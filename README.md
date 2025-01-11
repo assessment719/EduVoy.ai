@@ -1,4 +1,4 @@
-<h1>EduVoy.ai : A One Stop Solution To Help All The Aspiring Students</h1>
+<h1>EduVoy.ai : A One Stop Solution for Studying Abroad</h1>
 
 <b>Description:</b>
 <br />

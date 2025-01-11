@@ -1,9 +1,5 @@
 <h1>EduVoy.ai : A One Stop Solution To Help All The Aspiring Students</h1>
 
-1. Front-End runs on http://localhost:5173
-2. Back-End runs on http://localhost:3000
-3. Server runs on http://localhost:2000
-
 <b>Description:</b>
 <br />
 An AI-powered full-stack web application designed to streamline the study abroad process for students and consultancies. Built using React, Node.js, Express, MongoDB, and TypeScript, the platform offers four key features:
@@ -14,3 +10,7 @@ An AI-powered full-stack web application designed to streamline the study abroad
 4. Interview Simulator: Prepares students for various interviews with feedback, progress tracking, and resources.
 
 EduVoy.ai’s dynamic backend ensures seamless resource management, making it a scalable, user-centric solution.
+
+- Front-End runs on http://localhost:5173
+- Back-End runs on http://localhost:3000
+- Server runs on http://localhost:2000

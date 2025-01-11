@@ -1,0 +1,20 @@
+{
+  "name": "eduvoy-ai-fullstack",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\" \"npm run dev:server\"",
+    "dev:frontend": "npm --prefix ./EduVoy-Ai run dev",
+    "dev:backend": "npm --prefix ./EduVoy-Ai-Backend run dev",
+    "dev:server": "npx ts-node ./Server/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "concurrently": "^9.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  }
+}

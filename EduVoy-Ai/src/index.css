@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+      @apply antialiased text-gray-900;
+    }
+  }
+  
+  @layer components {
+    .btn {
+      @apply text-xl font-bold rounded-lg px-3 py-2 border-2 border-black;
+    }
+  
+    .btn-primary {
+      @apply bg-green-200 shadow-lg hover:shadow-black transition-shadow duration-300;
+    }
+  
+    .btn-secondary {
+      @apply bg-gray-200 text-gray-800 hover:bg-gray-300;
+    }
+  }

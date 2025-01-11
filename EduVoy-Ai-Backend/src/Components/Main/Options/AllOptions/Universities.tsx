@@ -1,6 +1,6 @@
 import { University } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Option } from './../../../../utils/options';
 import { BACKEND_URL } from './../../../../config';
 import LoaderComponent from '../../../loader';
@@ -48,6 +48,15 @@ const Universities: React.FC = () => {
     }
 
     // Update Uk Universities
+    const inputSectionRef = useRef<HTMLDivElement | null>(null);
+
+    const handleScrollToInputSection = () => {
+        inputSectionRef.current?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+        });
+    };
+
     const goToUpadteOption = async (idx: number) => {
         setNumberOfUpdatingOption(idx);
 
@@ -68,6 +77,7 @@ const Universities: React.FC = () => {
 
             setOptionTitle(`${universityToUpdate.option}`);
             setIsOptionToUpdated(true);
+            handleScrollToInputSection();
         } catch (error) {
             console.error('Error fetching options:', error);
         }
@@ -188,7 +198,7 @@ const Universities: React.FC = () => {
             </div>}
             {!isFetching && <div className="max-w-7xl mx-auto p-6 -mt-6 -ml-6">
                 <div className='flex justify-center'>
-                    <div className="flex justify-around bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-5 mb-8 text-white w-[1000px]">
+                    <div ref={inputSectionRef} className="flex justify-around bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-5 mb-8 text-white w-[1000px]">
                         <input
                             type="text"
                             id="optionTitle"

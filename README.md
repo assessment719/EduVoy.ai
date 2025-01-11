@@ -11,7 +11,6 @@
 4. Typescript
 
 <b>Description:</b>
-<br />
 An AI-powered full-stack web application designed to streamline the study abroad process for students and consultancies. Built using React, Node.js, Express, MongoDB, and TypeScript, the platform offers four key features:
 
 1. University Finder: Matches students with universities based on their educational background.

@@ -4,12 +4,6 @@
 2. Back-End runs on http://localhost:3000
 3. Server runs on http://localhost:2000
 
-<b>Things Used To Make This:</b>
-1. React
-2. Node
-3. Tailwind CSS
-4. Typescript
-
 <b>Description:</b>
 <br />
 An AI-powered full-stack web application designed to streamline the study abroad process for students and consultancies. Built using React, Node.js, Express, MongoDB, and TypeScript, the platform offers four key features:

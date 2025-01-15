@@ -13,8 +13,13 @@ const openai = new OpenAI({
 facultiesRouter.post("/", userAuth, async (req, res) => {
     const { desiredCourseType, firstSub = null, secondSub = null, thirdSub = null, fourthSub = null, prevDegree = null } = req.body;
 
+    const token = req.headers.token;
+
     const response = await fetch("http://localhost:2000/users/options/faculty", {
-        method: "GET"
+        method: "GET",
+        headers: {
+            'token': `${token}`
+        }
     });
     const data: { faculties: { id: number, option: string }[] } = await response.json();
 

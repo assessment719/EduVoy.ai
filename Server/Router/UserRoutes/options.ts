@@ -50,7 +50,7 @@ optionsRouter.get("/moiunis", userAuth, async function (req, res) {
     }
 });
 
-optionsRouter.get("/faculty", async function (req, res) {
+optionsRouter.get("/faculty", userAuth, async function (req, res) {
 
     try {
         const faculties = await facultiesOptionModel.find().sort({option: 1});

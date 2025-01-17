@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { StringDrop } from '../../../../Utils/stringDrop';
 import { PgUnis } from '../../../../Utils/pgunis';
 import { EnglandUniversities } from '../../../../Utils/ukUniversities';
-import { numNumDrop } from '../../../../Utils/numNumDrop';
+import { NumDrop } from '../../../../Utils/numDrop';
 import { BACKEND_URL } from './../../../../config';
 import LoaderComponent from './../../../loader';
 
@@ -33,7 +33,7 @@ const Test = () => {
 
     const ieltsMarksArr = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0];
 
-    const ieltsMarksArrOptions = ieltsMarksArr.map(mark => ({ value: Number(mark.toFixed(1)), label: Number(mark.toFixed(1)) }));
+    const ieltsMarksArrOptions = ieltsMarksArr.map(mark => ({ value: Number(mark.toFixed(1)), label: mark.toFixed(1) }));
 
     // For University Search
     const [isSearched, setIsSearched] = useState(false);
@@ -256,7 +256,7 @@ const Test = () => {
                                     closeOnClickInput
                                     values={[]}
                                     options={ieltsMarksArrOptions}
-                                    onChange={(value: numNumDrop[]): void => { setOverall(value[0].value) }}
+                                    onChange={(value: NumDrop[]): void => { setOverall(value[0].value) }}
                                 />
                             </div>
                         </div>
@@ -274,7 +274,7 @@ const Test = () => {
                                     closeOnClickInput
                                     values={[]}
                                     options={ieltsMarksArrOptions}
-                                    onChange={(value: numNumDrop[]): void => { setListening(value[0].value) }}
+                                    onChange={(value: NumDrop[]): void => { setListening(value[0].value) }}
                                 />
                             </div>
                         </div>
@@ -292,7 +292,7 @@ const Test = () => {
                                     closeOnClickInput
                                     values={[]}
                                     options={ieltsMarksArrOptions}
-                                    onChange={(value: numNumDrop[]): void => { setReading(value[0].value) }}
+                                    onChange={(value: NumDrop[]): void => { setReading(value[0].value) }}
                                 />
                             </div>
                         </div>
@@ -310,7 +310,7 @@ const Test = () => {
                                     closeOnClickInput
                                     values={[]}
                                     options={ieltsMarksArrOptions}
-                                    onChange={(value: numNumDrop[]): void => { setWriting(value[0].value) }}
+                                    onChange={(value: NumDrop[]): void => { setWriting(value[0].value) }}
                                 />
                             </div>
                         </div>
@@ -327,7 +327,7 @@ const Test = () => {
                                     placeholder='Select Speaking Marks'
                                     values={[]}
                                     options={ieltsMarksArrOptions}
-                                    onChange={(value: numNumDrop[]): void => { setSpeaking(value[0].value) }}
+                                    onChange={(value: NumDrop[]): void => { setSpeaking(value[0].value) }}
                                 />
                             </div>
                         </div>
@@ -418,7 +418,9 @@ const Test = () => {
             </motion.div>}
 
             {isGotData && !isFetching && noOfUnis !== 0 && <div className='flex flex-col items-center gap-6'>
-                <h1 className='text-3xl font-bold underline m-2'>-: You Can Apply For Following Universities :-</h1>
+                <div className='p-1 bg-gray-200 rounded-2xl w-full'>
+                    <h1 className='text-3xl font-bold text-center'>You Can Apply For Following Universities</h1>
+                </div>
 
                 <div className='grid grid-cols-5 gap-6 items-center mb-5 p-5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-white w-[1000px]'>
                     <div className="mb-4 col-span-3">
@@ -481,7 +483,7 @@ const Test = () => {
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="w-[700px] mt-[15%] border-4 border-black bg-white p-5 rounded-xl shadow-2xl hover:shadow-black transition-shadow duration-500"
+                        className="w-[700px] mt-[15%] border-4 border-black bg-white p-5 rounded-xl shadow-2xl shadow-black"
                     >
                         <div className='flex justify-end'>
                             <Cross onClick={() => setIsMore(false)} className='fixed hover:text-red-500 transition-text duration-300 scale-150 rotate-45 cursor-pointer' />

@@ -707,7 +707,7 @@ const Action = () => {
                                 id="placement"
                                 value={placement}
                                 onChange={e => setPlacement(e.target.value)}
-                                className="w-full border border-black text-black rounded-lg h-10"
+                                className="p-2 w-full border border-black text-black rounded-lg h-10"
                             >
                                 <option value="all">Select An Decision</option>
                                 <option value="Yes">Yes</option>
@@ -723,7 +723,7 @@ const Action = () => {
                                 id="topup"
                                 value={topup}
                                 onChange={e => setTopup(e.target.value)}
-                                className="w-full border border-black text-black rounded-lg h-10"
+                                className="p-2 w-full border border-black text-black rounded-lg h-10"
                             >
                                 <option value="all">Select An Decision</option>
                                 <option value="Yes">Yes</option>
@@ -739,7 +739,7 @@ const Action = () => {
                                 id="research"
                                 value={research}
                                 onChange={e => setResearch(e.target.value)}
-                                className="w-full border border-black text-black rounded-lg h-10"
+                                className="p-2 w-full border border-black text-black rounded-lg h-10"
                             >
                                 <option value="all">Select An Decision</option>
                                 <option value="Yes">Yes</option>

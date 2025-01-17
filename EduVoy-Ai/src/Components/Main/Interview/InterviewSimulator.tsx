@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Mic, MicOff, User2, AlertCircle, Loader2 } from 'lucide-react';
+import { Mic, MicOff, UserIcon, AlertCircle, Loader2 } from 'lucide-react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { motion } from 'framer-motion';
 import { analyzeResponse } from './analysation';
@@ -302,18 +302,18 @@ const InterviewSimulator: React.FC = () => {
                     <div className="mb-8">
                         <motion.div
                             key={currentQuestion.id}
-                            className="flex items-center space-x-4 p-4 bg-blue-50 rounded-lg"
+                            className="flex items-center space-x-4 p-4 bg-gray-200 rounded-lg"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                         >
-                            <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
-                                <User2 className="w-6 h-6 text-white" />
+                            <div className="w-12 h-12 bg-green-200 rounded-full flex items-center justify-center">
+                                <UserIcon className="w-8 h-8" />
                             </div>
                             <div>
-                                <p className="text-xl font-medium">
+                                <p className="text-xl font-bold">
                                     {currentQuestion.question}
                                 </p>
-                                <p className="text-lg mt-1">
+                                <p className="text-lg mt-1 font-medium">
                                     Category: {currentQuestion.category} | Difficulty: {currentQuestion.difficulty}
                                 </p>
                             </div>

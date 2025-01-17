@@ -536,9 +536,9 @@ const EligibleCourses = () => {
             </motion.div>}
 
             {isIntake && eligibleFaculties.length !== 0 && desiredFaculty === 0 && <div className='flex flex-col items-center'>
-                <h1 className='text-3xl font-bold underline mt-3'>-: You Are Eligible To Apply In Below Faculties :-</h1>
-
-                <h1 className='text-2xl font-bold mt-3'>Select An Faculty From Below To Search Courses</h1>
+                <div className='p-1 bg-gray-200 rounded-2xl w-full'>
+                    <h1 className='text-3xl font-bold text-center'>You Are Eligible To Apply In Below Faculties - Select One</h1>
+                </div>
 
                 <div className={`grid ${eligibleFaculties.length > 2 ? "grid-cols-3" : eligibleFaculties.length > 1 ? "grid-cols-2" : "grid-cols-1"} gap-5 mt-10`}>
                     {eligibleFaculties.map((faculty, index) => (
@@ -614,6 +614,10 @@ const EligibleCourses = () => {
             </div >}
 
             {!isFetching && desiredFaculty !== 0 && <div className="w-[1100px] mx-auto -ml-2 mb-10">
+                <div className='p-1 bg-gray-200 rounded-2xl w-full mb-8'>
+                    <h1 className='text-3xl font-bold text-center'>You Can Apply For Following Courses</h1>
+                </div>
+
                 <div className='grid grid-cols-5 gap-6 items-center mb-5 p-5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-white'>
                     <div className="mb-4 col-span-3">
                         <label htmlFor="queryCourse" className="block font-bold text-xl text-white mb-1">
@@ -652,63 +656,62 @@ const EligibleCourses = () => {
                     <h1 className='text-2xl font-bold'>Sorry! There Are No Course That Matches Your Query.</h1>
                 </div>}
 
-                {courses.length !== 0 && <div className="grid grid-cols-1 gap-6 w-[1100px]">
-                    {courses.slice(prevNum, nextNum).map((course, index) =>
-                        <motion.div
-                            key={index}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.1 }}
-                            className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-500"
-                        >
-                            <div className="flex items-start space-x-4 mb-5">
-                                <div className="p-3 bg-green-200 rounded-lg">
-                                    <Book className="w-6 h-6 text-black" />
-                                </div>
-                                <div className="flex-1 mt-3">
-                                    <b className="font-bold text-xl mb-3">{course.courseName}</b>
-                                    <br /><br />
-                                    <p className="font-light text-xl mb-2">
-                                        <b className="font-bold text-lg mb-3">University:</b> {course.universityName}
-                                    </p>
-                                    <div className='grid grid-cols-4'>
-                                        <p className="font-light text-xl mb-2">
-                                            <b className="font-bold text-lg mb-3">Course Type:</b> {course.courseType}
-                                        </p>
-
-                                        <p className="font-light text-xl mb-2">
-                                            <b className="font-bold text-lg mb-3">Campus:</b> {course.campus}
-                                        </p>
-
-                                        <p className="font-light text-xl mb-2">
-                                            <b className="font-bold text-lg mb-3">Course Duration:</b> {course.duration}
-                                        </p>
-
-                                        <p className="font-light text-xl mb-2">
-                                            <b className="font-bold text-lg mb-3">Course Fee:</b> {course.fees}
-                                        </p>
-                                    </div>
-                                    <div className='flex justify-start items-center'>
-                                        <p className="font-light text-xl mb-2">
-                                            <b className="font-bold text-lg mb-3">Intake(s):</b>
-                                        </p>
-                                        {course.intakes.map((intake, index) => (
-                                            <motion.div
-                                                key={index}
-                                                initial={{ opacity: 0, x: 20 }}
-                                                animate={{ opacity: 1, x: 0 }}
-                                                transition={{ delay: index * 0.1 }}
-                                                className="bg-green-200 p-1 ml-1 mr-1 font-bold rounded-xl"
-                                            >
-                                                {objIntake[intake as number]}
-                                            </motion.div>
-                                        ))}
-                                    </div>
-                                    <a href={objLink[course.universityId]} target='blank'><button className='btn btn-primary mt-3 w-full'>Go To University Course Page</button></a>
-                                </div>
+                {courses.length !== 0 && <div className="grid grid-cols-1 gap-6 w-[1100px]">{courses.slice(prevNum, nextNum).map((course, index) =>
+                    <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-500"
+                    >
+                        <div className="flex items-start space-x-4 mb-5">
+                            <div className="p-3 bg-green-200 rounded-lg">
+                                <Book className="w-6 h-6 text-black" />
                             </div>
-                        </motion.div>
-                    )}
+                            <div className="flex-1 mt-3">
+                                <b className="font-bold text-xl mb-3">{course.courseName}</b>
+                                <br /><br />
+                                <p className="font-light text-xl mb-2">
+                                    <b className="font-bold text-lg mb-3">University:</b> {course.universityName}
+                                </p>
+                                <div className='grid grid-cols-4'>
+                                    <p className="font-light text-xl mb-2">
+                                        <b className="font-bold text-lg mb-3">Course Type:</b> {course.courseType}
+                                    </p>
+
+                                    <p className="font-light text-xl mb-2">
+                                        <b className="font-bold text-lg mb-3">Campus:</b> {course.campus}
+                                    </p>
+
+                                    <p className="font-light text-xl mb-2">
+                                        <b className="font-bold text-lg mb-3">Course Duration:</b> {course.duration}
+                                    </p>
+
+                                    <p className="font-light text-xl mb-2">
+                                        <b className="font-bold text-lg mb-3">Course Fee:</b> {course.fees}
+                                    </p>
+                                </div>
+                                <div className='flex justify-start items-center'>
+                                    <p className="font-light text-xl mb-2">
+                                        <b className="font-bold text-lg mb-3">Intake(s):</b>
+                                    </p>
+                                    {course.intakes.map((intake, index) => (
+                                        <motion.div
+                                            key={index}
+                                            initial={{ opacity: 0, x: 20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            transition={{ delay: index * 0.1 }}
+                                            className="bg-green-200 p-1 ml-1 mr-1 font-bold rounded-xl"
+                                        >
+                                            {objIntake[intake as number]}
+                                        </motion.div>
+                                    ))}
+                                </div>
+                                <a href={objLink[course.universityId]} target='blank'><button className='btn btn-primary mt-3 w-full'>Go To University Course Page</button></a>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
                 </div>}
 
                 {noOfCourses > 5 && <div className="flex justify-center mt-10">

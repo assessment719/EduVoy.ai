@@ -14,8 +14,19 @@ coursesRouter.get("/", userAuth, async function (req, res) {
     if (facultyId && Number(facultyId) !== 0) query.faculties = Number(facultyId);
 
     try {
+        const projection = {
+            id: 1,
+            universityId: 1,
+            courseName: 1,
+            courseType: 1,
+            universityName: 1,
+            campus: 1,
+            duration: 1,
+            fees: 1,
+            intakes: 1
+        }
         const courses = await courseModel
-            .find(query)
+            .find(query, projection)
             .sort({ universityName: 1, courseType: 1, courseName: 1 });
 
         res.json({

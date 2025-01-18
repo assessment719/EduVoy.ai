@@ -38,7 +38,7 @@ postgraduateRouter.get("/", userAuth, async function (req, res) {
     if (mathMarks) {
         query[`mathReq.${boardId}`] = { $lte: Number(mathMarks) };
     }
-    
+
     // Query for fees
     if (fees) {
         query.fees = { $lte: Number(fees) };
@@ -72,8 +72,9 @@ postgraduateRouter.get("/", userAuth, async function (req, res) {
     }
 
     try {
+        const projection = { universityId: 1, universityName: 1 }
         const universities = await pgUniversityModel
-            .find(query)
+            .find(query, projection)
             .sort({ universityName: 1 });
 
         res.json({
@@ -87,12 +88,17 @@ postgraduateRouter.get("/", userAuth, async function (req, res) {
     }
 });
 
-postgraduateRouter.get("/:universityId", userAuth, async function (req, res) {
+postgraduateRouter.get("/:queryField/:universityId", userAuth, async function (req, res) {
 
+    const queryField = req.params.queryField;
     const universityId = parseInt(req.params.universityId);
 
     try {
-        const university = await pgUniversityModel.findOne({ universityId });
+        const projection: { [key: string]: number } = {};
+        projection[`${queryField}`] = 1
+        projection.extraReqInfo = 1
+        
+        const university = await pgUniversityModel.findOne({ universityId }, projection);
 
         res.json({
             university

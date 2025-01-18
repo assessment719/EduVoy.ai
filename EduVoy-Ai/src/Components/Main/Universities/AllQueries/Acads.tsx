@@ -215,7 +215,7 @@ const Acads = () => {
             if (!token) {
                 return;
             }
-            const response = await fetch(`${BACKEND_URL}/users/universities/${courseType}/${universityId}`, {
+            const response = await fetch(`${BACKEND_URL}/users/universities/${courseType}/academicReq/${universityId}`, {
                 method: "GET",
                 headers: {
                     'token': `${token}`

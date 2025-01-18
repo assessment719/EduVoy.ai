@@ -181,7 +181,7 @@ const Waiver = () => {
             if (!token) {
                 return;
             }
-            const response = await fetch(`${BACKEND_URL}/users/universities/${courseType}/${universityId}`, {
+            const response = await fetch(`${BACKEND_URL}/users/universities/${courseType}/englishReq/${universityId}`, {
                 method: "GET",
                 headers: {
                     'token': `${token}`

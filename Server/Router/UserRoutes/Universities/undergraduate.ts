@@ -66,8 +66,9 @@ undergraduateRouter.get("/", userAuth, async function (req, res) {
     }
 
     try {
+        const projection = {universityId: 1, universityName: 1}
         const universities = await ugUniversityModel
-            .find(query)
+            .find(query, projection)
             .sort({ universityName: 1 });
 
         res.json({
@@ -81,12 +82,17 @@ undergraduateRouter.get("/", userAuth, async function (req, res) {
     }
 });
 
-undergraduateRouter.get("/:universityId", userAuth, async function (req, res) {
+undergraduateRouter.get("/:queryField/:universityId", userAuth, async function (req, res) {
 
+    const queryField = req.params.queryField;
     const universityId = parseInt(req.params.universityId);
 
     try {
-        const university = await ugUniversityModel.findOne({ universityId });
+        const projection: { [key: string]: number } = {};
+        projection[`${queryField}`] = 1
+        projection.extraReqInfo = 1
+        
+        const university = await ugUniversityModel.findOne({ universityId }, projection);
 
         res.json({
             university

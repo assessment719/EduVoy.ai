@@ -163,7 +163,7 @@ const Test = () => {
             if (!token) {
                 return;
             }
-            const response = await fetch(`${BACKEND_URL}/users/universities/${courseType}/${universityId}`, {
+            const response = await fetch(`${BACKEND_URL}/users/universities/${courseType}/${selectedTest}/${universityId}`, {
                 method: "GET",
                 headers: {
                     'token': `${token}`

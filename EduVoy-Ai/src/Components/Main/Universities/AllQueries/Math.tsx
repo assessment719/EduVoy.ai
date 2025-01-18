@@ -181,7 +181,7 @@ const Math = () => {
             if (!token) {
                 return;
             }
-            const response = await fetch(`${BACKEND_URL}/users/universities/${courseType}/${universityId}`, {
+            const response = await fetch(`${BACKEND_URL}/users/universities/${courseType}/mathReq/${universityId}`, {
                 method: "GET",
                 headers: {
                     'token': `${token}`

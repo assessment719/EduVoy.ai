@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\" \"npm run dev:server\"",
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\" \"npm run dev:server\" \"npm run dev:wssserver\"",
     "dev:frontend": "npm --prefix ./EduVoy-Ai run dev",
     "dev:backend": "npm --prefix ./EduVoy-Ai-Backend run dev",
-    "dev:server": "npx ts-node ./Server/index.ts"
+    "dev:server": "npx ts-node ./Server/index.ts",
+    "dev:wssserver": "npx ts-node ./Server/websockets.ts"
   },
   "keywords": [],
   "author": "",

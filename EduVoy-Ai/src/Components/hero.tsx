@@ -9,6 +9,7 @@ import Universities from './Main/Universities/Universities';
 import Courses from './Main/Courses/Courses';
 import SOP from './Main/SOP/SOP';
 import Interview from './Main/Interview/Head';
+import ChatDashboard from './Main/ChatSupport/ChatDashboard';
 
 
 function Hero() {
@@ -104,6 +105,8 @@ function Hero() {
                     </motion.div>
                 </Tabs.Root>
             </div>
+
+            <ChatDashboard />
         </div>
     )
 }

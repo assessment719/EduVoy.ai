@@ -13,7 +13,8 @@ import { analysationRouter } from "./OpenAI/analysation";
 import { sopRouter } from "./OpenAI/sop";
 import { facultiesRouter } from "./OpenAI/faculties";
 import { finalUniversitiesRouter } from "./ukuniversities";
-import { optionsRouter } from './options'
+import { optionsRouter } from './options';
+import { chatRouter } from "./OpenAI/chat";
 
 export const usersRouter = Router();
 
@@ -116,3 +117,4 @@ usersRouter.use("/options", optionsRouter);
 usersRouter.use("/openai/analysation", analysationRouter);
 usersRouter.use("/openai/sop", sopRouter);
 usersRouter.use("/openai/faculties", facultiesRouter);
+usersRouter.use("/openai/chat", chatRouter);

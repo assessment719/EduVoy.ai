@@ -203,7 +203,9 @@ const CourseType = () => {
             </motion.div>}
 
             {isGotData && !isFetching && noOfUnis !== 0 && <div className='flex flex-col items-center gap-6'>
-                <h1 className='text-3xl font-bold underline m-2'>-: You Can Apply For Following Universities :-</h1>
+                <div className='p-1 bg-gray-200 rounded-2xl w-full'>
+                    <h1 className='text-3xl font-bold text-center'>You Can Apply For Following Universities</h1>
+                </div>
 
                 <div className='grid grid-cols-5 gap-6 items-center mb-5 p-5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-white w-[1000px]'>
                     <div className="mb-4 col-span-3">

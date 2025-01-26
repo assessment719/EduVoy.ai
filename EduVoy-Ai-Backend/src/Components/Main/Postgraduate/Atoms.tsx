@@ -1,21 +1,21 @@
 import { atom } from 'recoil';
 
 export const isFetchingAtom = atom({
-    key: 'isFetching',
+    key: 'isPgFetching',
     default: false
 });
 
 export const stateOfChangesAtom = atom({
-    key: 'stateOfChanges',
+    key: 'PgstateOfChanges',
     default: ''
 });
 
 export const isActionedAtom = atom({
-    key: 'isActioned',
+    key: 'isPgActioned',
     default: false
 });
 
 export const inActionUniIdAtom = atom({
-    key: 'inActionUniId',
+    key: 'inPgActionUniId',
     default: 0
 });

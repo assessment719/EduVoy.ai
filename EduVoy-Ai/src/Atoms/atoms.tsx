@@ -14,3 +14,14 @@ export const signAtom = atom({
     default: 'up',
     effects_UNSTABLE: [persistAtom],
 });
+
+export const chatBoxStateAtom = atom({
+    key: 'chatBoxState',
+    default: false
+});
+
+export const currentRoomAtom = atom({
+    key: 'currrentRoom',
+    default: '',
+    effects_UNSTABLE: [persistAtom],
+});

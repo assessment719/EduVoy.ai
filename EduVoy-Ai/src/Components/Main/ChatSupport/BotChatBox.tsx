@@ -18,42 +18,44 @@ function BotChat() {
             { role: "user", message: message }
         ]);
 
-        try {
-            const token = localStorage.getItem('token');
+        if (message !== '') {
+            try {
+                const token = localStorage.getItem('token');
 
-            if (!token) {
-                return;
+                if (!token) {
+                    return;
+                }
+
+                const result = await fetch(`${BACKEND_URL}/users/openai/chat`, {
+                    method: "POST",
+                    headers: {
+                        'token': `${token}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        message
+                    }),
+                });
+                const data = await result.json();
+
+                await new Promise((resolve) => setTimeout(resolve, 1500));
+                setIsTyping(false);
+
+                setCurrentMessages(msg => [
+                    ...msg,
+                    { role: "bot", message: data.reply }
+                ]);
+            } catch (error) {
+                console.error("Error analyzing response:", error);
+
+                await new Promise((resolve) => setTimeout(resolve, 1500));
+                setIsTyping(false);
+
+                setCurrentMessages(msg => [
+                    ...msg,
+                    { role: "bot", message: "Sorry there is an error while replying. Please try again" }
+                ]);
             }
-
-            const result = await fetch(`${BACKEND_URL}/users/openai/chat`, {
-                method: "POST",
-                headers: {
-                    'token': `${token}`,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    message
-                }),
-            });
-            const data = await result.json();
-
-            await new Promise((resolve) => setTimeout(resolve, 1500));
-            setIsTyping(false);
-
-            setCurrentMessages(msg => [
-                ...msg,
-                { role: "bot", message: data.reply }
-            ]);
-        } catch (error) {
-            console.error("Error analyzing response:", error);
-            
-            await new Promise((resolve) => setTimeout(resolve, 1500));
-            setIsTyping(false);
-
-            setCurrentMessages(msg => [
-                ...msg,
-                { role: "bot", message: "Sorry there is an error while replying. Please try again" }
-            ]);
         }
 
         setMessage('');
@@ -136,7 +138,8 @@ function BotChat() {
 
                             <motion.button
                                 initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
+                                animate={{ opacity: message === '' ? 0.5 : 1 }}
+                                disabled={message === ''}
                                 onClick={sendMessage}
                                 className="w-32 btn btn-primary bg-gradient-to-r from-red-500 to-green-600"
                             >

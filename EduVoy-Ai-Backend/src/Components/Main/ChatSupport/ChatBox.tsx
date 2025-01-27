@@ -150,7 +150,8 @@ const ChatBox = () => {
 
                             <motion.button
                                 initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
+                                animate={{ opacity: message === '' ? 0.5 : 1 }}
+                                disabled={message === ''}
                                 onClick={sendMessage}
                                 className="w-32 btn btn-primary bg-gradient-to-r from-red-500 to-green-600"
                             >

@@ -5,9 +5,10 @@ import { userAuth } from "./../../Auth/user";
 export const coursesRouter = Router();
 
 coursesRouter.get("/", userAuth, async function (req, res) {
-    const { universityId, courseType, intakes, facultyId } = req.query;
+    const { search, universityId, courseType, intakes, facultyId } = req.query;
 
-    const query: Partial<{ universityId: number; courseType: string; intakes: number; faculties: number }> = {};
+    const query: Partial<{ courseName: any, universityId: number; courseType: string; intakes: number; faculties: number }> = {};
+    if (search && search !== '') query.courseName = { $regex: search, $options: 'i'};
     if (universityId && Number(universityId) !== 0) query.universityId = Number(universityId);
     if (courseType && courseType !== 'all') query.courseType = courseType as string;
     if (intakes && Number(intakes) !== 0) query.intakes = Number(intakes);

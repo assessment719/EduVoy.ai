@@ -8,9 +8,10 @@ import { adminAuth } from "./../../../Auth/admin";
 export const coursesRouter = Router();
 
 coursesRouter.get("/", adminAuth, async function (req, res) {
-    const { universityId, courseType, intakes } = req.query;
+    const { search, universityId, courseType, intakes } = req.query;
 
-    const query: Partial<{ universityId: number; courseType: string; intakes: number }> = {};
+    const query: Partial<{ courseName: any, universityId: number; courseType: string; intakes: number }> = {};
+    if (search && search !== '') query.courseName = { $regex: search, $options: 'i'};
     if (universityId && Number(universityId) !== 0) query.universityId = Number(universityId);
     if (courseType && courseType !== 'all') query.courseType = courseType as string;
     if (intakes && Number(intakes) !== 0) query.intakes = Number(intakes);

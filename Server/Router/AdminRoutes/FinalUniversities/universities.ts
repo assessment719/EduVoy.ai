@@ -8,9 +8,13 @@ import { adminAuth } from "../../../Auth/admin";
 export const finalUniversitiesRouter = Router();
 
 finalUniversitiesRouter.get("/", adminAuth, async function (req, res) {
+    const { search } = req.query;
+
+    const query: Partial<{ universityName: any }> = {};
+    if (search && search !== '') query.universityName = { $regex: search, $options: 'i'};
 
     try {
-        const universities = await universityModel.find().sort({universityName: 1});
+        const universities = await universityModel.find(query).sort({universityName: 1});
 
         res.json({
             universities

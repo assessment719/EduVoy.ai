@@ -66,18 +66,6 @@ const EligibleCourses = () => {
         queryCourseRef.current = queryCourse;
     }, [queryCourse]);
 
-    const queryUniRef = useRef(queryUni);
-
-    useEffect(() => {
-        queryUniRef.current = queryUni;
-    }, [queryUni]);
-
-    const queryIntakeRef = useRef(queryIntake);
-
-    useEffect(() => {
-        queryIntakeRef.current = queryIntake;
-    }, [queryIntake]);
-
     function resetQuery() {
         setIsCourseType(false);
         setIsUni(false);
@@ -237,10 +225,10 @@ const EligibleCourses = () => {
             await new Promise((e) => { setTimeout(e, 1500) })
 
             const queryParams = new URLSearchParams();
-            if (chosenType !== 'all') queryParams.append('courseType', chosenType);
             if (queryCourseRef.current !== '') queryParams.append('search', queryCourse);
-            if (queryUniRef.current !== 0) queryParams.append('universityId', queryUniRef.current.toString());
-            if (queryIntakeRef.current !== 0) queryParams.append('intakes', queryIntakeRef.current.toString());
+            if (chosenType !== 'all') queryParams.append('courseType', chosenType);
+            if (chosenUni !== 0) queryParams.append('universityId', chosenUni.toString());
+            if (chosenIntake !== 0) queryParams.append('intakes', chosenIntake.toString());
             if (chosnFcaulty !== 0) queryParams.append('facultyId', chosnFcaulty.toString());
 
             const response = await fetch(`${BACKEND_URL}/users/courses?${queryParams.toString()}`, {
@@ -270,7 +258,11 @@ const EligibleCourses = () => {
         setIsFetching(true);
         setPrevNum(0);
         setNextNum(5);
-        searchCourses(desiredCourseType, desiredUni, desiredIntake, desiredFaculty);
+        if (queryUni !== 0 || queryIntake !== 0) {
+            searchCourses(desiredCourseType, queryUni, queryIntake, desiredFaculty);
+        } else {
+            searchCourses(desiredCourseType, desiredUni, desiredIntake, desiredFaculty);
+        }
     }
 
     function resetCourses() {
@@ -290,13 +282,13 @@ const EligibleCourses = () => {
         setIsMore(false);
         setIsFiltered(true);
         searchCourses(desiredCourseType, queryUni, queryIntake, desiredFaculty);
+        setQueryUni(0);
+        setQueryIntake(0);
         setQueryCourse('');
         setIsSearched(false);
     }
 
     function resetFilter() {
-        setQueryUni(0);
-        setQueryIntake(0);
         setIsFetching(true);
         setIsFiltered(false);
         setPrevNum(0);

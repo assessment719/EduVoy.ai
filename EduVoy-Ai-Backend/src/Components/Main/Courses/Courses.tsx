@@ -48,27 +48,45 @@ const CourseCentre: React.FC = () => {
     const [queryType, setQueryType] = useState('all');
     const [queryIntake, setQueryIntake] = useState(0);
 
+    const queryCourseRef = useRef(queryCourse);
+
+    useEffect(() => {
+        queryCourseRef.current = queryCourse;
+    }, [queryCourse]);
+
+    const queryUniRef = useRef(queryUni);
+
+    useEffect(() => {
+        queryUniRef.current = queryUni;
+    }, [queryUni]);
+
+    const queryTypeRef = useRef(queryType);
+
+    useEffect(() => {
+        queryTypeRef.current = queryType;
+    }, [queryType]);
+
+    const queryIntakeRef = useRef(queryIntake);
+
+    useEffect(() => {
+        queryIntakeRef.current = queryIntake;
+    }, [queryIntake]);
+
     async function searchCourse() {
         setIsFetching(true);
         setIsSearched(true);
         setPrevNum(0);
         setNextNum(5);
-        await new Promise((e) => { setTimeout(e, 1200) })
-        const filteredCourses = courses?.filter((course) =>
-            course.courseName.toLowerCase().includes(queryCourse.toLowerCase())
-        );
-        setCourses(filteredCourses);
-        setIsFetching(false);
-        setNoOfCourses(filteredCourses.length);
+        fetchCourses();
     }
 
     function resetCourses() {
+        setQueryCourse('');
         setIsFetching(true);
         setPrevNum(0);
         setNextNum(5);
         setIsSearched(false);
         fetchCourses();
-        setQueryCourse('');
         setIsFiltered(false);
     }
 
@@ -79,14 +97,14 @@ const CourseCentre: React.FC = () => {
         setIsMore(false);
         setIsFiltered(true);
         fetchCourses();
-        setQueryUni(0);
-        setQueryType('all');
-        setQueryIntake(0);
         setIsSearched(false);
         setQueryCourse('');
     }
 
     function resetFilter() {
+        setQueryUni(0);
+        setQueryType('all');
+        setQueryIntake(0);
         setIsFetching(true);
         setIsFiltered(false);
         setPrevNum(0);
@@ -217,9 +235,10 @@ const CourseCentre: React.FC = () => {
             await new Promise((e) => { setTimeout(e, 1200) })
 
             const queryParams = new URLSearchParams();
-            if (queryUni !== 0) queryParams.append('universityId', queryUni.toString());
-            if (queryType !== 'all') queryParams.append('courseType', queryType);
-            if (queryIntake !== 0) queryParams.append('intakes', queryIntake.toString());
+            if (queryCourseRef.current !== '') queryParams.append('search', queryCourseRef.current);
+            if (queryUniRef.current !== 0) queryParams.append('universityId', queryUniRef.current.toString());
+            if (queryTypeRef.current!== 'all') queryParams.append('courseType', queryTypeRef.current);
+            if (queryIntakeRef.current !== 0) queryParams.append('intakes', queryIntakeRef.current.toString());
 
             const response = await fetch(`${BACKEND_URL}/admin/courses?${queryParams.toString()}`, {
                 method: "GET",

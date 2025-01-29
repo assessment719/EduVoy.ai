@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Search, Cross, FilterIcon, Book, ArrowLeftCircleIcon, ArrowRightCircleIcon } from 'lucide-react';
 import Select from 'react-dropdown-select';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { NumDrop } from '../../../../Utils/numDrop';
 import { StringDrop } from '../../../../Utils/stringDrop';
 import { Course } from "../../../../Utils/courses";
@@ -40,6 +40,30 @@ const AllCourses: React.FC = () => {
     const [prevNum, setPrevNum] = useState(0);
     const [nextNum, setNextNum] = useState(5);
 
+    const queryCourseRef = useRef(queryCourse);
+
+    useEffect(() => {
+        queryCourseRef.current = queryCourse;
+    }, [queryCourse]);
+
+    const queryUniRef = useRef(queryUni);
+
+    useEffect(() => {
+        queryUniRef.current = queryUni;
+    }, [queryUni]);
+
+    const queryTypeRef = useRef(queryType);
+
+    useEffect(() => {
+        queryTypeRef.current = queryType;
+    }, [queryType]);
+
+    const queryIntakeRef = useRef(queryIntake);
+
+    useEffect(() => {
+        queryIntakeRef.current = queryIntake;
+    }, [queryIntake]);
+
     function increseMapCount() {
         if (noOfCourses - 1 >= nextNum) {
             setPrevNum((c) => c + 5);
@@ -64,9 +88,10 @@ const AllCourses: React.FC = () => {
             await new Promise((e) => { setTimeout(e, 1200) })
 
             const queryParams = new URLSearchParams();
-            if (queryUni !== 0) queryParams.append('universityId', queryUni.toString());
-            if (queryType !== 'all') queryParams.append('courseType', queryType);
-            if (queryIntake !== 0) queryParams.append('intakes', queryIntake.toString());
+            if (queryCourseRef.current !== '') queryParams.append('search', queryCourse);
+            if (queryUniRef.current !== 0) queryParams.append('universityId', queryUniRef.current.toString());
+            if (queryTypeRef.current !== 'all') queryParams.append('courseType', queryTypeRef.current);
+            if (queryIntakeRef.current !== 0) queryParams.append('intakes', queryIntakeRef.current.toString());
 
             const response = await fetch(`${BACKEND_URL}/users/courses?${queryParams.toString()}`, {
                 method: "GET",
@@ -148,23 +173,16 @@ const AllCourses: React.FC = () => {
         setIsFetching(true);
         setPrevNum(0);
         setNextNum(5);
-        await new Promise((e) => { setTimeout(e, 1200) })
-        const filteredCourses = courses?.filter((course) =>
-            course.courseName.toLowerCase().includes(queryCourse.toLowerCase())
-        );
-        console.log(filteredCourses);
-        setCourses(filteredCourses);
-        setIsFetching(false);
-        setNoOfCourses(filteredCourses.length);
+        fetchCourses();
     }
 
-    function resetCourses() {
+    async function resetCourses() {
+        setQueryCourse('');
         setIsFetching(true);
         setPrevNum(0);
         setNextNum(5);
         setIsSearched(false);
         fetchCourses();
-        setQueryCourse('');
         setIsFiltered(false);
     }
 
@@ -175,14 +193,14 @@ const AllCourses: React.FC = () => {
         setIsMore(false);
         setIsFiltered(true);
         fetchCourses();
-        setQueryUni(0);
-        setQueryType('all');
-        setQueryIntake(0);
         setIsSearched(false);
         setQueryCourse('');
     }
 
     function resetFilter() {
+        setQueryUni(0);
+        setQueryType('all');
+        setQueryIntake(0);
         setIsFetching(true);
         setIsFiltered(false);
         setPrevNum(0);

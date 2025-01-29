@@ -22,23 +22,23 @@ const UkUniversities: React.FC = () => {
     const [isSearched, setIsSearched] = useState(false);
     const [queryUni, setQueryUni] = useState('');
 
+    const queryUniRef = useRef(queryUni);
+
+    useEffect(() => {
+        queryUniRef.current = queryUni;
+    }, [queryUni]);
+
     async function searchUnis() {
         setIsSearched(true);
         setIsFetching(true);
-        await new Promise((e) => { setTimeout(e, 1200) })
-        const filteredUnis = ukUniversities?.filter((uni) =>
-            uni.universityName.toLowerCase().includes(queryUni.toLowerCase())
-        );
-        setUkUniversities(filteredUnis);
-        setNumberOfUkUniversities(filteredUnis.length);
-        setIsFetching(false);
+        fetchUkUniversities();
     }
 
     function resetUnis() {
+        setQueryUni('');
         setIsFetching(true);
         setIsSearched(false);
         fetchUkUniversities();
-        setQueryUni('');
     }
 
     const [prevNum, setPrevNum] = useState(0);
@@ -77,7 +77,10 @@ const UkUniversities: React.FC = () => {
                 return;
             }
             await new Promise((e) => { setTimeout(e, 1200) })
-            const response = await fetch(`${BACKEND_URL}/admin/finaluniversities`, {
+
+            const queryParams = new URLSearchParams();
+            if (queryUniRef.current !== '') queryParams.append('search', queryUniRef.current);
+            const response = await fetch(`${BACKEND_URL}/admin/finaluniversities?${queryParams.toString()}`, {
                 method: "GET",
                 headers: {
                     'token': `${token}`

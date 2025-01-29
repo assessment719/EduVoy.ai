@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { SearchIcon, ArrowBigRight, Search, Cross, FilterIcon, Book, ArrowLeftCircleIcon, ArrowRightCircleIcon } from 'lucide-react';
 import Select from 'react-dropdown-select';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { NumDrop } from '../../../../Utils/numDrop';
 import { StringDrop } from '../../../../Utils/stringDrop';
 import { EnglandUniversities } from '../../../../Utils/ukUniversities';
@@ -59,6 +59,24 @@ const EligibleCourses = () => {
     // For Pagination
     const [prevNum, setPrevNum] = useState(0);
     const [nextNum, setNextNum] = useState(5);
+
+    const queryCourseRef = useRef(queryCourse);
+
+    useEffect(() => {
+        queryCourseRef.current = queryCourse;
+    }, [queryCourse]);
+
+    const queryUniRef = useRef(queryUni);
+
+    useEffect(() => {
+        queryUniRef.current = queryUni;
+    }, [queryUni]);
+
+    const queryIntakeRef = useRef(queryIntake);
+
+    useEffect(() => {
+        queryIntakeRef.current = queryIntake;
+    }, [queryIntake]);
 
     function resetQuery() {
         setIsCourseType(false);
@@ -220,8 +238,9 @@ const EligibleCourses = () => {
 
             const queryParams = new URLSearchParams();
             if (chosenType !== 'all') queryParams.append('courseType', chosenType);
-            if (chosenUni !== 0) queryParams.append('universityId', chosenUni.toString());
-            if (chosenIntake !== 0) queryParams.append('intakes', chosenIntake.toString());
+            if (queryCourseRef.current !== '') queryParams.append('search', queryCourse);
+            if (queryUniRef.current !== 0) queryParams.append('universityId', queryUniRef.current.toString());
+            if (queryIntakeRef.current !== 0) queryParams.append('intakes', queryIntakeRef.current.toString());
             if (chosnFcaulty !== 0) queryParams.append('facultyId', chosnFcaulty.toString());
 
             const response = await fetch(`${BACKEND_URL}/users/courses?${queryParams.toString()}`, {
@@ -251,22 +270,16 @@ const EligibleCourses = () => {
         setIsFetching(true);
         setPrevNum(0);
         setNextNum(5);
-        await new Promise((e) => { setTimeout(e, 1200) })
-        const filteredCourses = courses?.filter((course) =>
-            course.courseName.toLowerCase().includes(queryCourse.toLowerCase())
-        );
-        setCourses(filteredCourses);
-        setIsFetching(false);
-        setNoOfCourses(filteredCourses.length);
+        searchCourses(desiredCourseType, desiredUni, desiredIntake, desiredFaculty);
     }
 
     function resetCourses() {
+        setQueryCourse('');
         setIsFetching(true);
         setPrevNum(0);
         setNextNum(5);
         setIsSearched(false);
         searchCourses(desiredCourseType, desiredUni, desiredIntake, desiredFaculty);
-        setQueryCourse('');
         setIsFiltered(false);
     }
 
@@ -277,13 +290,13 @@ const EligibleCourses = () => {
         setIsMore(false);
         setIsFiltered(true);
         searchCourses(desiredCourseType, queryUni, queryIntake, desiredFaculty);
-        setQueryUni(0);
-        setQueryIntake(0);
         setQueryCourse('');
         setIsSearched(false);
     }
 
     function resetFilter() {
+        setQueryUni(0);
+        setQueryIntake(0);
         setIsFetching(true);
         setIsFiltered(false);
         setPrevNum(0);

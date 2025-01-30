@@ -1,5 +1,6 @@
 import { Cross, Search, University, ArrowLeftCircleIcon, ArrowRightCircleIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
+import moment from 'moment';
 import { useState, useEffect, useRef } from 'react';
 import { EnglandUniversities } from './../../../../utils/ukuniversities';
 import { BACKEND_URL } from './../../../../config';
@@ -237,17 +238,6 @@ const UkUniversities: React.FC = () => {
             .catch((error) => console.error("Error fetching ukuniversities:", error));
     }
 
-    function increaseNewId() {
-        const idsOfCurrentUkUniversities = []
-        idsOfCurrentUkUniversities.push(...ukUniversities.map(ukUniversity => ukUniversity.id));
-        if (idsOfCurrentUkUniversities.length !== 0) {
-            let id = Math.max(...idsOfCurrentUkUniversities)
-            return id + 1
-        } else {
-            return 1
-        }
-    }
-
     // Add Uk Universities
     const addUkUniversity = async () => {
         setIsFetching(true);
@@ -258,7 +248,7 @@ const UkUniversities: React.FC = () => {
         }
 
         if (universityName && location && logoLink && universityWebsitePage && universityCoursePage) {
-            const newId = increaseNewId();
+            const newId = moment().unix() + Math.floor((Math.random() * 100) + 1);
 
             fetch(`${BACKEND_URL}/admin/finaluniversities/add`, {
                 method: "POST",

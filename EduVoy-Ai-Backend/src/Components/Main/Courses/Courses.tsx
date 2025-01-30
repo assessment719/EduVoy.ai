@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Search, Cross, FilterIcon, Book, ArrowLeftCircleIcon, ArrowRightCircleIcon } from 'lucide-react';
 import Select from 'react-dropdown-select';
+import moment from 'moment';
 import { EnglandUniversities } from './../../../utils/ukuniversities';
 import { Dropdown } from './../../../utils/dropdown';
 import { Option } from './../../../utils/options';
@@ -173,10 +174,11 @@ const CourseCentre: React.FC = () => {
                     'token': `${token}`
                 },
             });
-            const data: { universities: EnglandUniversities[] } = await response.json();
+            const res = await response.json();
+            const data = res.data;
 
             let options = [];
-            options.push(...data.universities.map(obj => ({ value: obj.id, label: obj.universityName })));
+            options.push(...data.universities.map((obj : EnglandUniversities) => ({ value: obj.id, label: obj.universityName })));
             setUniOption(options);
         } catch (error) {
             console.error('Error fetching resources:', error);
@@ -460,17 +462,6 @@ const CourseCentre: React.FC = () => {
             .catch((error) => console.error("Error fetching course:", error));
     }
 
-    function increaseNewId() {
-        const idsOfCurrentCourses = []
-        idsOfCurrentCourses.push(...courses.map(course => course.id));
-        if (idsOfCurrentCourses.length !== 0) {
-            let id = Math.max(...idsOfCurrentCourses)
-            return id + 1
-        } else {
-            return 1
-        }
-    }
-
     const addCourse = () => {
         setIsFetching(true);
         const token = localStorage.getItem('token');
@@ -480,8 +471,8 @@ const CourseCentre: React.FC = () => {
         }
 
         // Add Course
-        if (selectedUni && courseName && courseType !== "all" && campus && duration && fees && selectedIntakes && selectedFaculties) {
-            const newId = increaseNewId();
+        if (courseName && selectedUni && courseType !== "all" && campus && duration && fees && selectedIntakes && selectedFaculties) {
+            const newId = moment().unix() + Math.floor((Math.random() * 100) + 1);
             const intakes = createIntakes();
             const faculties = createFaculties();
             const universityId = selectedUni[0].value;

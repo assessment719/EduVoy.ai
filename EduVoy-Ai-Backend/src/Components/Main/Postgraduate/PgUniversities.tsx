@@ -46,28 +46,29 @@ const PgUniversities: React.FC = () => {
                     'token': `${token}`
                 },
             });
-            const data: { universities: EnglandUniversities[] } = await response.json();
+            const res = await response.json();
+            const data = res.data;
 
             let obj: { [key: number]: string } = {};
-            data.universities.forEach((uni) => {
+            data.universities.forEach((uni: EnglandUniversities) => {
                 obj[uni.id] = uni.universityName;
             });
             setObjUnisName(obj);
 
             let imgObj: { [key: number]: string } = {};
-            data.universities.forEach((uni) => {
+            data.universities.forEach((uni: EnglandUniversities) => {
                 imgObj[uni.id] = uni.logoLink;
             });
             setObjUnisImg(imgObj);
 
             let addObj: { [key: number]: string } = {};
-            data.universities.forEach((uni) => {
+            data.universities.forEach((uni: EnglandUniversities) => {
                 addObj[uni.id] = uni.location;
             });
             setObjUnisAdd(addObj);
 
             let options = [];
-            options.push(...data.universities.map(obj => (obj.id)));
+            options.push(...data.universities.map((obj: EnglandUniversities) => (obj.id)));
             setUniOption(options);
         } catch (error) {
             console.error('Error fetching unis:', error);

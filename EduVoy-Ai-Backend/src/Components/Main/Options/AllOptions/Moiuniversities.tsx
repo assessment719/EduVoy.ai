@@ -1,5 +1,6 @@
 import { University } from 'lucide-react';
 import { motion } from 'framer-motion';
+import moment from 'moment';
 import { useState, useEffect, useRef } from 'react';
 import { Option } from './../../../../utils/options';
 import { BACKEND_URL } from './../../../../config';
@@ -143,17 +144,6 @@ const MoiUniversities: React.FC = () => {
             .catch((error) => console.error("Error fetching options:", error));
     }
 
-    function increaseNewId () {
-        const idsOfCurrentOptions = []
-        idsOfCurrentOptions.push(...options.map(option => option.id));
-        if (idsOfCurrentOptions.length !== 0) {
-            let id = Math.max(...idsOfCurrentOptions)
-            return id + 1
-        } else {
-            return 1
-        }
-    }
-
     // Add Uk Universities
     const addOption = () => {
         setIsFetching(true);
@@ -164,7 +154,7 @@ const MoiUniversities: React.FC = () => {
         }
 
         if (optionTitle) {
-            const newId = increaseNewId();
+            const newId = moment().unix() + Math.floor((Math.random() * 100) + 1);
 
             fetch(`${BACKEND_URL}/admin/options/add/moiunis`, {
                 method: "POST",

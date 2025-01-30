@@ -59,10 +59,11 @@ const Action = () => {
                     'token': `${token}`
                 },
             });
-            const data: { universities: EnglandUniversities[] } = await response.json();
+            const res = await response.json();
+            const data = res.data;
 
             let obj: { [key: number]: string } = {};
-            data.universities.forEach((uni) => {
+            data.universities.forEach((uni: EnglandUniversities) => {
                 obj[uni.id] = uni.universityName;
             });
             setObjUkUnis(obj);

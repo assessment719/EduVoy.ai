@@ -8,7 +8,7 @@ import { adminAuth } from "./../../../Auth/admin";
 export const coursesRouter = Router();
 
 coursesRouter.get("/", adminAuth, async function (req, res) {
-    const { search, universityId, courseType, intakes } = req.query;
+    const { search, universityId, courseType, intakes, skip, limit } = req.query;
 
     const query: Partial<{ courseName: any, universityId: number; courseType: string; intakes: number }> = {};
     if (search && search !== '') query.courseName = { $regex: search, $options: 'i'};
@@ -19,10 +19,14 @@ coursesRouter.get("/", adminAuth, async function (req, res) {
     try {
         const courses = await courseModel
             .find(query)
-            .sort({ universityName: 1, courseType: 1, courseName: 1 });
+            .sort({ universityName: 1, courseType: 1, courseName: 1 })
+            .skip(Number(skip))
+            .limit(Number(limit));
+
+        const count = await courseModel.countDocuments(query);
 
         res.json({
-            courses,
+            data : {total: count, courses}
         });
     } catch (error) {
         res.status(500).json({

@@ -130,18 +130,34 @@ const CourseCentre: React.FC = () => {
     const [prevNum, setPrevNum] = useState(0);
     const [nextNum, setNextNum] = useState(5);
 
+    const prevNumRef = useRef(prevNum);
+
+    useEffect(() => {
+        prevNumRef.current = prevNum;
+    }, [prevNum]);
+
+    const nextNumRef = useRef(nextNum);
+
+    useEffect(() => {
+        nextNumRef.current = nextNum;
+    }, [nextNum]);
+
     function increseMapCount() {
+        setIsFetching(true);
         if (noOfCourses - 1 >= nextNum) {
             setPrevNum((c) => c + 5);
             setNextNum((c) => c + 5);
         }
+        fetchCourses();
     }
 
     function decreaseMapCount() {
+        setIsFetching(true);
         if (prevNum !== 0) {
             setPrevNum((c) => c - 5);
             setNextNum((c) => c - 5);
         }
+        fetchCourses();
     }
 
     const fetchUnis = async () => {
@@ -235,6 +251,9 @@ const CourseCentre: React.FC = () => {
             await new Promise((e) => { setTimeout(e, 1200) })
 
             const queryParams = new URLSearchParams();
+            queryParams.append('skip', prevNumRef.current.toString());
+            queryParams.append('limit', nextNumRef.current.toString());
+            
             if (queryCourseRef.current !== '') queryParams.append('search', queryCourseRef.current);
             if (queryUniRef.current !== 0) queryParams.append('universityId', queryUniRef.current.toString());
             if (queryTypeRef.current!== 'all') queryParams.append('courseType', queryTypeRef.current);
@@ -246,9 +265,9 @@ const CourseCentre: React.FC = () => {
                     'token': `${token}`
                 },
             });
-            const data: { courses: Course[] } = await response.json();
-            setCourses(data.courses);
-            setNoOfCourses(data.courses.length);
+            const res = await response.json();
+            setCourses(res.data.courses);
+            setNoOfCourses(res.data.total);
             setIsFetching(false);
         } catch (error) {
             console.error('Error fetching resources:', error);
@@ -611,7 +630,7 @@ const CourseCentre: React.FC = () => {
                     </motion.button>
                 </div>
                 <div className="grid grid-cols-1 gap-6 w-[1100px]">
-                    {courses.slice(prevNum, nextNum).map((course, index) =>
+                    {courses.map((course, index) =>
                         <motion.div
                             key={index}
                             initial={{ opacity: 0, y: 20 }}

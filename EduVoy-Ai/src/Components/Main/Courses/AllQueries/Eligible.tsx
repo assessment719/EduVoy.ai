@@ -58,7 +58,7 @@ const EligibleCourses = () => {
 
     // For Pagination
     const [prevNum, setPrevNum] = useState(0);
-    const [nextNum, setNextNum] = useState(5);
+    const [nextNum, setNextNum] = useState(10);
 
     const queryCourseRef = useRef(queryCourse);
 
@@ -77,17 +77,41 @@ const EligibleCourses = () => {
         setEligibleFaculties([]);
     }
 
+    const prevNumRef = useRef(prevNum);
+
+    useEffect(() => {
+        prevNumRef.current = prevNum;
+    }, [prevNum]);
+
+    const nextNumRef = useRef(nextNum);
+
+    useEffect(() => {
+        nextNumRef.current = nextNum;
+    }, [nextNum]);
+
     function increseMapCount() {
+        setIsFetching(true);
         if (noOfCourses - 1 >= nextNum) {
-            setPrevNum((c) => c + 5);
-            setNextNum((c) => c + 5);
+            setPrevNum((c) => c + 10);
+            setNextNum((c) => c + 10);
+        }
+        if (queryUni !== 0 || queryIntake !== 0) {
+            searchCourses(desiredCourseType, queryUni, queryIntake, desiredFaculty);
+        } else {
+            searchCourses(desiredCourseType, desiredUni, desiredIntake, desiredFaculty);
         }
     }
 
     function decreaseMapCount() {
+        setIsFetching(true);
         if (prevNum !== 0) {
-            setPrevNum((c) => c - 5);
-            setNextNum((c) => c - 5);
+            setPrevNum((c) => c - 10);
+            setNextNum((c) => c - 10);
+        }
+        if (queryUni !== 0 || queryIntake !== 0) {
+            searchCourses(desiredCourseType, queryUni, queryIntake, desiredFaculty);
+        } else {
+            searchCourses(desiredCourseType, desiredUni, desiredIntake, desiredFaculty);
         }
     }
 
@@ -225,6 +249,9 @@ const EligibleCourses = () => {
             await new Promise((e) => { setTimeout(e, 1500) })
 
             const queryParams = new URLSearchParams();
+            queryParams.append('skip', prevNumRef.current.toString());
+            queryParams.append('limit', nextNumRef.current.toString());
+            
             if (queryCourseRef.current !== '') queryParams.append('search', queryCourse);
             if (chosenType !== 'all') queryParams.append('courseType', chosenType);
             if (chosenUni !== 0) queryParams.append('universityId', chosenUni.toString());
@@ -237,9 +264,9 @@ const EligibleCourses = () => {
                     'token': `${token}`
                 },
             });
-            const data: { courses: Course[] } = await response.json();
-            setCourses(data.courses);
-            setNoOfCourses(data.courses.length);
+            const res = await response.json();
+            setCourses(res.data.courses);
+            setNoOfCourses(res.data.total);
             setIsFetching(false);
         } catch (error) {
             console.error('Error fetching resources:', error);
@@ -541,7 +568,7 @@ const EligibleCourses = () => {
             </motion.div>}
 
             {isIntake && eligibleFaculties.length !== 0 && desiredFaculty === 0 && <div className='flex flex-col items-center'>
-                <div className='p-1 bg-gray-200 rounded-2xl w-full'>
+                <div className='p-2 bg-gray-200 rounded-2xl w-full'>
                     <h1 className='text-3xl font-bold text-center'>You Are Eligible To Apply In Below Faculties - Select One</h1>
                 </div>
 
@@ -619,7 +646,7 @@ const EligibleCourses = () => {
             </div >}
 
             {!isFetching && desiredFaculty !== 0 && <div className="w-[1100px] mx-auto -ml-2 mb-10">
-                <div className='p-1 bg-gray-200 rounded-2xl w-full mb-8'>
+                <div className='p-2 bg-gray-200 rounded-2xl w-full mb-8'>
                     <h1 className='text-3xl font-bold text-center'>You Can Apply For Following Courses</h1>
                 </div>
 
@@ -661,7 +688,7 @@ const EligibleCourses = () => {
                     <h1 className='text-2xl font-bold'>Sorry! There Are No Course That Matches Your Query.</h1>
                 </div>}
 
-                {courses.length !== 0 && <div className="grid grid-cols-1 gap-6 w-[1100px]">{courses.slice(prevNum, nextNum).map((course, index) =>
+                {courses.length !== 0 && <div className="grid grid-cols-1 gap-6 w-[1100px]">{courses.map((course, index) =>
                     <motion.div
                         key={index}
                         initial={{ opacity: 0, y: 20 }}

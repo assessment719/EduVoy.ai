@@ -8,16 +8,22 @@ import { adminAuth } from "../../../Auth/admin";
 export const finalUniversitiesRouter = Router();
 
 finalUniversitiesRouter.get("/", adminAuth, async function (req, res) {
-    const { search } = req.query;
+    const { search, skip, limit } = req.query;
 
     const query: Partial<{ universityName: any }> = {};
-    if (search && search !== '') query.universityName = { $regex: search, $options: 'i'};
+    if (search && search !== '') query.universityName = { $regex: search, $options: 'i' };
 
     try {
-        const universities = await universityModel.find(query).sort({universityName: 1});
+        const universities = await universityModel
+            .find(query)
+            .sort({ universityName: 1 })
+            .skip(Number(skip))
+            .limit(Number(limit));
+
+        const count = await universityModel.countDocuments(query);
 
         res.json({
-            universities
+            data: { total: count, universities }
         });
     } catch (error) {
         res.status(500).json({

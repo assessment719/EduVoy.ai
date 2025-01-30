@@ -21,18 +21,34 @@ const QuestionCentre: React.FC = () => {
     const [prevNum, setPrevNum] = useState(0);
     const [nextNum, setNextNum] = useState(5);
 
+    const prevNumRef = useRef(prevNum);
+
+    useEffect(() => {
+        prevNumRef.current = prevNum;
+    }, [prevNum]);
+
+    const nextNumRef = useRef(nextNum);
+
+    useEffect(() => {
+        nextNumRef.current = nextNum;
+    }, [nextNum]);
+
     function increseMapCount() {
+        setIsFetching(true);
         if (numberOfQuestions - 1 >= nextNum) {
             setPrevNum((c) => c + 5);
             setNextNum((c) => c + 5);
         }
+        fetchQuestions();
     }
 
     function decreaseMapCount() {
+        setIsFetching(true);
         if (prevNum !== 0) {
             setPrevNum((c) => c - 5);
             setNextNum((c) => c - 5);
         }
+        fetchQuestions();
     }
 
     function checkAndDecreaseMapCount(number: any, func: any) {
@@ -54,15 +70,19 @@ const QuestionCentre: React.FC = () => {
                 return;
             }
             await new Promise((e) => { setTimeout(e, 1200) })
-            const response = await fetch(`${BACKEND_URL}/admin/questions`, {
+
+            const queryParams = new URLSearchParams();
+            queryParams.append('skip', prevNumRef.current.toString());
+            queryParams.append('limit', nextNumRef.current.toString());
+            const response = await fetch(`${BACKEND_URL}/admin/questions?${queryParams.toString()}`, {
                 method: "GET",
                 headers: {
                     'token': `${token}`
                 },
             });
-            const data: { questions: Question[] } = await response.json();
-            setInterviewQuestions(data.questions);
-            setNumberOfQuestions(data.questions.length);
+            const res = await response.json();
+            setInterviewQuestions(res.data.questions);
+            setNumberOfQuestions(res.data.total);
             setIsFetching(false);
         } catch (error) {
             console.error('Error fetching questions:', error);
@@ -224,7 +244,7 @@ const QuestionCentre: React.FC = () => {
             </div>}
             {!isFetching && <div className="max-w-7xl mx-auto p-6 -mt-6">
                 <div className="grid grid-cols-1 gap-6 w-[1100px]">
-                    {interviewQuestions.slice(prevNum, nextNum).map((question, index) =>
+                    {interviewQuestions.map((question, index) =>
                         <motion.div
                             key={index}
                             initial={{ opacity: 0, y: 20 }}

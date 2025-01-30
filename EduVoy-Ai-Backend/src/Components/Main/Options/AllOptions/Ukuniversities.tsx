@@ -44,18 +44,34 @@ const UkUniversities: React.FC = () => {
     const [prevNum, setPrevNum] = useState(0);
     const [nextNum, setNextNum] = useState(5);
 
+    const prevNumRef = useRef(prevNum);
+
+    useEffect(() => {
+        prevNumRef.current = prevNum;
+    }, [prevNum]);
+
+    const nextNumRef = useRef(nextNum);
+
+    useEffect(() => {
+        nextNumRef.current = nextNum;
+    }, [nextNum]);
+
     function increseMapCount() {
+        setIsFetching(true);
         if (numberOfUkUniversities - 1 >= nextNum) {
             setPrevNum((c) => c + 5);
             setNextNum((c) => c + 5);
         }
+        fetchUkUniversities();
     }
 
     function decreaseMapCount() {
+        setIsFetching(true);
         if (prevNum !== 0) {
             setPrevNum((c) => c - 5);
             setNextNum((c) => c - 5);
         }
+        fetchUkUniversities();
     }
 
     function checkAndDecreaseMapCount(number: any, func: any) {
@@ -79,6 +95,9 @@ const UkUniversities: React.FC = () => {
             await new Promise((e) => { setTimeout(e, 1200) })
 
             const queryParams = new URLSearchParams();
+            queryParams.append('skip', prevNumRef.current.toString());
+            queryParams.append('limit', nextNumRef.current.toString());
+            
             if (queryUniRef.current !== '') queryParams.append('search', queryUniRef.current);
             const response = await fetch(`${BACKEND_URL}/admin/finaluniversities?${queryParams.toString()}`, {
                 method: "GET",
@@ -86,9 +105,9 @@ const UkUniversities: React.FC = () => {
                     'token': `${token}`
                 },
             });
-            const data: { universities: EnglandUniversities[] } = await response.json();
-            setUkUniversities(data.universities);
-            setNumberOfUkUniversities(data.universities.length);
+            const res = await response.json();
+            setUkUniversities(res.data.universities);
+            setNumberOfUkUniversities(res.data.total);
             setIsFetching(false);
         } catch (error) {
             console.error('Error fetching ukuniversities:', error);
@@ -299,7 +318,7 @@ const UkUniversities: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-1 gap-6 w-[1100px]">
-                    {ukUniversities.slice(prevNum, nextNum).map((ukuniversity, index) =>
+                    {ukUniversities.map((ukuniversity, index) =>
                         <motion.div
                             key={index}
                             initial={{ opacity: 0, y: 20 }}

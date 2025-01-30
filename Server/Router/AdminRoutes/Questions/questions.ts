@@ -8,13 +8,19 @@ import { adminAuth } from "./../../../Auth/admin";
 export const questionsRouter = Router();
 
 questionsRouter.get("/", adminAuth, async function (req, res) {
+    const { skip, limit } = req.query;
 
     try {
-        const questions = await questionModel.find();
+        const questions = await questionModel
+        .find()
+        .skip(Number(skip))
+        .limit(Number(limit));
 
-        res.json({
-            questions
-        });
+    const count = await questionModel.countDocuments();
+
+    res.json({
+        data: { total: count, questions }
+    });
     } catch (error) {
         res.status(500).json({
             Message: "Error While Fetching",

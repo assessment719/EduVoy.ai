@@ -203,7 +203,7 @@ const CourseType = () => {
             </motion.div>}
 
             {isGotData && !isFetching && noOfUnis !== 0 && <div className='flex flex-col items-center gap-6'>
-                <div className='p-1 bg-gray-200 rounded-2xl w-full'>
+                <div className='p-2 bg-gray-200 rounded-2xl w-full'>
                     <h1 className='text-3xl font-bold text-center'>You Can Apply For Following Universities</h1>
                 </div>
 

@@ -250,7 +250,7 @@ const EligibleCourses = () => {
 
             const queryParams = new URLSearchParams();
             queryParams.append('skip', prevNumRef.current.toString());
-            queryParams.append('limit', nextNumRef.current.toString());
+            queryParams.append('limit', "10");
             
             if (queryCourseRef.current !== '') queryParams.append('search', queryCourse);
             if (chosenType !== 'all') queryParams.append('courseType', chosenType);

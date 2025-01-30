@@ -97,7 +97,7 @@ const UkUniversities: React.FC = () => {
 
             const queryParams = new URLSearchParams();
             queryParams.append('skip', prevNumRef.current.toString());
-            queryParams.append('limit', nextNumRef.current.toString());
+            queryParams.append('limit', "5");
             
             if (queryUniRef.current !== '') queryParams.append('search', queryUniRef.current);
             const response = await fetch(`${BACKEND_URL}/admin/finaluniversities?${queryParams.toString()}`, {

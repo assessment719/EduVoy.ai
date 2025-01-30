@@ -73,7 +73,7 @@ const QuestionCentre: React.FC = () => {
 
             const queryParams = new URLSearchParams();
             queryParams.append('skip', prevNumRef.current.toString());
-            queryParams.append('limit', nextNumRef.current.toString());
+            queryParams.append('limit', "5");
             const response = await fetch(`${BACKEND_URL}/admin/questions?${queryParams.toString()}`, {
                 method: "GET",
                 headers: {

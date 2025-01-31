@@ -413,7 +413,7 @@ const EligibleCourses = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: isDesiredUni === '' ? 0.5 : 1 }}
                     disabled={isDesiredUni === ''}
-                    onClick={goToIntake}
+                    onClick={() => { goToIntake(); setIsDesiredUni('') }}
                     className="w-full btn btn-primary font-bold flex justify-center items-center"
                 >
                     <p>Next</p>
@@ -470,7 +470,7 @@ const EligibleCourses = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: isDesiredIntake === '' ? 0.5 : 1 }}
                     disabled={isDesiredIntake === ''}
-                    onClick={prevCourse}
+                    onClick={() => { prevCourse(); setIsDesiredIntake('') }}
                     className="w-full btn btn-primary font-bold flex justify-center items-center"
                 >
                     <p>Next</p>

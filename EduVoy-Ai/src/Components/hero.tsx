@@ -34,7 +34,7 @@ function Hero() {
     function signOut() {
         localStorage.removeItem('token');
         setFullName('');
-        navigate('/users/sign');
+        navigate('/sign');
     }
 
     return (

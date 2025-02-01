@@ -10,12 +10,12 @@ function Home () {
 
     function signUp() {
         setSign('up');
-        navigate("/users/sign");
+        navigate("/sign");
     }
 
     function signIn() {
         setSign('in');
-        navigate("/users/sign");
+        navigate("/sign");
     }
 
     return (

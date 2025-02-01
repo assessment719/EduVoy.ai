@@ -11,11 +11,11 @@ function App() {
     <RecoilRoot>
       <BrowserRouter>
         <Routes>
-          <Route path="*" element={<Navigate to="/users/home" />} />
-          <Route path="/users/home" element={<Home />} />
-          <Route path="/users/sign" element={<Sign />} />
+          <Route path="*" element={<Navigate to="/home" />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/sign" element={<Sign />} />
           <Route element={<ProtectedRoutes />}>
-            <Route path="/users/eduvoytools" element={<Hero />} />
+            <Route path="/eduvoytools" element={<Hero />} />
           </Route>
         </Routes>
       </BrowserRouter>

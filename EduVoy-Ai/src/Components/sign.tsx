@@ -77,7 +77,7 @@ function Sign() {
                     localStorage.setItem('token', data.token);
                     setFullName(`${data.firstName} ${data.lastName}`);
                     setSign('up');
-                    navigate("/users/eduvoytools");
+                    navigate("/eduvoytools");
                 } else {
                     alert("Sign-in failed. Please check your credentials.");
                     setIsLoading(false);
@@ -105,7 +105,7 @@ function Sign() {
                         <img className="w-36" src="https://i.postimg.cc/G2Gdrhxb/logopng.png" alt="Logo" />
                         <div>
                             <button
-                                onClick={() => navigate("/users/home")}
+                                onClick={() => navigate("/home")}
                                 className="text-xl font-bold px-3 py-2 rounded-2xl bg-transparent border-2 border-black shadow-lg hover:shadow-black transition-shadow duration-300"
                             >
                                 Home

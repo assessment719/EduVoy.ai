@@ -1,4 +1,4 @@
-import { FileText, Download } from 'lucide-react';
+import { FileText, FileVideo, FileAudio, Download } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Resource } from './../../../Utils/resource';
 import { BACKEND_URL } from './../../../config';
@@ -57,7 +57,9 @@ const ResourceCenter = () => {
             >
               <div className="flex items-start space-x-4">
                 <div className="p-3 bg-green-200 rounded-lg">
-                  <FileText className="w-6 h-6 text-black" />
+                  {resource.type === 'Document' && <FileText className="w-6 h-6 text-black" />}
+                  {resource.type === 'Video' && <FileVideo className="w-6 h-6 text-black" />}
+                  {resource.type === 'Audio' && <FileAudio className="w-6 h-6 text-black" />}
                 </div>
                 <div className="flex-1">
                   <h3 className="font-semibold text-xl mb-2">{resource.title}</h3>

@@ -94,8 +94,11 @@ const PgUniversities: React.FC = () => {
             let options = [];
             options.push(...data.pgUniversities.map(obj => (obj.universityId)));
             setPgUniOptions(options);
+            await new Promise((e) => { setTimeout(e, 1200) })
+            setIsFetching(false);
         } catch (error) {
             console.error('Error fetching unis:', error);
+            setIsFetching(false);
         }
     };
 
@@ -132,6 +135,7 @@ const PgUniversities: React.FC = () => {
     }
 
     useEffect(() => {
+        setIsFetching(true);
         fetchUnis();
         fetchPgUnis();
     }, []);

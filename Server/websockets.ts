@@ -212,7 +212,6 @@ chatServer.on("connection", (socket) => {
 // Update Server Logic
 updateServer.on("connection", (socket) => {
     adminUpdateSocket = socket;
-    console.log("Admin Joined Update Server")
 
     allConnectedUsers.forEach((user) => {
         sendJson(socket, {

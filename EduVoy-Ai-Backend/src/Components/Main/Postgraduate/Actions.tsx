@@ -210,9 +210,6 @@ const Action = () => {
         setIsFetching(true);
         setIsActioned(false);
         setAddingUni(0);
-        setTimeout(() => {
-            setIsFetching(false);
-        }, 1000)
     }
 
     const handleAcadMarksChange = (key: number, value: number) => {

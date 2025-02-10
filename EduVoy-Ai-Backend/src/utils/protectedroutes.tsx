@@ -37,7 +37,7 @@ function ProtectedRoutes() {
         checkingAuthentication();
     }, []);
 
-    return isLogin ? <Outlet /> : <Navigate to={"/admin/signin"} />
+    return isLogin ? <Outlet /> : <Navigate to={"/admin/home"} />
 }
 
 export default ProtectedRoutes

@@ -1,5 +1,5 @@
 import Router from "express";
-import { courseModel } from "./../../database";
+import { courseModel, userModel } from "./../../database";
 import { userAuth } from "./../../Auth/user";
 
 export const coursesRouter = Router();
@@ -41,6 +41,44 @@ coursesRouter.get("/", userAuth, async function (req, res) {
         res.status(500).json({
             Message: "Error While Fetching",
             Error: `Error With Api: ${error}`,
+        });
+    }
+});
+
+coursesRouter.get("/dreamCourses", userAuth, async function (req, res) {
+
+    const { userId, courseType, skip, limit } = req.query;
+
+    const response = await userModel.findOne({id: userId}, { dreamCourses: 1});
+
+    try {
+        const projection = {
+            id: 1,
+            universityId: 1,
+            courseName: 1,
+            courseType: 1,
+            universityName: 1,
+            campus: 1,
+            duration: 1,
+            fees: 1,
+            intakes: 1
+        }
+
+        const courses = await courseModel
+            .find({id: {$in: response?.dreamCourses}, courseType: courseType}, projection)
+            .sort({ universityName: 1, courseName: 1 })
+            .skip(Number(skip))
+            .limit(Number(limit));
+
+        const count = await courseModel.countDocuments({id: {$in: response?.dreamCourses}, courseType: courseType});
+
+        res.json({
+            data: { total: count, courses }
+        });
+    } catch (error) {
+        res.status(500).json({
+            Message: "Error While Fetching",
+            Error: `Error With Api: ${error}`
         });
     }
 });

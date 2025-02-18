@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Search, Cross, FilterIcon, Book, ArrowLeftCircleIcon, ArrowRightCircleIcon } from 'lucide-react';
 import Select from 'react-dropdown-select';
 import { useEffect, useState, useRef } from "react";
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { NumDrop } from '../../../../Utils/numDrop';
 import { StringDrop } from '../../../../Utils/stringDrop';
 import { Course } from "../../../../Utils/courses";
@@ -9,6 +10,7 @@ import { Option } from '../../../../Utils/options';
 import { EnglandUniversities } from '../../../../Utils/ukUniversities';
 import { BACKEND_URL } from './../../../../config';
 import LoaderComponent from './../../../loader';
+import { dreamCourseAtom, userDetailsAtom } from './../../../../Atoms/atoms';
 
 
 const AllCourses: React.FC = () => {
@@ -24,6 +26,7 @@ const AllCourses: React.FC = () => {
 
     // Set Of Objects Of Options
     const [objIntake, setObjIntake] = useState<{ [key: number]: string }>({});
+    const [objLink, setObjLink] = useState<{ [key: number]: string }>({});
 
     // Search Query Params
     const [queryCourse, setQueryCourse] = useState('');
@@ -39,6 +42,56 @@ const AllCourses: React.FC = () => {
     // For Pagination
     const [prevNum, setPrevNum] = useState(0);
     const [nextNum, setNextNum] = useState(10);
+
+    // For Dream List
+    const setAddedToList = useSetRecoilState(dreamCourseAtom);
+    const addedToList = useRecoilValue(dreamCourseAtom);
+    const userDetails = useRecoilValue(userDetailsAtom);
+    const initialMount = useRef(false);
+
+    const updateDreamCourses = (dreamCourses: number[]) => {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            return;
+        }
+
+        fetch(`${BACKEND_URL}/users/dreamCourses`, {
+            method: "PUT",
+            headers: {
+                'token': `${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ userId: userDetails.id, dreamCourses: dreamCourses }),
+        })
+            .then(async (res) => {
+                if (!res.ok) {
+                    throw new Error("Failed to fetch data");
+                }
+            })
+            .catch((error) => console.error("Error fetching questions:", error));
+    }
+
+    useEffect(() => {
+        if (initialMount.current === true) {
+            let dreamCourses: number[] = [];
+
+            for (const key in addedToList) {
+                if (addedToList[key] === true) {
+                    dreamCourses.push(Number(key));
+                }
+            }
+            updateDreamCourses(dreamCourses)
+        }
+    }, [addedToList]);
+
+    const toggleAddedToList = (courseId: number) => {
+        initialMount.current = true;
+        setAddedToList((prevState) => ({
+            ...prevState,
+            [courseId]: !prevState[courseId] || false,
+        }));
+    };
 
     const queryCourseRef = useRef(queryCourse);
 
@@ -104,13 +157,12 @@ const AllCourses: React.FC = () => {
             await new Promise((e) => { setTimeout(e, 1200) })
 
             const queryParams = new URLSearchParams();
-            queryParams.append('skip', prevNumRef.current.toString());
-            queryParams.append('limit', "10");
-
-            if (queryCourseRef.current !== '') queryParams.append('search', queryCourse);
+            if (queryCourseRef.current !== '') queryParams.append('search', queryCourseRef.current);
             if (queryUniRef.current !== 0) queryParams.append('universityId', queryUniRef.current.toString());
             if (queryTypeRef.current !== 'all') queryParams.append('courseType', queryTypeRef.current);
             if (queryIntakeRef.current !== 0) queryParams.append('intakes', queryIntakeRef.current.toString());
+            queryParams.append('skip', prevNumRef.current.toString());
+            queryParams.append('limit', "10");
 
             const response = await fetch(`${BACKEND_URL}/users/courses?${queryParams.toString()}`, {
                 method: "GET",
@@ -170,11 +222,17 @@ const AllCourses: React.FC = () => {
                     'token': `${token}`
                 },
             });
-            const data: { universities: EnglandUniversities[] } = await response.json();
+            const data = await response.json();
 
             let options = [];
-            options.push(...data.universities.map(obj => ({ value: obj.id, label: obj.universityName })));
+            options.push(...data.data.universities.map((obj: EnglandUniversities) => ({ value: obj.id, label: obj.universityName })));
             setUniOption(options);
+
+            let obj: { [key: number]: string } = {};
+            data.data.universities.forEach((uni: EnglandUniversities) => {
+                obj[uni.id] = uni.universityCoursePage;
+            });
+            setObjLink(obj);
         } catch (error) {
             console.error('Error fetching unis:', error);
         }
@@ -191,7 +249,7 @@ const AllCourses: React.FC = () => {
         setIsSearched(true);
         setIsFetching(true);
         setPrevNum(0);
-        setNextNum(5);
+        setNextNum(10);
         fetchCourses();
     }
 
@@ -199,7 +257,7 @@ const AllCourses: React.FC = () => {
         setQueryCourse('');
         setIsFetching(true);
         setPrevNum(0);
-        setNextNum(5);
+        setNextNum(10);
         setIsSearched(false);
         fetchCourses();
         setIsFiltered(false);
@@ -208,7 +266,7 @@ const AllCourses: React.FC = () => {
     async function filterCourse() {
         setIsFetching(true);
         setPrevNum(0);
-        setNextNum(5);
+        setNextNum(10);
         setIsMore(false);
         setIsFiltered(true);
         fetchCourses();
@@ -223,7 +281,7 @@ const AllCourses: React.FC = () => {
         setIsFetching(true);
         setIsFiltered(false);
         setPrevNum(0);
-        setNextNum(5);
+        setNextNum(10);
         fetchCourses();
         setIsSearched(false);
         setQueryCourse('');
@@ -363,7 +421,7 @@ const AllCourses: React.FC = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.1 }}
-                            className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-500 w-[1100px]"
+                            className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-500 w-[1100px] gap-3"
                         >
                             <div className="flex items-start space-x-4 mb-5">
                                 <div className="p-3 bg-green-200 rounded-lg">
@@ -389,7 +447,7 @@ const AllCourses: React.FC = () => {
                                         </p>
 
                                         <p className="font-light text-xl mb-2">
-                                            <b className="font-bold text-lg mb-3">Course Fee:</b> {course.fees}
+                                            <b className="font-bold text-lg mb-3">Course Fees:</b> {course.fees}
                                         </p>
                                     </div>
                                     <div className='flex justify-start items-center'>
@@ -410,11 +468,23 @@ const AllCourses: React.FC = () => {
                                     </div>
                                 </div>
                             </div>
+
+                            <div className="flex justify-around items-center gap-3">
+                                <a href={objLink[course.universityId]} target='blank' className='btn btn-primary w-full text-center'>Go To University Course Page</a>
+
+                                <button
+                                    className={`btn btn-primary w-full flex justify-center items-center ${addedToList[course.id] ? 'bg-red-500 text-white' : ''}`}
+                                    onClick={() => toggleAddedToList(course.id)}
+                                >
+                                    {!addedToList[course.id] ? <Cross className='mr-1 w-6' /> : <Cross className='mr-1 w-6 rotate-45' />}
+                                    {!addedToList[course.id] ? <p>Add To Dream List</p> : <p>Remove From Dream List</p>}
+                                </button>
+                            </div>
                         </motion.div>
                     )}
                 </div>}
 
-                {noOfCourses > 5 && <div className="flex justify-center mt-10">
+                {noOfCourses > 10 && <div className="flex justify-center mt-10">
                     <motion.button
                         initial={{ opacity: 0 }}
                         animate={{ opacity: prevNum === 0 ? 0.5 : 1 }}

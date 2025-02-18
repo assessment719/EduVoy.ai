@@ -1,14 +1,14 @@
 import * as Tabs from '@radix-ui/react-tabs';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import EligibleCourses from './AllQueries/Eligible';
-import AllCourses from './AllQueries/All';
-import { userDetailsAtom, dreamCourseAtom } from './../../../Atoms/atoms';
-import { BACKEND_URL } from './../../../config';
+import DreamPgCourses from './Courses/PgCourses';
+import DreamUgCourses from './Courses/UgCourses';
+import { userDetailsAtom, dreamCourseAtom } from './../../../../Atoms/atoms';
+import { BACKEND_URL } from './../../../../config';
 
-const Courses = () => {
-    const [activeTab, setActiveTab] = useState('eligible');
+const DreamList = () => {
+    const [activeTab, setActiveTab] = useState('dreamPgCourses');
 
     // For Dream List
     const userDetails = useRecoilValue(userDetailsAtom);
@@ -45,12 +45,12 @@ const Courses = () => {
     }, [])
 
     return (
-        <main className="min-h-screen px-4 sm:px-6 lg:px-8">
+        <main className="min-h-screen -ml-2">
             <Tabs.Root value={activeTab} onValueChange={setActiveTab}>
-                <Tabs.List className="flex gap-2 space-x-1 -ml-2 bg-gray-200 p-4 rounded-xl shadow-sm mb-8 font-bold w-[1100px]">
+                <Tabs.List className="flex gap-2 space-x-1 bg-gray-200 p-4 rounded-xl shadow-sm mb-8 font-bold w-[1100px]">
                     {[
-                        { id: 'eligible', label: 'Find Eligible Courses' },
-                        { id: 'all', label: 'Find All Courses' }
+                        { id: 'dreamPgCourses', label: 'Postgraduate Courses' },
+                        { id: 'dreamUgCourses', label: 'Undergraduate Courses' }
                     ].map(({ id, label }) => (
                         <Tabs.Trigger
                             key={id}
@@ -68,17 +68,14 @@ const Courses = () => {
                 </Tabs.List>
 
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
                     className='flex justify-center'
                 >
-                    <Tabs.Content value="eligible">
-                        <EligibleCourses />
+                    <Tabs.Content value="dreamPgCourses">
+                        <DreamPgCourses />
                     </Tabs.Content>
 
-                    <Tabs.Content value="all">
-                        <AllCourses />
+                    <Tabs.Content value="dreamUgCourses">
+                        <DreamUgCourses />
                     </Tabs.Content>
                 </motion.div>
             </Tabs.Root>
@@ -86,4 +83,4 @@ const Courses = () => {
     )
 }
 
-export default Courses
+export default DreamList

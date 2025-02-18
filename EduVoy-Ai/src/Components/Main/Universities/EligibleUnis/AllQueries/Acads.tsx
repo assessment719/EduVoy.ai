@@ -1,14 +1,16 @@
 import { motion } from 'framer-motion';
 import Select from 'react-dropdown-select';
 import { SearchIcon, Cross, Search } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { StringDrop } from '../../../../Utils/stringDrop';
-import { NumDrop } from '../../../../Utils/numDrop';
-import { Option } from './../../../../Utils/options';
-import { PgUnis } from '../../../../Utils/pgunis';
-import { EnglandUniversities } from '../../../../Utils/ukUniversities';
-import { BACKEND_URL } from './../../../../config';
-import LoaderComponent from './../../../loader';
+import { useEffect, useState, useRef } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { StringDrop } from '../../../../../Utils/stringDrop';
+import { NumDrop } from '../../../../../Utils/numDrop';
+import { Option } from '../../../../../Utils/options';
+import { PgUnis } from '../../../../../Utils/pgunis';
+import { EnglandUniversities } from '../../../../../Utils/ukUniversities';
+import { BACKEND_URL } from '../../../../../config';
+import LoaderComponent from '../../../../loader';
+import { userDetailsAtom, dreamUniAtom } from'../../../../../Atoms/atoms';
 
 
 const Acads = () => {
@@ -37,6 +39,56 @@ const Acads = () => {
     // For University Search
     const [isSearched, setIsSearched] = useState(false);
     const [queryUni, setQueryUni] = useState('');
+
+    // For Dream List
+    const setAddedToList = useSetRecoilState(dreamUniAtom);
+    const addedToList = useRecoilValue(dreamUniAtom);
+    const userDetails = useRecoilValue(userDetailsAtom);
+    const initialMount = useRef(false);
+
+    const updateDreamUnis = (dreamUnis: number[]) => {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            return;
+        }
+
+        fetch(`${BACKEND_URL}/users/dreamUnis`, {
+            method: "PUT",
+            headers: {
+                'token': `${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ userId: userDetails.id, dreamUnis: dreamUnis }),
+        })
+            .then(async (res) => {
+                if (!res.ok) {
+                    throw new Error("Failed to fetch data");
+                }
+            })
+            .catch((error) => console.error("Error fetching questions:", error));
+    }
+
+    useEffect(() => {
+        if (initialMount.current === true) {
+            let dreamUnis: number[] = [];
+
+            for (const key in addedToList) {
+                if (addedToList[key] === true) {
+                    dreamUnis.push(Number(key));
+                }
+            }
+            updateDreamUnis(dreamUnis)
+        }
+    }, [addedToList]);
+
+    const toggleAddedToList = (universityId: number) => {
+        initialMount.current = true;
+        setAddedToList((prevState) => ({
+            ...prevState,
+            [universityId]: !prevState[universityId] || false,
+        }));
+    };
 
     async function searchUnis() {
         setIsSearched(true);
@@ -72,22 +124,22 @@ const Acads = () => {
                     'token': `${token}`
                 },
             });
-            const data: { universities: EnglandUniversities[] } = await response.json();
+            const data = await response.json();
 
             let imgObj: { [key: number]: string } = {};
-            data.universities.forEach((uni) => {
+            data.data.universities.forEach((uni: EnglandUniversities) => {
                 imgObj[uni.id] = uni.logoLink;
             });
             setObjUnisImg(imgObj);
 
             let webObj: { [key: number]: string } = {};
-            data.universities.forEach((uni) => {
+            data.data.universities.forEach((uni: EnglandUniversities) => {
                 webObj[uni.id] = uni.universityWebsitePage;
             });
             setObjUnisWeb(webObj);
 
             let addObj: { [key: number]: string } = {};
-            data.universities.forEach((uni) => {
+            data.data.universities.forEach((uni: EnglandUniversities) => {
                 addObj[uni.id] = uni.location;
             });
             setObjUnisAdd(addObj);
@@ -345,10 +397,10 @@ const Acads = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1 }}
-                        className="w-[700px] bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-500"
+                        className="w-[950px] bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-500 flex flex-col gap-3"
                     >
                         <div className="flex justify-around items-center space-x-4">
-                            <div className='rounded-xl border-2 border-black overflow-hidden '>
+                            <div className='rounded-xl border-2 border-black overflow-hidden'>
                                 <img src={objUnisImg[uni.universityId]} className='object-cover w-24 h-20' />
                             </div>
                             <div className="flex-1 mt-3">
@@ -356,9 +408,19 @@ const Acads = () => {
                                 <br />
                                 <p className="text-lg mb-3">{objUnisAdd[uni.universityId]}</p>
                             </div>
-                            <div className='flex flex-col gap-3'>
-                                <a href={objUnisWeb[uni.universityId]} target='blank'><button className='btn btn-primary'>Go To University Website</button></a>
-                                <button onClick={() => showMore(uni.universityId)} className='btn btn-primary'>More Info</button>
+                            <div className='flex flex-col gap-3 w-[50%]'>
+                                <button
+                                    className={`btn btn-primary w-full flex justify-center items-center ${addedToList[uni.universityId] ? 'bg-red-500 text-white' : ''}`}
+                                    onClick={() => toggleAddedToList(uni.universityId)}
+                                >
+                                    {!addedToList[uni.universityId] ? <Cross className='mr-1 w-6' /> : <Cross className='mr-1 w-6 rotate-45' />}
+                                    {!addedToList[uni.universityId] ? <p>Add To Dream List</p> : <p>Remove From Dream List</p>}
+                                </button>
+                                <div className="flex justify-around items-center gap-3">
+                                    <button onClick={() => showMore(uni.universityId)} className='btn btn-primary w-full'>More Info</button>
+
+                                    <a href={objUnisWeb[uni.universityId]} target='blank' className='btn btn-primary w-full text-center'>University Website</a>
+                                </div>
                             </div>
                         </div>
                     </motion.div>

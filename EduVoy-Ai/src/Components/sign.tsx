@@ -3,7 +3,7 @@ import { Eye, EyeOffIcon } from 'lucide-react';
 import * as Tabs from '@radix-ui/react-tabs';
 import { motion } from 'framer-motion';
 import { useState, useRef } from 'react';
-import { fullNameAtom, signAtom } from '../Atoms/atoms';
+import { userDetailsAtom, signAtom } from '../Atoms/atoms';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { BACKEND_URL } from '../config';
 import LoaderComponent from './loader';
@@ -18,7 +18,7 @@ function Sign() {
 
     const navigate = useNavigate();
 
-    const setFullName = useSetRecoilState(fullNameAtom);
+    const setUserDetails = useSetRecoilState(userDetailsAtom);
     const setActiveTab = useSetRecoilState(signAtom);
     const setSign = useSetRecoilState(signAtom);
     const activeTab = useRecoilValue(signAtom);
@@ -75,7 +75,7 @@ function Sign() {
                 if (data.token) {
                     setIsLoading(false);
                     localStorage.setItem('token', data.token);
-                    setFullName(`${data.firstName} ${data.lastName}`);
+                    setUserDetails({id: data.userId, fullName: `${data.firstName} ${data.lastName}`});
                     setSign('up');
                     navigate("/eduvoytools");
                 } else {

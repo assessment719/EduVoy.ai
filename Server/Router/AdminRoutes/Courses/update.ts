@@ -6,13 +6,13 @@ export const updateRouter = Router();
 
 updateRouter.put("/", adminAuth, async function (req, res) {
 
-  const { id, universityId, courseName, courseType, universityName, campus, duration, fees, intakes, faculties } = req.body;
+  const { id, universityId, courseName, courseType, universityName, campus, duration, fees, intakes, faculties, modeOfStudy, applicationFees, scholarship, courseModules, placementAvailability, carrer } = req.body;
 
   try {
     await courseModel.updateOne({
       id
     }, {
-      id, universityId, courseName, courseType, universityName, campus, duration, fees, intakes, faculties
+      id, universityId, courseName, courseType, universityName, campus, duration, fees, intakes, faculties, modeOfStudy, applicationFees, scholarship, courseModules, placementAvailability, carrer
     });
 
     res.json({

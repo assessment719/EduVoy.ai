@@ -3,9 +3,9 @@ import { recoilPersist } from 'recoil-persist';
 
 const { persistAtom } = recoilPersist();
 
-export const fullNameAtom = atom({
-    key: 'fullName',
-    default: '',
+export const userDetailsAtom = atom({
+    key: 'userDetails',
+    default: {},
     effects_UNSTABLE: [persistAtom],
 });
 
@@ -13,6 +13,11 @@ export const signAtom = atom({
     key: 'sign',
     default: 'up',
     effects_UNSTABLE: [persistAtom],
+});
+
+export const activeTabAtom = atom({
+    key: 'activeTab',
+    default: 'university',
 });
 
 export const chatBoxStateAtom = atom({
@@ -24,4 +29,14 @@ export const currentRoomAtom = atom({
     key: 'currrentRoom',
     default: '',
     effects_UNSTABLE: [persistAtom],
+});
+
+export const dreamUniAtom = atom({
+    key: 'addedToUniList',
+    default: {} as { [key: number]: boolean }
+});
+
+export const dreamCourseAtom = atom({
+    key: 'addedToCourseList',
+    default: {} as { [key: number]: boolean }
 });

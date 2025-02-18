@@ -23,12 +23,18 @@ const CourseCentre: React.FC = () => {
     const [selectedIntakes, setSelectedIntakes] = useState<Dropdown[]>([]);
     const [selectedFaculties, setSelectedFaculties] = useState<Dropdown[]>([]);
 
-    // Set Of Add Of Update Courses
+    // Set Of Add Or Update Courses
     const [courseName, setCourseName] = useState('');
     const [courseType, setCourseType] = useState('all');
     const [campus, setCampus] = useState('');
     const [duration, setDuration] = useState('');
     const [fees, setFees] = useState(0);
+    const [modeOfStudy, setModeOfStudy] = useState('');
+    const [applicationFees, setApplicationFees] = useState(0);
+    const [scholarship, setScholarship] = useState('');
+    const [courseModules, setCourseModules] = useState('');
+    const [placementAvailability, setPlacementAvailability] = useState('one');
+    const [carrer, setCarrer] = useState('');
 
     // Set Of Objects Of Options
     const [objIntake, setObjIntake] = useState<{ [key: number]: string }>({});
@@ -178,7 +184,7 @@ const CourseCentre: React.FC = () => {
             const data = res.data;
 
             let options = [];
-            options.push(...data.universities.map((obj : EnglandUniversities) => ({ value: obj.id, label: obj.universityName })));
+            options.push(...data.universities.map((obj: EnglandUniversities) => ({ value: obj.id, label: obj.universityName })));
             setUniOption(options);
         } catch (error) {
             console.error('Error fetching resources:', error);
@@ -253,13 +259,12 @@ const CourseCentre: React.FC = () => {
             await new Promise((e) => { setTimeout(e, 1200) })
 
             const queryParams = new URLSearchParams();
-            queryParams.append('skip', prevNumRef.current.toString());
-            queryParams.append('limit', "5");
-            
             if (queryCourseRef.current !== '') queryParams.append('search', queryCourseRef.current);
             if (queryUniRef.current !== 0) queryParams.append('universityId', queryUniRef.current.toString());
-            if (queryTypeRef.current!== 'all') queryParams.append('courseType', queryTypeRef.current);
+            if (queryTypeRef.current !== 'all') queryParams.append('courseType', queryTypeRef.current);
             if (queryIntakeRef.current !== 0) queryParams.append('intakes', queryIntakeRef.current.toString());
+            queryParams.append('skip', prevNumRef.current.toString());
+            queryParams.append('limit', "5");
 
             const response = await fetch(`${BACKEND_URL}/admin/courses?${queryParams.toString()}`, {
                 method: "GET",
@@ -295,6 +300,12 @@ const CourseCentre: React.FC = () => {
         setFees(0);
         setSelectedIntakes([]);
         setSelectedFaculties([]);
+        setModeOfStudy('');
+        setApplicationFees(0);
+        setScholarship('');
+        setCourseModules('');
+        setPlacementAvailability('one');
+        setCarrer('');
         fetchCourses();
     }
 
@@ -375,6 +386,12 @@ const CourseCentre: React.FC = () => {
             }));
 
             setSelectedFaculties(allFaculties);
+            setModeOfStudy(`${courseToUpdate.modeOfStudy}`);
+            setApplicationFees(courseToUpdate.applicationFees);
+            setScholarship(`${courseToUpdate.scholarship}`);
+            setCourseModules(`${courseToUpdate.courseModules}`);
+            setPlacementAvailability(`${courseToUpdate.placementAvailability}`);
+            setCarrer(`${courseToUpdate.carrer}`);
 
             setIsCourseToUpdated(true);
         } catch (error) {
@@ -390,7 +407,7 @@ const CourseCentre: React.FC = () => {
             return;
         }
 
-        if (selectedUni && courseName && courseType !== "all" && campus && duration && fees && selectedIntakes && selectedFaculties) {
+        if (selectedUni && courseName && courseType !== "all" && campus && duration && fees && selectedIntakes && selectedFaculties && modeOfStudy && applicationFees && scholarship && courseModules && placementAvailability !== 'one' && carrer) {
             const intakes = createIntakes();
             const faculties = createFaculties();
             const universityId = selectedUni[0].value;
@@ -402,7 +419,7 @@ const CourseCentre: React.FC = () => {
                     'token': `${token}`,
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ id: numberOfUpdatingCourse, universityId, courseName, courseType, universityName, campus, duration, fees, intakes, faculties }),
+                body: JSON.stringify({ id: numberOfUpdatingCourse, universityId, courseName, courseType, universityName, campus, duration, fees, intakes, faculties, modeOfStudy, applicationFees, scholarship, courseModules, placementAvailability, carrer }),
             })
                 .then(async (res) => {
                     if (!res.ok) {
@@ -471,7 +488,7 @@ const CourseCentre: React.FC = () => {
         }
 
         // Add Course
-        if (courseName && selectedUni && courseType !== "all" && campus && duration && fees && selectedIntakes && selectedFaculties) {
+        if (courseName && selectedUni && courseType !== "all" && campus && duration && fees && selectedIntakes && selectedFaculties && modeOfStudy && applicationFees && scholarship && courseModules && placementAvailability !== 'one' && carrer) {
             const newId = moment().unix() + Math.floor((Math.random() * 100) + 1);
             const intakes = createIntakes();
             const faculties = createFaculties();
@@ -484,7 +501,7 @@ const CourseCentre: React.FC = () => {
                     'token': `${token}`,
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ id: newId, universityId, courseName, courseType, universityName, campus, duration, fees, intakes, faculties }),
+                body: JSON.stringify({ id: newId, universityId, courseName, courseType, universityName, campus, duration, fees, intakes, faculties, modeOfStudy, applicationFees, scholarship, courseModules, placementAvailability, carrer }),
             })
                 .then(async (res) => {
                     if (!res.ok) {
@@ -639,11 +656,10 @@ const CourseCentre: React.FC = () => {
                                     <p className="font-light text-xl mb-2">
                                         <b className="font-bold text-lg mb-3">University:</b> {course.universityName}
                                     </p>
-                                    <div className='grid grid-cols-4'>
-                                        <p className="font-light text-xl mb-2">
-                                            <b className="font-bold text-lg mb-3">Course Type:</b> {course.courseType}
-                                        </p>
-
+                                    <p className="font-light text-xl mb-2">
+                                        <b className="font-bold text-lg mb-3">Course Type:</b> {course.courseType}
+                                    </p>
+                                    <div className='grid grid-cols-3'>
                                         <p className="font-light text-xl mb-2">
                                             <b className="font-bold text-lg mb-3">Campus:</b> {course.campus}
                                         </p>
@@ -653,7 +669,33 @@ const CourseCentre: React.FC = () => {
                                         </p>
 
                                         <p className="font-light text-xl mb-2">
-                                            <b className="font-bold text-lg mb-3">Course Fee:</b> {course.fees}
+                                            <b className="font-bold text-lg mb-3">Course Fees:</b> {course.fees}
+                                        </p>
+                                    </div>
+                                    <div className='grid grid-cols-3'>
+                                        <p className="font-light text-xl mb-2">
+                                            <b className="font-bold text-lg mb-3">Mode Of Study:</b> {course.modeOfStudy}
+                                        </p>
+
+                                        <p className="font-light text-xl mb-2">
+                                            <b className="font-bold text-lg mb-3">Application Fees:</b> {course.applicationFees}
+                                        </p>
+
+                                        <p className="font-light text-xl mb-2">
+                                            <b className="font-bold text-lg mb-3">Scholarship:</b> {course.scholarship}
+                                        </p>
+                                    </div>
+                                    <div className='grid grid-cols-3'>
+                                        <p className="font-light text-xl mb-2">
+                                            <b className="font-bold text-lg mb-3">Course Modules:</b> {course.courseModules}
+                                        </p>
+
+                                        <p className="font-light text-xl mb-2">
+                                            <b className="font-bold text-lg mb-3">Placement Availability:</b> {course.placementAvailability}
+                                        </p>
+
+                                        <p className="font-light text-xl mb-2">
+                                            <b className="font-bold text-lg mb-3">Career Paths & Job Roles:</b> {course.carrer}
                                         </p>
                                     </div>
                                     <div className='flex justify-start items-center'>
@@ -821,7 +863,7 @@ const CourseCentre: React.FC = () => {
                                 id="fees"
                                 value={fees}
                                 onChange={(e) => setFees(Number(e.target.value))}
-                                placeholder="Enter Course Name"
+                                placeholder="Enter Course Fees"
                                 className="p-2 w-full border border-black text-black rounded-lg"
                             />
                         </div>
@@ -857,6 +899,92 @@ const CourseCentre: React.FC = () => {
                                 color='#8bb87b'
                                 placeholder='Select Faculty(s)'
                                 closeOnClickInput
+                            />
+                        </div>
+
+                        <div className="mb-4">
+                            <label htmlFor="title" className="block font-bold text-xl text-white mb-1">
+                                Mode Of Study:
+                            </label>
+                            <input
+                                type="text"
+                                id="fees"
+                                value={modeOfStudy}
+                                onChange={(e) => setModeOfStudy(e.target.value)}
+                                placeholder="Enter Mode Of Study"
+                                className="p-2 w-full border border-black text-black rounded-lg"
+                            />
+                        </div>
+
+                        <div className="mb-4">
+                            <label htmlFor="title" className="block font-bold text-xl text-white mb-1">
+                                Application Fees:
+                            </label>
+                            <input
+                                type="text"
+                                id="fees"
+                                value={applicationFees}
+                                onChange={(e) => setApplicationFees(Number(e.target.value))}
+                                placeholder="Enter Application Fees"
+                                className="p-2 w-full border border-black text-black rounded-lg"
+                            />
+                        </div>
+
+                        <div className="mb-4">
+                            <label htmlFor="title" className="block font-bold text-xl text-white mb-1">
+                                Scholarship:
+                            </label>
+                            <input
+                                type="text"
+                                id="fees"
+                                value={scholarship}
+                                onChange={(e) => setScholarship(e.target.value)}
+                                placeholder="Enter Scholarship"
+                                className="p-2 w-full border border-black text-black rounded-lg"
+                            />
+                        </div>
+
+                        <div className="mb-4">
+                            <label htmlFor="title" className="block font-bold text-xl text-white mb-1">
+                                Course Modules:
+                            </label>
+                            <input
+                                type="text"
+                                id="fees"
+                                value={courseModules}
+                                onChange={(e) => setCourseModules(e.target.value)}
+                                placeholder="Enter Course Modules"
+                                className="p-2 w-full border border-black text-black rounded-lg"
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="category" className="block font-bold text-xl text-white mb-1">
+                                Internship/Placement Availability:
+                            </label>
+                            <select
+                                id="difficulty"
+                                value={placementAvailability}
+                                onChange={e => setPlacementAvailability(e.target.value)}
+                                className="w-full border border-black text-black rounded-lg h-10"
+                            >
+                                <option value="one">Select An Option</option>
+                                <option value="Available">Available</option>
+                                <option value="Not Available">Not Available</option>
+                            </select>
+                        </div>
+
+                        <div className="mb-4">
+                            <label htmlFor="title" className="block font-bold text-xl text-white mb-1">
+                                Career Paths & Job Roles:
+                            </label>
+                            <input
+                                type="text"
+                                id="fees"
+                                value={carrer}
+                                onChange={(e) => setCarrer(e.target.value)}
+                                placeholder="Enter Career Paths & Job Roles"
+                                className="p-2 w-full border border-black text-black rounded-lg"
                             />
                         </div>
                     </div>

@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import { CurrentMessages } from './../../../Utils/currentMessages';
-import { chatBoxStateAtom, currentRoomAtom, fullNameAtom } from './../../../Atoms/atoms';
+import { chatBoxStateAtom, currentRoomAtom, userDetailsAtom } from './../../../Atoms/atoms';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 function HumanChat() {
@@ -10,7 +10,7 @@ function HumanChat() {
     const [currentMessages, setCurrentMessages] = useState<CurrentMessages[]>([{ role: "admin", message: "Hello! I am your personal study abroad advisor." }, { role: "admin", message: "How can i help you?" }]);
     const setChatBoxState = useSetRecoilState(chatBoxStateAtom);
     const currentRoom = useRecoilValue(currentRoomAtom);
-    const fullName = useRecoilValue(fullNameAtom);
+    const userDetails = useRecoilValue(userDetailsAtom);
 
     const room = useRef(currentRoom);
 
@@ -40,7 +40,7 @@ function HumanChat() {
         let joinMessage = {
             type: "join",
             payload: {
-                name: fullName,
+                name: userDetails.fullName,
                 role: "user",
                 roomId: room.current
             }

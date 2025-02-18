@@ -9,4 +9,10 @@ export interface Course {
     fees: number;
     intakes: [Number];
     faculties: [Number];
+    modeOfStudy: string;
+    applicationFees: number;
+    scholarship: string;
+    courseModules: string;
+    placementAvailability: string;
+    carrer: string;
   }

@@ -4,10 +4,13 @@ import { boolean } from "zod";
 const Schema = mongoose.Schema;
 
 const user = new Schema({
+    id: { type: Number, unique: true, required: true },
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
     firstName: { type: String, required: true },
-    lastName: { type: String, required: true }
+    lastName: { type: String, required: true },
+    dreamUnis: { type: [Number], default: [] },
+    dreamCourses: { type: [Number], default: [] },
 });
 
 const admin = new Schema({
@@ -78,7 +81,13 @@ const course = new Schema({
     duration: { type: String, required: true },
     fees: { type: Number, required: true },
     intakes: { type: [Number], required: true },
-    faculties: { type: [Number], required: true }
+    faculties: { type: [Number], required: true },
+    modeOfStudy: { type: String, required: true },
+    applicationFees: { type: Number, required: true },
+    scholarship: { type: String, required: true },
+    courseModules: { type: String, required: true },
+    placementAvailability: { type: String, required: true },
+    carrer: { type: String, required: true }
 });
 
 const universities = new Schema({
@@ -87,7 +96,16 @@ const universities = new Schema({
     location: { type: String, required: true },
     logoLink: { type: String, unique: true, required: true },
     universityWebsitePage: { type: String, unique: true, required: true },
-    universityCoursePage: { type: String, unique: true, required: true }
+    universityCoursePage: { type: String, unique: true, required: true },
+    globalRanking: { type: String, unique: true, required: true },
+    accreditation: { type: String, unique: true, required: true },
+    tutionFees: { type: String, unique: true, required: true },
+    scholarships: { type: String, unique: true, required: true },
+    researchFacilities: { type: String, unique: true, required: true },
+    jobPlacementRate: { type: String, unique: true, required: true },
+    livingCost: { type: String, unique: true, required: true },
+    averageSalary: { type: String, unique: true, required: true },
+    studentReview: { type: String, unique: true, required: true }
 });
 
 const boardsoption = new Schema({

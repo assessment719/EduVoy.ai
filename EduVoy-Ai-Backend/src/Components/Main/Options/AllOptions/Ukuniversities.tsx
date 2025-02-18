@@ -12,6 +12,15 @@ const UkUniversities: React.FC = () => {
     const [logoLink, setLogoLink] = useState('');
     const [universityWebsitePage, setUniversityWebsitePage] = useState('');
     const [universityCoursePage, setUniversityCoursePage] = useState('');
+    const [globalRanking, setGlobalRanking] = useState('');
+    const [accreditation, setAccreditation] = useState('one');
+    const [tutionFees, setTutionFees] = useState('');
+    const [scholarships, setScholarships] = useState('');
+    const [researchFacilities, setResearchFacilities] = useState('');
+    const [jobPlacementRate, setJobPlacementRate] = useState('0%');
+    const [livingCost, setLivingCost] = useState('');
+    const [averageSalary, setAverageSalary] = useState('');
+    const [studentReview, setStudentReview] = useState('0/5');
     const [isFetching, setIsFetching] = useState(false);
 
     const [ukUniversities, setUkUniversities] = useState<EnglandUniversities[]>([]);
@@ -96,10 +105,10 @@ const UkUniversities: React.FC = () => {
             await new Promise((e) => { setTimeout(e, 1200) })
 
             const queryParams = new URLSearchParams();
+            if (queryUniRef.current !== '') queryParams.append('search', queryUniRef.current);
             queryParams.append('skip', prevNumRef.current.toString());
             queryParams.append('limit', "5");
             
-            if (queryUniRef.current !== '') queryParams.append('search', queryUniRef.current);
             const response = await fetch(`${BACKEND_URL}/admin/finaluniversities?${queryParams.toString()}`, {
                 method: "GET",
                 headers: {
@@ -127,6 +136,15 @@ const UkUniversities: React.FC = () => {
         setLogoLink('');
         setUniversityWebsitePage('');
         setUniversityCoursePage('');
+        setGlobalRanking('');
+        setAccreditation('one');
+        setTutionFees('');
+        setScholarships('');
+        setResearchFacilities('');
+        setJobPlacementRate('0%');
+        setLivingCost('');
+        setAverageSalary('');
+        setStudentReview('0/5');
         fetchUkUniversities();
     }
 
@@ -163,6 +181,15 @@ const UkUniversities: React.FC = () => {
             setLogoLink(`${universityToUpdate.logoLink}`);
             setUniversityWebsitePage(`${universityToUpdate.universityWebsitePage}`);
             setUniversityCoursePage(`${universityToUpdate.universityCoursePage}`);
+            setGlobalRanking(`${universityToUpdate.globalRanking}`);
+            setAccreditation(`${universityToUpdate.accreditation}`);
+            setTutionFees(`${universityToUpdate.tutionFees}`);
+            setScholarships(`${universityToUpdate.scholarships}`);
+            setResearchFacilities(`${universityToUpdate.researchFacilities}`);
+            setJobPlacementRate(`${universityToUpdate.jobPlacementRate}`);
+            setLivingCost(`${universityToUpdate.livingCost}`);
+            setAverageSalary(`${universityToUpdate.averageSalary}`);
+            setStudentReview(`${universityToUpdate.studentReview}`);
             setIsUkUniversityToUpdated(true);
             handleScrollToInputSection();
         } catch (error) {
@@ -178,14 +205,14 @@ const UkUniversities: React.FC = () => {
             return;
         }
 
-        if (universityName && location && logoLink && universityWebsitePage && universityCoursePage) {
+        if (universityName && location && logoLink && universityWebsitePage && universityCoursePage && globalRanking && accreditation !== 'one' && tutionFees && scholarships && researchFacilities && jobPlacementRate && livingCost && averageSalary && studentReview) {
             fetch(`${BACKEND_URL}/admin/finaluniversities/update`, {
                 method: "PUT",
                 headers: {
                     'token': `${token}`,
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ id: numberOfUpdatingUkUniversity, universityName, location, logoLink, universityWebsitePage, universityCoursePage }),
+                body: JSON.stringify({ id: numberOfUpdatingUkUniversity, universityName, location, logoLink, universityWebsitePage, universityCoursePage, globalRanking, accreditation, tutionFees, scholarships, researchFacilities, jobPlacementRate, livingCost, averageSalary, studentReview }),
             })
                 .then(async (res) => {
                     if (!res.ok) {
@@ -247,7 +274,7 @@ const UkUniversities: React.FC = () => {
             return;
         }
 
-        if (universityName && location && logoLink && universityWebsitePage && universityCoursePage) {
+        if (universityName && location && logoLink && universityWebsitePage && universityCoursePage && globalRanking && accreditation !== 'one' && tutionFees && scholarships && researchFacilities && jobPlacementRate && livingCost && averageSalary && studentReview) {
             const newId = moment().unix() + Math.floor((Math.random() * 100) + 1);
 
             fetch(`${BACKEND_URL}/admin/finaluniversities/add`, {
@@ -256,7 +283,7 @@ const UkUniversities: React.FC = () => {
                     'token': `${token}`,
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ id: newId, universityName, location, logoLink, universityWebsitePage, universityCoursePage }),
+                body: JSON.stringify({ id: newId, universityName, location, logoLink, universityWebsitePage, universityCoursePage, globalRanking, accreditation, tutionFees, scholarships, researchFacilities, jobPlacementRate, livingCost, averageSalary, studentReview }),
             })
                 .then(async (res) => {
                     if (!res.ok) {
@@ -326,6 +353,21 @@ const UkUniversities: React.FC = () => {
                                     <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Logo Link:</b> {ukuniversity.logoLink}</p>
                                     <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Website Link:</b> {ukuniversity.universityWebsitePage}</p>
                                     <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Course Page Link:</b> {ukuniversity.universityCoursePage}</p>
+                                    <div className='grid grid-cols-3'>
+                                        <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Global Ranking:</b> {ukuniversity.globalRanking}</p>
+                                        <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Accreditation:</b> {ukuniversity.accreditation}</p>
+                                        <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Tution Fees / Year:</b> {ukuniversity.tutionFees}</p>
+                                    </div>
+                                    <div className='grid grid-cols-3'>
+                                        <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Scholarship Availability:</b> {ukuniversity.scholarships}</p>
+                                        <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Research Facilities:</b> {ukuniversity.researchFacilities}</p>
+                                        <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Job Placement Rate:</b> {ukuniversity.jobPlacementRate}</p>
+                                    </div>
+                                    <div className='grid grid-cols-3'>
+                                        <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Living Costs / Year (Approx):</b> {ukuniversity.livingCost}</p>
+                                        <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Avg. Graduate Salary:</b> {ukuniversity.averageSalary}</p>
+                                        <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Student Reviews & Ratings:</b> {ukuniversity.studentReview}</p>
+                                    </div>
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -377,7 +419,7 @@ const UkUniversities: React.FC = () => {
 
                 <div ref={inputSectionRef} className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-8 mt-8 text-white w-[1100px]">
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mb-4'>
-                        <div className="mb-4 col-span-1 md:col-span-2">
+                        <div className="mb-4">
                             <label htmlFor="title" className="block font-bold text-xl text-white mb-1">
                                 University Name:
                             </label>
@@ -443,6 +485,134 @@ const UkUniversities: React.FC = () => {
                                 value={universityCoursePage}
                                 onChange={(e) => setUniversityCoursePage(e.target.value)}
                                 placeholder="Enter University Course Page Link"
+                                className="p-2 w-full border border-black text-black rounded-lg"
+                            />
+                        </div>
+
+                        <div className="mb-4">
+                            <label htmlFor="category" className="block font-bold text-xl text-white mb-1">
+                                University Global Ranking:
+                            </label>
+                            <input
+                                type="text"
+                                id="universityCoursePage"
+                                value={globalRanking}
+                                onChange={(e) => setGlobalRanking(e.target.value)}
+                                placeholder="Enter University Global Ranking"
+                                className="p-2 w-full border border-black text-black rounded-lg"
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="category" className="block font-bold text-xl text-white mb-1">
+                                University Accreditation:
+                            </label>
+                            <select
+                                id="difficulty"
+                                value={accreditation}
+                                onChange={e => setAccreditation(e.target.value)}
+                                className="w-full border border-black text-black rounded-lg h-10"
+                            >
+                                <option value="one">Select An Option</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+
+                        <div className="mb-4">
+                            <label htmlFor="category" className="block font-bold text-xl text-white mb-1">
+                                University Tuition Fees / Year:
+                            </label>
+                            <input
+                                type="text"
+                                id="universityCoursePage"
+                                value={tutionFees}
+                                onChange={(e) => setTutionFees(e.target.value)}
+                                placeholder="Enter University Tuition Fees / Year"
+                                className="p-2 w-full border border-black text-black rounded-lg"
+                            />
+                        </div>
+
+                        <div className="mb-4">
+                            <label htmlFor="category" className="block font-bold text-xl text-white mb-1">
+                                University Scholarships Availability:
+                            </label>
+                            <input
+                                type="text"
+                                id="universityCoursePage"
+                                value={scholarships}
+                                onChange={(e) => setScholarships(e.target.value)}
+                                placeholder="Enter University Scholarships Availability"
+                                className="p-2 w-full border border-black text-black rounded-lg"
+                            />
+                        </div>
+
+                        <div className="mb-4">
+                            <label htmlFor="category" className="block font-bold text-xl text-white mb-1">
+                                University Research Facilities:
+                            </label>
+                            <input
+                                type="text"
+                                id="universityCoursePage"
+                                value={researchFacilities}
+                                onChange={(e) => setResearchFacilities(e.target.value)}
+                                placeholder="Enter University Research Facilities"
+                                className="p-2 w-full border border-black text-black rounded-lg"
+                            />
+                        </div>
+
+                        <div className="mb-4">
+                            <label htmlFor="category" className="block font-bold text-xl text-white mb-1">
+                                University Job Placement Rate:
+                            </label>
+                            <input
+                                type="text"
+                                id="universityCoursePage"
+                                value={jobPlacementRate}
+                                onChange={(e) => setJobPlacementRate(e.target.value)}
+                                placeholder="Enter University Job Placement Rate"
+                                className="p-2 w-full border border-black text-black rounded-lg"
+                            />
+                        </div>
+
+                        <div className="mb-4">
+                            <label htmlFor="category" className="block font-bold text-xl text-white mb-1">
+                                University Living Costs / Year (Approx):
+                            </label>
+                            <input
+                                type="text"
+                                id="universityCoursePage"
+                                value={livingCost}
+                                onChange={(e) => setLivingCost(e.target.value)}
+                                placeholder="Enter University Living Costs / Year"
+                                className="p-2 w-full border border-black text-black rounded-lg"
+                            />
+                        </div>
+
+                        <div className="mb-4">
+                            <label htmlFor="category" className="block font-bold text-xl text-white mb-1">
+                                University Average Graduate Salary:
+                            </label>
+                            <input
+                                type="text"
+                                id="universityCoursePage"
+                                value={averageSalary}
+                                onChange={(e) => setAverageSalary(e.target.value)}
+                                placeholder="Enter University Average Graduate Salary"
+                                className="p-2 w-full border border-black text-black rounded-lg"
+                            />
+                        </div>
+
+                        <div className="mb-4">
+                            <label htmlFor="category" className="block font-bold text-xl text-white mb-1">
+                                Univrsity Student Reviews & Ratings:
+                            </label>
+                            <input
+                                type="text"
+                                id="universityCoursePage"
+                                value={studentReview}
+                                onChange={(e) => setStudentReview(e.target.value)}
+                                placeholder="Enter University Student Reviews & Ratings"
                                 className="p-2 w-full border border-black text-black rounded-lg"
                             />
                         </div>

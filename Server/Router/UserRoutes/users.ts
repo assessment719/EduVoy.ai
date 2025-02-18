@@ -15,11 +15,12 @@ import { facultiesRouter } from "./OpenAI/faculties";
 import { finalUniversitiesRouter } from "./ukuniversities";
 import { optionsRouter } from './options';
 import { chatRouter } from "./OpenAI/chat";
+import { manualCompRouter } from "./OpenAI/manualComparision";
 
 export const usersRouter = Router();
 
 usersRouter.post("/signup", async (req, res) => {
-    const requiredBody = z.object ({
+    const requiredBody = z.object({
         email: z.string().email(),
         password: z.string().min(5).max(20),
         firstName: z.string(),
@@ -91,6 +92,7 @@ usersRouter.post("/signin", async (req, res) => {
 
         res.json({
             token,
+            userId: user.id,
             firstName: user.firstName,
             lastName: user.lastName
         })
@@ -100,6 +102,94 @@ usersRouter.post("/signin", async (req, res) => {
         })
     }
 
+});
+
+usersRouter.get("/dreamUnis", userAuth, async (req, res) => {
+
+    const id = req.query.userId;
+
+    try {
+        const dreams = await userModel.findOne({
+            id
+        }, {
+            dreamUnis: 1
+        });
+
+        res.json({
+            dreamUnis: dreams?.dreamUnis
+        });
+    } catch (error) {
+        res.status(500).json({
+            Message: "Error While Fetching",
+            Error: `Error With Api: ${error}`
+        });
+    }
+});
+
+usersRouter.put("/dreamUnis", userAuth, async (req, res) => {
+
+    const { userId, dreamUnis } = req.body;
+
+    try {
+        await userModel.updateOne({
+            id: userId
+        }, {
+            dreamUnis
+        });
+
+        res.json({
+            Message: "You Have Updated Dream Unversities"
+        });
+    } catch (error) {
+        res.status(500).json({
+            Message: "Error While Fetching",
+            Error: `Error With Api: ${error}`
+        });
+    }
+});
+
+usersRouter.get("/dreamCourses", userAuth, async (req, res) => {
+
+    const id = req.query.userId;
+
+    try {
+        const dreams = await userModel.findOne({
+            id
+        }, {
+            dreamCourses: 1
+        });
+
+        res.json({
+            dreamCourses: dreams?.dreamCourses
+        });
+    } catch (error) {
+        res.status(500).json({
+            Message: "Error While Fetching",
+            Error: `Error With Api: ${error}`
+        });
+    }
+});
+
+usersRouter.put("/dreamCourses", userAuth, async (req, res) => {
+
+    const { userId, dreamCourses } = req.body;
+
+    try {
+        await userModel.updateOne({
+            id: userId
+        }, {
+            dreamCourses
+        });
+
+        res.json({
+            Message: "You Have Updated Dream Courses"
+        });
+    } catch (error) {
+        res.status(500).json({
+            Message: "Error While Fetching",
+            Error: `Error With Api: ${error}`
+        });
+    }
 });
 
 usersRouter.get("/authenticate", userAuth, async (req, res) => {
@@ -118,3 +208,4 @@ usersRouter.use("/openai/analysation", analysationRouter);
 usersRouter.use("/openai/sop", sopRouter);
 usersRouter.use("/openai/faculties", facultiesRouter);
 usersRouter.use("/openai/chat", chatRouter);
+usersRouter.use("/openai/manual", manualCompRouter);

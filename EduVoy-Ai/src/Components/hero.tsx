@@ -2,21 +2,24 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import * as Tabs from '@radix-ui/react-tabs';
 import { motion } from 'framer-motion';
-import { University, Book, PenBoxIcon, Laptop, ArrowRight } from 'lucide-react';
-import { fullNameAtom } from '../Atoms/atoms';
+import { University, Book, PenBoxIcon, Laptop, ArrowRight, LucideListPlus } from 'lucide-react';
+import { activeTabAtom, userDetailsAtom, currentRoomAtom } from '../Atoms/atoms';
 import { useNavigate } from 'react-router-dom';
 import Universities from './Main/Universities/Universities';
 import Courses from './Main/Courses/Courses';
 import SOP from './Main/SOP/SOP';
 import Interview from './Main/Interview/Head';
 import ChatDashboard from './Main/ChatSupport/ChatDashboard';
+import DreamList from './../Components/Main/DreamList/DreamList';
 
 
 function Hero() {
-    const [activeTab, setActiveTab] = useState('university');
     const [activeTabTitle, setActiveTabTitle] = useState('');
-    const fullName = useRecoilValue(fullNameAtom);
-    const setFullName = useSetRecoilState(fullNameAtom);
+    const setActiveTab = useSetRecoilState(activeTabAtom);
+    const activeTab = useRecoilValue(activeTabAtom);
+    const userDetails = useRecoilValue(userDetailsAtom);
+    const setUserDetails = useSetRecoilState(userDetailsAtom);
+    const setCurrentRoom = useSetRecoilState(currentRoomAtom);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -26,14 +29,17 @@ function Hero() {
             setActiveTabTitle("Find Courses");
         } else if (activeTab === 'sop') {
             setActiveTabTitle("Statement of Purpose Generator");
-        } else {
+        } else if (activeTab === 'interview') {
             setActiveTabTitle("Interview Simulator");
+        } else {
+            setActiveTabTitle("Dream List");
         }
     }, [activeTab]);
 
     function signOut() {
         localStorage.removeItem('token');
-        setFullName('');
+        setUserDetails({});
+        setCurrentRoom('');
         navigate('/sign');
     }
 
@@ -46,7 +52,7 @@ function Hero() {
                     <div className="flex justify-around w-44 border-2 border-black p-1 rounded-2xl shadow-lg">
                         <img className="w-10 border-2 border-black rounded-xl" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtuphMb4mq-EcVWhMVT8FCkv5dqZGgvn_QiA&s" />
                         <div>
-                            <h4 className="font-bold">{fullName}</h4>
+                            <h4 className="font-bold">{userDetails.fullName}</h4>
                             <button onClick={() => signOut()} className="text-red-500 font-semibold flex justify-center">
                                 <p>Sign Out</p>
                                 <ArrowRight className="w-4" />
@@ -61,6 +67,7 @@ function Hero() {
                         {[
                             { id: 'university', label: 'Find Universities', icon: University },
                             { id: 'course', label: 'Find Courses', icon: Book },
+                            { id: 'dreamlist', label: 'Dream List', icon: LucideListPlus },
                             { id: 'sop', label: 'SOP Generator', icon: PenBoxIcon },
                             { id: 'interview', label: 'Interview Simulator', icon: Laptop }
                         ].map(({ id, label, icon: Icon }) => (
@@ -93,6 +100,10 @@ function Hero() {
 
                         <Tabs.Content value="course">
                             <Courses />
+                        </Tabs.Content>
+
+                        <Tabs.Content value="dreamlist">
+                            <DreamList />
                         </Tabs.Content>
 
                         <Tabs.Content value="sop">

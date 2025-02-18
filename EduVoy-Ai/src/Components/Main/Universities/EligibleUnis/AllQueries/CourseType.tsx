@@ -1,32 +1,24 @@
 import { motion } from 'framer-motion';
 import Select from 'react-dropdown-select';
 import { SearchIcon, Cross, Search } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { StringDrop } from '../../../../Utils/stringDrop';
-import { NumDrop } from '../../../../Utils/numDrop';
-import { Option } from './../../../../Utils/options';
-import { PgUnis } from './../../../../Utils/pgunis';
-import { EnglandUniversities } from '../../../../Utils/ukUniversities';
-import { BACKEND_URL } from './../../../../config';
-import LoaderComponent from './../../../loader';
+import { useEffect, useState, useRef } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { StringDrop } from '../../../../../Utils/stringDrop';
+import { PgUnis } from '../../../../../Utils/pgunis';
+import { EnglandUniversities } from '../../../../../Utils/ukUniversities';
+import { BACKEND_URL } from '../../../../../config';
+import LoaderComponent from '../../../../loader';
+import { userDetailsAtom, dreamUniAtom } from'../../../../../Atoms/atoms';
 
-const Math = () => {
+const CourseType = () => {
     const [courseType, setCourseType] = useState('');
-    const [boardId, setBoardId] = useState(0);
-    const [mathMarks, setMathMarks] = useState(0);
-
-    const [boards, setBoards] = useState<NumDrop[]>([]);
+    const [courseVarient, setCourseVarient] = useState('');
 
     const [isFetching, setIsFetching] = useState(false);
     const [isGotData, setIsGotData] = useState(false);
-    const [isMore, setIsMore] = useState(false);
     const [objUnisWeb, setObjUnisWeb] = useState<{ [key: number]: string }>({});
     const [objUnisImg, setObjUnisImg] = useState<{ [key: number]: string }>({});
     const [objUnisAdd, setObjUnisAdd] = useState<{ [key: number]: string }>({});
-
-    const [objBoards, setObjBoards] = useState<{ [key: number]: string }>({});
-    const [objMarks, setObjMarks] = useState<{ [key: number]: number }>({});
-    const [extraInfo, setExtraInfo] = useState('');
 
     const [unis, setUnis] = useState<PgUnis[]>([]);
     const [noOfUnis, setNoOfUnis] = useState(0);
@@ -34,6 +26,56 @@ const Math = () => {
     // For University Search
     const [isSearched, setIsSearched] = useState(false);
     const [queryUni, setQueryUni] = useState('');
+
+    // For Dream List
+    const setAddedToList = useSetRecoilState(dreamUniAtom);
+    const addedToList = useRecoilValue(dreamUniAtom);
+    const userDetails = useRecoilValue(userDetailsAtom);
+    const initialMount = useRef(false);
+
+    const updateDreamUnis = (dreamUnis: number[]) => {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            return;
+        }
+
+        fetch(`${BACKEND_URL}/users/dreamUnis`, {
+            method: "PUT",
+            headers: {
+                'token': `${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ userId: userDetails.id, dreamUnis: dreamUnis }),
+        })
+            .then(async (res) => {
+                if (!res.ok) {
+                    throw new Error("Failed to fetch data");
+                }
+            })
+            .catch((error) => console.error("Error fetching questions:", error));
+    }
+
+    useEffect(() => {
+        if (initialMount.current === true) {
+            let dreamUnis: number[] = [];
+
+            for (const key in addedToList) {
+                if (addedToList[key] === true) {
+                    dreamUnis.push(Number(key));
+                }
+            }
+            updateDreamUnis(dreamUnis)
+        }
+    }, [addedToList]);
+
+    const toggleAddedToList = (universityId: number) => {
+        initialMount.current = true;
+        setAddedToList((prevState) => ({
+            ...prevState,
+            [universityId]: !prevState[universityId] || false,
+        }));
+    };
 
     async function searchUnis() {
         setIsSearched(true);
@@ -56,6 +98,17 @@ const Math = () => {
         setQueryUni('');
     }
 
+    const ugCourseTypes = [
+        { value: 'placementCourses', label: 'Placement Courses' },
+        { value: 'topupCourses', label: 'Top-Up Courses' }
+    ]
+
+    const pgCourseTypes = [
+        { value: 'placementCourses', label: 'Placement Courses' },
+        { value: 'topupCourses', label: 'Top-Up Courses' },
+        { value: 'resCourses', label: 'Research Courses' }
+    ]
+
     const fetchUkUnis = async () => {
         try {
             const token = localStorage.getItem('token');
@@ -69,22 +122,22 @@ const Math = () => {
                     'token': `${token}`
                 },
             });
-            const data: { universities: EnglandUniversities[] } = await response.json();
+            const data = await response.json();
 
             let imgObj: { [key: number]: string } = {};
-            data.universities.forEach((uni) => {
+            data.data.universities.forEach((uni: EnglandUniversities) => {
                 imgObj[uni.id] = uni.logoLink;
             });
             setObjUnisImg(imgObj);
 
             let webObj: { [key: number]: string } = {};
-            data.universities.forEach((uni) => {
+            data.data.universities.forEach((uni: EnglandUniversities) => {
                 webObj[uni.id] = uni.universityWebsitePage;
             });
             setObjUnisWeb(webObj);
 
             let addObj: { [key: number]: string } = {};
-            data.universities.forEach((uni) => {
+            data.data.universities.forEach((uni: EnglandUniversities) => {
                 addObj[uni.id] = uni.location;
             });
             setObjUnisAdd(addObj);
@@ -93,42 +146,12 @@ const Math = () => {
         }
     };
 
-    const fetchBoards = async () => {
-        try {
-            const token = localStorage.getItem('token');
-
-            if (!token) {
-                return;
-            }
-            const response = await fetch(`${BACKEND_URL}/users/options/board`, {
-                method: "GET",
-                headers: {
-                    'token': `${token}`
-                },
-            });
-            const data: { boards: Option[] } = await response.json();
-
-            let options = [];
-            options.push(...data.boards.map(obj => ({ value: obj.id, label: obj.option })));
-            setBoards(options);
-
-            let Obj: { [key: number]: string } = {};
-            data.boards.forEach((board) => {
-                Obj[board.id] = board.option;
-            });
-            setObjBoards(Obj);
-        } catch (error) {
-            console.error('Error fetching resources:', error);
-        }
-    };
-
     useEffect(() => {
-        fetchBoards();
         fetchUkUnis();
     }, [])
 
     const fetchUniversities = async () => {
-        if (courseType && boardId !== 0 && mathMarks !== 0) {
+        if (courseType && courseVarient) {
             setIsFetching(true);
             try {
                 const token = localStorage.getItem('token');
@@ -139,8 +162,7 @@ const Math = () => {
 
                 await new Promise((resolve) => setTimeout(resolve, 2000));
                 const queryParams = new URLSearchParams();
-                if (boardId !== 0) queryParams.append('boardId', boardId.toString());
-                if (mathMarks !== 0) queryParams.append('mathMarks', mathMarks.toString()); ``
+                if (courseVarient !== '') queryParams.append('courseType', courseVarient);
 
                 const response = await fetch(`${BACKEND_URL}/users/universities/${courseType}/?${queryParams.toString()}`, {
                     method: "GET",
@@ -170,33 +192,7 @@ const Math = () => {
     function resetQuery() {
         setIsGotData(false);
         setCourseType('');
-        setBoardId(0);
-        setMathMarks(0);
-    }
-
-    async function showMore(universityId: Number) {
-        try {
-            const token = localStorage.getItem('token');
-
-            if (!token) {
-                return;
-            }
-            const response = await fetch(`${BACKEND_URL}/users/universities/${courseType}/mathReq/${universityId}`, {
-                method: "GET",
-                headers: {
-                    'token': `${token}`
-                },
-            });
-            const data = await response.json();
-            const infoOfUni = data.university;
-
-            //Fetching All Data
-            setObjMarks(infoOfUni.mathReq);
-            setExtraInfo(infoOfUni.extraReqInfo);
-            setIsMore(true);
-        } catch (error) {
-            console.error('Error fetching options:', error);
-        }
+        setCourseVarient('');
     }
 
     return (
@@ -229,40 +225,27 @@ const Math = () => {
 
                     <div className='w-full'>
                         <label htmlFor="type" className="block font-bold text-xl mb-1">
-                            Select Board:
+                            Select Preferred Course Type:
                         </label>
                         <div className='border-2 border-black'>
                             <Select
                                 className='bg-white text-black h-10 text-2xl'
                                 name='university'
                                 color='#8bb87b'
-                                placeholder='Select Board'
+                                searchable={false}
+                                placeholder='Select Course Type'
                                 closeOnClickInput
                                 values={[]}
-                                options={boards}
-                                onChange={(value: NumDrop[]): void => { setBoardId(value[0].value) }}
+                                options={courseType === "undergraduate" ? ugCourseTypes : pgCourseTypes}
+                                onChange={(value: StringDrop[]): void => { setCourseVarient(value[0].value) }}
                             />
                         </div>
-                    </div>
-
-                    <div className="w-full">
-                        <label htmlFor="expectedKeywordsID" className="block font-bold text-xl mb-1">
-                            Enter Overall Math Subject Marks:
-                        </label>
-                        <input
-                            type="text"
-                            id="acadMarks"
-                            value={mathMarks === 0 ? '' : mathMarks}
-                            onChange={(e) => setMathMarks(Number(e.target.value))}
-                            placeholder="Enter Overall Percentage"
-                            className="p-2 h-11 border-2 border-black text-xl w-full"
-                        />
                     </div>
                 </div>
                 <motion.button
                     initial={{ opacity: 0 }}
-                    animate={{ opacity: courseType === '' || boardId === 0 || mathMarks === 0 ? 0.5 : 1 }}
-                    disabled={courseType === '' || boardId === 0 || mathMarks === 0}
+                    animate={{ opacity: courseType === '' || courseVarient === '' ? 0.5 : 1 }}
+                    disabled={courseType === '' || courseVarient === ''}
                     onClick={findUnis}
                     className="w-full btn btn-primary font-bold flex justify-center items-center"
                 >
@@ -311,10 +294,10 @@ const Math = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1 }}
-                        className="w-[700px] bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-500"
+                        className="w-[950px] bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-500 flex flex-col gap-3"
                     >
                         <div className="flex justify-around items-center space-x-4">
-                            <div className='rounded-xl border-2 border-black overflow-hidden '>
+                            <div className='rounded-xl border-2 border-black overflow-hidden'>
                                 <img src={objUnisImg[uni.universityId]} className='object-cover w-24 h-20' />
                             </div>
                             <div className="flex-1 mt-3">
@@ -322,46 +305,24 @@ const Math = () => {
                                 <br />
                                 <p className="text-lg mb-3">{objUnisAdd[uni.universityId]}</p>
                             </div>
-                            <div className='flex flex-col gap-3'>
-                                <a href={objUnisWeb[uni.universityId]} target='blank'><button className='btn btn-primary'>Go To University Website</button></a>
-                                <button onClick={() => showMore(uni.universityId)} className='btn btn-primary'>More Info</button>
+                            <div className='flex flex-col gap-3 w-[50%]'>
+                                <button
+                                    className={`btn btn-primary w-full flex justify-center items-center ${addedToList[uni.universityId] ? 'bg-red-500 text-white' : ''}`}
+                                    onClick={() => toggleAddedToList(uni.universityId)}
+                                >
+                                    {!addedToList[uni.universityId] ? <Cross className='mr-1 w-6' /> : <Cross className='mr-1 w-6 rotate-45' />}
+                                    {!addedToList[uni.universityId] ? <p>Add To Dream List</p> : <p>Remove From Dream List</p>}
+                                </button>
+
+                                <a href={objUnisWeb[uni.universityId]} target='blank' className='btn btn-primary w-full text-center'>University Website</a>
                             </div>
                         </div>
                     </motion.div>
                 )}
             </div>}
 
-            {isMore && <div className='fixed h-screen w-[1200px] top-28 -ml-[100px]'>
-                <div className='flex justify-center'>
-                    <motion.div
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                        className="w-[700px] mt-[15%] border-4 border-black bg-white p-5 rounded-xl shadow-2xl shadow-black"
-                    >
-                        <div className='flex justify-end'>
-                            <Cross onClick={() => setIsMore(false)} className='fixed hover:text-red-500 transition-text duration-300 scale-150 rotate-45 cursor-pointer' />
-                        </div>
-                        <div className='flex flex-col p-3 gap-5'>
-                            <div>
-                                <h1 className='font-bold text-3xl underline'>Math Requirements (Math Marks):</h1>
-                                <div className="grid grid-cols-1 gap-2 mt-2">
-                                    {Object.entries(objMarks).map(([key, value]) => (
-                                        <h1 className='text-xl'><b>- {objBoards[key as any]}: </b>{value}</h1>
-                                    ))}
-                                </div>
-                            </div>
-                            <div>
-                                <h1 className='font-bold text-3xl underline'>Extra Requirements:</h1>
-                                <h1 className='text-xl mt-2'>{extraInfo}</h1>
-                            </div>
-                        </div>
-                    </motion.div>
-                </div>
-            </div>}
-
             {isGotData && !isFetching && noOfUnis === 0 && <div className='mt-5 flex justify-center'>
-                <h1 className='text-2xl font-bold'>Sorry! You Are Not Eligible For Any University.</h1>
+                <h1 className='text-2xl font-bold'>Sorry! There Is No University Offering This Course Type.</h1>
             </div>}
 
             {isGotData && !isFetching && <div className='m-5 flex justify-center'>
@@ -379,4 +340,4 @@ const Math = () => {
     )
 }
 
-export default Math
+export default CourseType

@@ -1,29 +1,56 @@
 import * as Tabs from '@radix-ui/react-tabs';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
-import Acads from './AllQueries/Acads';
-import Waiver from './AllQueries/Waiver';
-import Test from './AllQueries/Tests';
-import Math from './AllQueries/Math';
-import Moi from './AllQueries/MOI';
-import CourseType from './AllQueries/CourseType';
-import Fees from './AllQueries/Fees';
+import { useEffect, useState } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import EligibleUniversities from './EligibleUnis/EligibleUnis';
+import AllUnis from './AllUnis/All';
+import { userDetailsAtom, dreamUniAtom } from './../../../Atoms/atoms';
+import { BACKEND_URL } from './../../../config';
 
 const Universities = () => {
-    const [activeTab, setActiveTab] = useState('acadreq');
+    const [activeTab, setActiveTab] = useState('eligible');
+
+    // For Dream List
+    const userDetails = useRecoilValue(userDetailsAtom);
+    const setAddedToList = useSetRecoilState(dreamUniAtom);
+
+    const fetchDreamUnis = async () => {
+        try {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                return;
+            }
+
+            const response = await fetch(`${BACKEND_URL}/users/dreamUnis?userId=${userDetails.id}`, {
+                method: "GET",
+                headers: {
+                    'token': `${token}`
+                },
+            });
+            const data = await response.json();
+
+            let obj: { [key: string]: boolean } = {};
+            data.dreamUnis.forEach((courseId: number) => {
+                obj[courseId] = true;
+            });
+            setAddedToList(obj);
+        } catch (error) {
+            console.error('Error fetching resources:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchDreamUnis();
+    }, [])
 
     return (
         <main className="min-h-screen px-4 sm:px-6 lg:px-8">
             <Tabs.Root value={activeTab} onValueChange={setActiveTab}>
                 <Tabs.List className="flex gap-2 space-x-1 -ml-2 bg-gray-200 p-4 rounded-xl shadow-sm mb-8 font-bold w-[1100px]">
                     {[
-                        { id: 'acadreq', label: 'Academic' },
-                        { id: 'engreq', label: 'English Waiver' },
-                        { id: 'testreq', label: 'Language Test' },
-                        { id: 'mathreq', label: 'Math' },
-                        { id: 'moi', label: 'MOI' },
-                        { id: 'coursetype', label: 'Course Type' },
-                        { id: 'fees', label: 'Fees' },
+                        { id: 'eligible', label: 'Find Eligible Universities' },
+                        { id: 'all', label: 'Find All Universities' }
                     ].map(({ id, label }) => (
                         <Tabs.Trigger
                             key={id}
@@ -41,37 +68,14 @@ const Universities = () => {
                 </Tabs.List>
 
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
                     className='flex justify-center'
                 >
-                    <Tabs.Content value="acadreq">
-                        <Acads />
+                    <Tabs.Content value="eligible">
+                        <EligibleUniversities />
                     </Tabs.Content>
 
-                    <Tabs.Content value="engreq">
-                        <Waiver />
-                    </Tabs.Content>
-
-                    <Tabs.Content value="testreq">
-                        <Test />
-                    </Tabs.Content>
-
-                    <Tabs.Content value="mathreq">
-                        <Math />
-                    </Tabs.Content>
-
-                    <Tabs.Content value="moi">
-                        <Moi />
-                    </Tabs.Content>
-
-                    <Tabs.Content value="coursetype">
-                        <CourseType />
-                    </Tabs.Content>
-
-                    <Tabs.Content value="fees">
-                        <Fees />
+                    <Tabs.Content value="all">
+                        <AllUnis />
                     </Tabs.Content>
                 </motion.div>
             </Tabs.Root>

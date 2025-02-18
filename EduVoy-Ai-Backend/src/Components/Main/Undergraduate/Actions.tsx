@@ -563,7 +563,7 @@ const Action = () => {
 
                         <div className="mb-4">
                             <label htmlFor="title" className="block font-bold text-xl mb-1">
-                                Enter Minimum Course Fee:
+                                Enter Minimum Course Fees:
                             </label>
                             <input
                                 type="number"

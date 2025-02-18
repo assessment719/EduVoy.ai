@@ -6,11 +6,11 @@ export const addRouter = Router();
 
 addRouter.post("/", adminAuth, async function (req, res) {
 
-    const { id, universityName, location, logoLink, universityWebsitePage, universityCoursePage } = req.body;
+    const { id, universityName, location, logoLink, universityWebsitePage, universityCoursePage, globalRanking, accreditation, tutionFees, scholarships, researchFacilities, jobPlacementRate, livingCost, averageSalary, studentReview } = req.body;
 
     try {
         await universityModel.create({
-            id, universityName, location, logoLink, universityWebsitePage, universityCoursePage
+            id, universityName, location, logoLink, universityWebsitePage, universityCoursePage, globalRanking, accreditation, tutionFees, scholarships, researchFacilities, jobPlacementRate, livingCost, averageSalary, studentReview
         });
 
         res.json({

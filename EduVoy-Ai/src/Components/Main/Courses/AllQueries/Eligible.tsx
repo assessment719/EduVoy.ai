@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { SearchIcon, ArrowBigRight, Search, Cross, FilterIcon, Book, ArrowLeftCircleIcon, ArrowRightCircleIcon } from 'lucide-react';
 import Select from 'react-dropdown-select';
 import { useEffect, useState, useRef } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { NumDrop } from '../../../../Utils/numDrop';
 import { StringDrop } from '../../../../Utils/stringDrop';
 import { EnglandUniversities } from '../../../../Utils/ukUniversities';
@@ -9,6 +10,7 @@ import { Course } from "../../../../Utils/courses";
 import { Option } from '../../../../Utils/options';
 import { BACKEND_URL } from './../../../../config';
 import LoaderComponent from './../../../loader';
+import { dreamCourseAtom, userDetailsAtom } from './../../../../Atoms/atoms';
 
 const EligibleCourses = () => {
     const [isFetching, setIsFetching] = useState(false);
@@ -59,6 +61,56 @@ const EligibleCourses = () => {
     // For Pagination
     const [prevNum, setPrevNum] = useState(0);
     const [nextNum, setNextNum] = useState(10);
+
+    // For Dream List
+    const setAddedToList = useSetRecoilState(dreamCourseAtom);
+    const addedToList = useRecoilValue(dreamCourseAtom);
+    const userDetails = useRecoilValue(userDetailsAtom);
+    const initialMount = useRef(false);
+
+    const updateDreamCourses = (dreamCourses: number[]) => {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            return;
+        }
+
+        fetch(`${BACKEND_URL}/users/dreamCourses`, {
+            method: "PUT",
+            headers: {
+                'token': `${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ userId: userDetails.id, dreamCourses: dreamCourses }),
+        })
+            .then(async (res) => {
+                if (!res.ok) {
+                    throw new Error("Failed to fetch data");
+                }
+            })
+            .catch((error) => console.error("Error fetching questions:", error));
+    }
+
+    useEffect(() => {
+        if (initialMount.current === true) {
+            let dreamCourses: number[] = [];
+
+            for (const key in addedToList) {
+                if (addedToList[key] === true) {
+                    dreamCourses.push(Number(key));
+                }
+            }
+            updateDreamCourses(dreamCourses)
+        }
+    }, [addedToList]);
+
+    const toggleAddedToList = (courseId: number) => {
+        initialMount.current = true;
+        setAddedToList((prevState) => ({
+            ...prevState,
+            [courseId]: !prevState[courseId] || false,
+        }));
+    };
 
     const queryCourseRef = useRef(queryCourse);
 
@@ -128,14 +180,14 @@ const EligibleCourses = () => {
                     'token': `${token}`
                 },
             });
-            const data: { universities: EnglandUniversities[] } = await response.json();
+            const data = await response.json();
 
             let options = [];
-            options.push(...data.universities.map(obj => ({ value: obj.id, label: obj.universityName })));
+            options.push(...data.data.universities.map((obj: EnglandUniversities) => ({ value: obj.id, label: obj.universityName })));
             setUkUnis(options);
 
             let obj: { [key: number]: string } = {};
-            data.universities.forEach((uni) => {
+            data.data.universities.forEach((uni: EnglandUniversities) => {
                 obj[uni.id] = uni.universityCoursePage;
             });
             setObjLink(obj);
@@ -249,14 +301,13 @@ const EligibleCourses = () => {
             await new Promise((e) => { setTimeout(e, 1500) })
 
             const queryParams = new URLSearchParams();
-            queryParams.append('skip', prevNumRef.current.toString());
-            queryParams.append('limit', "10");
-            
-            if (queryCourseRef.current !== '') queryParams.append('search', queryCourse);
+            if (queryCourseRef.current !== '') queryParams.append('search', queryCourseRef.current);
             if (chosenType !== 'all') queryParams.append('courseType', chosenType);
             if (chosenUni !== 0) queryParams.append('universityId', chosenUni.toString());
             if (chosenIntake !== 0) queryParams.append('intakes', chosenIntake.toString());
             if (chosnFcaulty !== 0) queryParams.append('facultyId', chosnFcaulty.toString());
+            queryParams.append('skip', prevNumRef.current.toString());
+            queryParams.append('limit', "10");
 
             const response = await fetch(`${BACKEND_URL}/users/courses?${queryParams.toString()}`, {
                 method: "GET",
@@ -284,7 +335,7 @@ const EligibleCourses = () => {
         setIsSearched(true);
         setIsFetching(true);
         setPrevNum(0);
-        setNextNum(5);
+        setNextNum(10);
         if (queryUni !== 0 || queryIntake !== 0) {
             searchCourses(desiredCourseType, queryUni, queryIntake, desiredFaculty);
         } else {
@@ -296,7 +347,7 @@ const EligibleCourses = () => {
         setQueryCourse('');
         setIsFetching(true);
         setPrevNum(0);
-        setNextNum(5);
+        setNextNum(10);
         setIsSearched(false);
         searchCourses(desiredCourseType, desiredUni, desiredIntake, desiredFaculty);
         setIsFiltered(false);
@@ -305,7 +356,7 @@ const EligibleCourses = () => {
     async function filterCourse() {
         setIsFetching(true);
         setPrevNum(0);
-        setNextNum(5);
+        setNextNum(10);
         setIsMore(false);
         setIsFiltered(true);
         searchCourses(desiredCourseType, queryUni, queryIntake, desiredFaculty);
@@ -319,7 +370,7 @@ const EligibleCourses = () => {
         setIsFetching(true);
         setIsFiltered(false);
         setPrevNum(0);
-        setNextNum(5);
+        setNextNum(10);
         searchCourses(desiredCourseType, desiredUni, desiredIntake, desiredFaculty);
         setIsSearched(false);
         setQueryCourse('');
@@ -720,7 +771,7 @@ const EligibleCourses = () => {
                                     </p>
 
                                     <p className="font-light text-xl mb-2">
-                                        <b className="font-bold text-lg mb-3">Course Fee:</b> {course.fees}
+                                        <b className="font-bold text-lg mb-3">Course Fees:</b> {course.fees}
                                     </p>
                                 </div>
                                 <div className='flex justify-start items-center'>
@@ -739,14 +790,25 @@ const EligibleCourses = () => {
                                         </motion.div>
                                     ))}
                                 </div>
-                                <a href={objLink[course.universityId]} target='blank'><button className='btn btn-primary mt-3 w-full'>Go To University Course Page</button></a>
                             </div>
+                        </div>
+
+                        <div className="flex justify-around items-center gap-3">
+                            <a href={objLink[course.universityId]} target='blank' className='btn btn-primary w-full text-center'>Go To University Course Page</a>
+
+                            <button
+                                className={`btn btn-primary w-full flex justify-center items-center ${addedToList[course.id] ? 'bg-red-500 text-white' : ''}`}
+                                onClick={() => toggleAddedToList(course.id)}
+                            >
+                                {!addedToList[course.id] ? <Cross className='mr-1 w-6' /> : <Cross className='mr-1 w-6 rotate-45' />}
+                                {!addedToList[course.id] ? <p>Add To Dream List</p> : <p>Remove From Dream List</p>}
+                            </button>
                         </div>
                     </motion.div>
                 )}
                 </div>}
 
-                {noOfCourses > 5 && <div className="flex justify-center mt-10">
+                {noOfCourses > 10 && <div className="flex justify-center mt-10">
                     <motion.button
                         initial={{ opacity: 0 }}
                         animate={{ opacity: prevNum === 0 ? 0.5 : 1 }}

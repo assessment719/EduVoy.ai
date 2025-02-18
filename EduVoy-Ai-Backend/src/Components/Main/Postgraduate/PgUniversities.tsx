@@ -223,7 +223,7 @@ const PgUniversities: React.FC = () => {
                             className="w-[700px] bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-500"
                         >
                             <div className="flex justify-around items-center space-x-4">
-                                <div className='rounded-xl border-2 border-black overflow-hidden '>
+                                <div className='rounded-xl border-2 border-black overflow-hidden'>
                                     <img src={objUnisImg[uni.universityId]} className='object-cover w-24 h-20' />
                                 </div>
                                 <div className="flex-1 mt-3">

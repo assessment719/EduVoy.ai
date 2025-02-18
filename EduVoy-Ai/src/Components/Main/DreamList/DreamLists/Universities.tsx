@@ -71,6 +71,9 @@ const DreamUniversities = () => {
             ...prevState,
             [universityId]: !prevState[universityId] || false,
         }));
+        if(Object.keys(compareUni).includes(`${universityId}`)) {
+            toggleAddedToCompareList(universityId);
+        }
     };
 
     //For Prev And Next Button

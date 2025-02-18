@@ -75,6 +75,9 @@ const DreamPgCourses = () => {
             ...prevState,
             [courseId]: !prevState[courseId] || false,
         }));
+        if(Object.keys(compareCourse).includes(`${courseId}`)) {
+            toggleAddedToCompareList(courseId);
+        }
     };
 
     //For Prev And Next Button

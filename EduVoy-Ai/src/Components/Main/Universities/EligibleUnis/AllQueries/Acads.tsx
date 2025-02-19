@@ -10,7 +10,7 @@ import { PgUnis } from '../../../../../Utils/pgunis';
 import { EnglandUniversities } from '../../../../../Utils/ukUniversities';
 import { BACKEND_URL } from '../../../../../config';
 import LoaderComponent from '../../../../loader';
-import { userDetailsAtom, dreamUniAtom } from'../../../../../Atoms/atoms';
+import { userDetailsAtom, dreamUniAtom } from '../../../../../Atoms/atoms';
 
 
 const Acads = () => {
@@ -427,7 +427,7 @@ const Acads = () => {
                 )}
             </div>}
 
-            {isMore && <div className='fixed h-screen w-[1200px] top-28 -ml-[100px]'>
+            {isMore && <div className='fixed h-screen w-[1200px] top-20 -ml-[100px]'>
                 <div className='flex justify-center'>
                     <motion.div
                         initial={{ opacity: 0, y: -20 }}
@@ -449,7 +449,7 @@ const Acads = () => {
                             </div>
                             <div>
                                 <h1 className='font-bold text-3xl underline'>Extra Requirements:</h1>
-                                <h1 className='text-xl mt-2'>{extraInfo}</h1>
+                                <h1 className='text-xl mt-2 max-h-40 overflow-y-auto'>{extraInfo}</h1>
                             </div>
                         </div>
                     </motion.div>

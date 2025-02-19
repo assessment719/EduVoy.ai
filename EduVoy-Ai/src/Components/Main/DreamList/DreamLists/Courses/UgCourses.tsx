@@ -75,7 +75,7 @@ const DreamUgCourses = () => {
             ...prevState,
             [courseId]: !prevState[courseId] || false,
         }));
-        if(Object.keys(compareCourse).includes(`${courseId}`)) {
+        if (Object.keys(compareCourse).includes(`${courseId}`)) {
             toggleAddedToCompareList(courseId);
         }
     };
@@ -227,8 +227,6 @@ const DreamUgCourses = () => {
             if (item.course2.result === "Perfect") perfectCountUni2++;
         });
         perfectCountUni1 > perfectCountUni2 ? setWinner(0) : setWinner(1);
-
-        await new Promise((e) => { setTimeout(e, 8000) })
         setIsManResultOut(true);
         setIsLoading(false);
     }
@@ -258,26 +256,28 @@ const DreamUgCourses = () => {
                     </div>
 
                     <div className='w-[850px] grid grid-cols-3 gap-3 items-center bg-white border-2 border-black'>
-                        <h1 className='text-2xl font-bold p-2 text-center'>Aspects</h1>
-                        <h1 className='text-2xl font-bold p-2 text-center'>{courses.find(course => course.id === compareAbleCourse[0])?.courseName}</h1>
-                        <h1 className='text-2xl font-bold p-2 text-center'>{courses.find(course => course.id === compareAbleCourse[1])?.courseName}</h1>
+                        <h1 className='text-2xl font-bold p-2 text-center mr-4'>Aspects</h1>
+                        <h1 className='text-2xl font-bold p-2 text-center mr-4'>{courses.find(course => course.id === compareAbleCourse[0])?.courseName}</h1>
+                        <h1 className='text-2xl font-bold p-2 text-center mr-4'>{courses.find(course => course.id === compareAbleCourse[1])?.courseName}</h1>
                     </div>
 
-                    {comparisionResult.map((result, index) =>
-                        <motion.div
-                            key={index}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.1 }}
-                            className={`w-[850px] bg-white p-1 flex flex-col gap-3 border-2 border-t-0 border-black ${index === comparisionResult.length - 1 ? "rounded-br-xl rounded-bl-xl" : ""}`}
-                        >
-                            <div className='grid grid-cols-3 gap-3 items-center'>
-                                <h1 className='text-xl font-bold'>{result.featureTitle}</h1>
-                                <h1 className={`text-lg rounded-lg ${result.course1.result === "Perfect" ? "bg-green-100" : "bg-red-100"} p-2 text-center`}>{result.course1.value}</h1>
-                                <h1 className={`text-lg rounded-lg ${result.course2.result === "Perfect" ? "bg-green-100" : "bg-red-100"} p-2 text-center`}>{result.course2.value}</h1>
-                            </div>
-                        </motion.div>
-                    )}
+                    <div className='max-h-[530px] w-[850px] overflow-y-auto rounded-br-xl rounded-bl-xl border-2 border-t-0 border-black bg-white'>
+                        {comparisionResult.map((result, index) =>
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.1 }}
+                                className={`w-[830px] bg-white p-1 flex flex-col gap-3 ${index === comparisionResult.length - 1 ? "" : "border-b-2 border-black"}`}
+                            >
+                                <div className='grid grid-cols-3 gap-3 items-center'>
+                                    <h1 className='break-words text-xl font-bold'>{result.featureTitle}</h1>
+                                    <h1 className={`break-words text-lg rounded-lg ${result.course1.result === "Perfect" ? "bg-green-100" : "bg-red-100"} h-full p-2 text-center`}>{result.course1.value}</h1>
+                                    <h1 className={`break-words text-lg rounded-lg ${result.course2.result === "Perfect" ? "bg-green-100" : "bg-red-100"} h-full p-2 text-center`}>{result.course2.value}</h1>
+                                </div>
+                            </motion.div>
+                        )}
+                    </div>
                 </div>
             </div>}
 

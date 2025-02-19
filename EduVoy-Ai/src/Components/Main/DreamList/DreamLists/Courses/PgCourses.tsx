@@ -261,7 +261,7 @@ const DreamPgCourses = () => {
                         <h1 className='text-2xl font-bold p-2 text-center mr-4'>{courses.find(course => course.id === compareAbleCourse[1])?.courseName}</h1>
                     </div>
 
-                    <div className='max-h-[530px] w-[850px] overflow-y-auto rounded-br-xl rounded-bl-xl border-2 border-t-0 border-black bg-white'>
+                    <div className='max-h-[500px] w-[850px] overflow-y-auto rounded-br-xl rounded-bl-xl border-2 border-t-0 border-black bg-white'>
                         {comparisionResult.map((result, index) =>
                             <motion.div
                                 key={index}

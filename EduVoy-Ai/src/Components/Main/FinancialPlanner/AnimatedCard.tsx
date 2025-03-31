@@ -106,7 +106,7 @@ const AnimatedStatCard: React.FC<AnimatedNumberProps> = ({ stat, index }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
-      className="bg-white p-6 rounded-lg shadow"
+      className="bg-white p-6 rounded-lg shadow-xl"
     >
       <h2 className="text-2xl font-semibold mb-4 text-gray-900">
         {stat.title}

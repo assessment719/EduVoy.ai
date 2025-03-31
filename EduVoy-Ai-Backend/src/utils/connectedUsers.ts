@@ -1,4 +1,4 @@
 export interface ConnectedUsers {
-    userName: string;
-    roomId: string;
-  }
+  userName: string;
+  roomId: string;
+}

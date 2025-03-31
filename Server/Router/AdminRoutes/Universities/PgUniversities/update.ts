@@ -12,7 +12,7 @@ updateRouter.put("/", adminAuth, async function (req, res) {
     await pgUniversityModel.updateOne({
       universityId
     }, {
-      universityId, universityName, academicReq, englishReq, moiUniversities, ieltsReq, pteReq, toeflReq, duolingoReq, mathReq, placementCourses, topupCourses, resCourses, fees, extraReqInfo
+      universityName, academicReq, englishReq, moiUniversities, ieltsReq, pteReq, toeflReq, duolingoReq, mathReq, placementCourses, topupCourses, resCourses, fees, extraReqInfo
     });
 
     res.json({

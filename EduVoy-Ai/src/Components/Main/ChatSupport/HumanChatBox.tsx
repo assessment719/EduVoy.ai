@@ -97,7 +97,7 @@ function HumanChat() {
                             </motion.button>
                         </div>
 
-                        <div ref={chatContainerRef} className="flex flex-col justify-start space-y-4 h-[258px] m-4 overflow-auto">
+                        <div ref={chatContainerRef} className="flex flex-col justify-start space-y-4 h-[266px] m-4 overflow-auto">
                             {currentMessages.map((message) => (
                                 <div
                                     className={`${message.role === "admin" ? "text-left" : "text-right"}`}

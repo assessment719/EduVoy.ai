@@ -8,9 +8,9 @@ const DreamList = () => {
     const [activeTab, setActiveTab] = useState('dreamUniversities');
 
     return (
-        <main className="min-h-screen px-4 sm:px-6 lg:px-8">
+        <main className="tabListMain">
             <Tabs.Root value={activeTab} onValueChange={setActiveTab}>
-                <Tabs.List className="flex gap-2 space-x-1 -ml-2 bg-gray-200 p-4 rounded-xl shadow-sm mb-8 font-bold w-[1100px]">
+                <Tabs.List className="tabsList">
                     {[
                         { id: 'dreamUniversities', label: 'Dream Universities' },
                         { id: 'dreamCourses', label: 'Dream Courses' }
@@ -18,10 +18,10 @@ const DreamList = () => {
                         <Tabs.Trigger
                             key={id}
                             value={id}
-                            className={`flex-1 shadow-md shadow-black text-lg p-2 flex items-center justify-center rounded-lg transition-colors duration-200 cursor-pointer
+                            className={`tabs
                                 ${activeTab === id
-                                    ? 'bg-green-200 text-white'
-                                    : 'hover:bg-white'
+                                    ? 'activeTab'
+                                    : 'inActiveTab'
                                 }
                             `}
                         >

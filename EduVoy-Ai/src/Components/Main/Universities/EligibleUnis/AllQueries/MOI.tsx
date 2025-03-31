@@ -45,13 +45,13 @@ const Moi = () => {
             return;
         }
 
-        fetch(`${BACKEND_URL}/users/dreamUnis`, {
+        fetch(`${BACKEND_URL}/users/updateField/dreamUnis/${userDetails.id}`, {
             method: "PUT",
             headers: {
                 'token': `${token}`,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ userId: userDetails.id, dreamUnis: dreamUnis }),
+            body: JSON.stringify({ updatingField: { dreamUnis } }),
         })
             .then(async (res) => {
                 if (!res.ok) {
@@ -211,6 +211,8 @@ const Moi = () => {
         setIsGotData(false);
         setCourseType('postgraduate');
         setSelectedMoiUni(0);
+        setQueryUni('');
+        setIsSearched(false);
     }
 
     return (
@@ -219,16 +221,16 @@ const Moi = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="mt-3 space-y-3 w-[800px] mx-auto p-6 bg-white rounded-2xl shadow-2xl"
+                className="eligibleUniBox"
             >
                 <div className='grid grid-cols-1 gap-6'>
                     <div className='w-full'>
-                        <label htmlFor="type" className="block font-bold text-xl mb-1">
+                        <label className="label">
                             Select Course Type:
                         </label>
-                        <div className='border-2 border-black'>
+                        <div className='selectBorder'>
                             <Select
-                                className='bg-white text-black h-10 text-2xl'
+                                className='select'
                                 name='university'
                                 color='#8bb87b'
                                 searchable={false}
@@ -242,12 +244,12 @@ const Moi = () => {
                     </div>
 
                     <div className='w-full'>
-                        <label htmlFor="type" className="block font-bold text-xl mb-1">
+                        <label className="label">
                             Select University:
                         </label>
-                        <div className='border-2 border-black'>
+                        <div className='selectBorder'>
                             <Select
-                                className='bg-white text-black h-10 text-2xl'
+                                className='select'
                                 name='university'
                                 color='#8bb87b'
                                 placeholder='Select University or Board'
@@ -264,7 +266,7 @@ const Moi = () => {
                     animate={{ opacity: selectedMoiUni === 0 ? 0.5 : 1 }}
                     disabled={selectedMoiUni === 0}
                     onClick={findUnis}
-                    className="w-full btn btn-primary font-bold flex justify-center items-center"
+                    className="uniSubmitBtn"
                 >
                     <SearchIcon className='mr-2' />
                     <p>Find Universities</p>

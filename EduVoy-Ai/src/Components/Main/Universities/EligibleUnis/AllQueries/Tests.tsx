@@ -54,13 +54,13 @@ const Test = () => {
             return;
         }
 
-        fetch(`${BACKEND_URL}/users/dreamUnis`, {
+        fetch(`${BACKEND_URL}/users/updateField/dreamUnis/${userDetails.id}`, {
             method: "PUT",
             headers: {
                 'token': `${token}`,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ userId: userDetails.id, dreamUnis: dreamUnis }),
+            body: JSON.stringify({ updatingField: { dreamUnis } }),
         })
             .then(async (res) => {
                 if (!res.ok) {
@@ -206,6 +206,8 @@ const Test = () => {
         setReading(0);
         setWriting(0);
         setSpeaking(0);
+        setQueryUni('');
+        setIsSearched(false);
     }
 
     async function showMore(universityId: Number) {
@@ -248,16 +250,16 @@ const Test = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="mt-3 space-y-3 w-[800px] mx-auto p-6 bg-white rounded-2xl shadow-2xl"
+                className="eligibleUniBox"
             >
                 <div className='grid grid-cols-1 gap-6'>
                     <div className='w-full'>
-                        <label htmlFor="type" className="block font-bold text-xl mb-1">
+                        <label className="label">
                             Select Course Type:
                         </label>
-                        <div className='border-2 border-black'>
+                        <div className='selectBorder'>
                             <Select
-                                className='bg-white text-black h-10 text-2xl'
+                                className='select'
                                 name='university'
                                 color='#8bb87b'
                                 searchable={false}
@@ -271,12 +273,12 @@ const Test = () => {
                     </div>
 
                     <div className='w-full'>
-                        <label htmlFor="type" className="block font-bold text-xl mb-1">
+                        <label className="label">
                             Select English Language Test:
                         </label>
-                        <div className='border-2 border-black'>
+                        <div className='selectBorder'>
                             <Select
-                                className='bg-white text-black h-10 text-2xl'
+                                className='select'
                                 name='university'
                                 color='#8bb87b'
                                 searchable={false}
@@ -296,12 +298,12 @@ const Test = () => {
 
                     {courseType && selectedTest && selectedTest === 'ieltsReq' && <div className='grid grid-cols-2 gap-6'>
                         <div className='w-full col-span-2'>
-                            <label htmlFor="type" className="block font-bold text-xl mb-1">
+                            <label className="label">
                                 Select Overall Marks:
                             </label>
-                            <div className='border-2 border-black'>
+                            <div className='selectBorder'>
                                 <Select
-                                    className='bg-white text-black h-10 text-2xl'
+                                    className='select'
                                     name='university'
                                     color='#8bb87b'
                                     placeholder='Select Overall Marks'
@@ -314,12 +316,12 @@ const Test = () => {
                         </div>
 
                         <div className='w-full'>
-                            <label htmlFor="type" className="block font-bold text-xl mb-1">
+                            <label className="label">
                                 Select Listening Marks:
                             </label>
-                            <div className='border-2 border-black'>
+                            <div className='selectBorder'>
                                 <Select
-                                    className='bg-white text-black h-10 text-2xl'
+                                    className='select'
                                     name='university'
                                     color='#8bb87b'
                                     placeholder='Select Listening Marks'
@@ -332,12 +334,12 @@ const Test = () => {
                         </div>
 
                         <div className='w-full'>
-                            <label htmlFor="type" className="block font-bold text-xl mb-1">
+                            <label className="label">
                                 Select Reading Marks:
                             </label>
-                            <div className='border-2 border-black'>
+                            <div className='selectBorder'>
                                 <Select
-                                    className='bg-white text-black h-10 text-2xl'
+                                    className='select'
                                     name='university'
                                     color='#8bb87b'
                                     placeholder='Select Reading Marks'
@@ -350,12 +352,12 @@ const Test = () => {
                         </div>
 
                         <div className='w-full'>
-                            <label htmlFor="type" className="block font-bold text-xl mb-1">
+                            <label className="label">
                                 Select Writing Marks:
                             </label>
-                            <div className='border-2 border-black'>
+                            <div className='selectBorder'>
                                 <Select
-                                    className='bg-white text-black h-10 text-2xl'
+                                    className='select'
                                     name='university'
                                     color='#8bb87b'
                                     placeholder='Select Writing Marks'
@@ -368,12 +370,12 @@ const Test = () => {
                         </div>
 
                         <div className='w-full'>
-                            <label htmlFor="type" className="block font-bold text-xl mb-1">
+                            <label className="label">
                                 Select Speaking Marks:
                             </label>
-                            <div className='border-2 border-black'>
+                            <div className='selectBorder'>
                                 <Select
-                                    className='bg-white text-black h-10 text-2xl'
+                                    className='select'
                                     name='university'
                                     color='#8bb87b'
                                     placeholder='Select Speaking Marks'
@@ -387,72 +389,72 @@ const Test = () => {
 
                     {courseType && selectedTest && selectedTest !== 'ieltsReq' && <div className='grid grid-cols-2 gap-6'>
                         <div className="w-full col-span-2">
-                            <label htmlFor="expectedKeywordsID" className="block font-bold text-xl mb-1">
+                            <label className="label">
                                 Enter Overall Marks:
                             </label>
                             <input
-                                type="text"
+                                type="number"
                                 id="acadMarks"
                                 value={overall === 0 ? '' : overall}
                                 onChange={(e) => setOverall(Number(e.target.value))}
                                 placeholder="Enter Overall Marks"
-                                className="p-2 h-11 border-2 border-black text-xl w-full"
+                                className="input"
                             />
                         </div>
 
                         <div className="w-full">
-                            <label htmlFor="expectedKeywordsID" className="block font-bold text-xl mb-1">
+                            <label className="label">
                                 Enter Listening Marks:
                             </label>
                             <input
-                                type="text"
+                                type="number"
                                 id="acadMarks"
                                 value={listening === 0 ? '' : listening}
                                 onChange={(e) => setListening(Number(e.target.value))}
                                 placeholder="Enter Listening Marks"
-                                className="p-2 h-11 border-2 border-black text-xl w-full"
+                                className="input"
                             />
                         </div>
 
                         <div className="w-full">
-                            <label htmlFor="expectedKeywordsID" className="block font-bold text-xl mb-1">
+                            <label className="label">
                                 Enter Reading Marks:
                             </label>
                             <input
-                                type="text"
+                                type="number"
                                 id="acadMarks"
                                 value={reading === 0 ? '' : reading}
                                 onChange={(e) => setReading(Number(e.target.value))}
                                 placeholder="Enter Reading Marks"
-                                className="p-2 h-11 border-2 border-black text-xl w-full"
+                                className="input"
                             />
                         </div>
 
                         <div className="w-full">
-                            <label htmlFor="expectedKeywordsID" className="block font-bold text-xl mb-1">
+                            <label className="label">
                                 Enter Writing Marks:
                             </label>
                             <input
-                                type="text"
+                                type="number"
                                 id="acadMarks"
                                 value={writing === 0 ? '' : writing}
                                 onChange={(e) => setWriting(Number(e.target.value))}
                                 placeholder="Enter Writing Marks"
-                                className="p-2 h-11 border-2 border-black text-xl w-full"
+                                className="input"
                             />
                         </div>
 
                         <div className="w-full">
-                            <label htmlFor="expectedKeywordsID" className="block font-bold text-xl mb-1">
+                            <label className="label">
                                 Enter Speaking Marks:
                             </label>
                             <input
-                                type="text"
+                                type="number"
                                 id="acadMarks"
                                 value={speaking === 0 ? '' : speaking}
                                 onChange={(e) => setSpeaking(Number(e.target.value))}
                                 placeholder="Enter Speaking Marks"
-                                className="p-2 h-11 border-2 border-black text-xl w-full"
+                                className="input"
                             />
                         </div>
                     </div>}
@@ -462,7 +464,7 @@ const Test = () => {
                     animate={{ opacity: courseType === '' || selectedTest === '' || overall === 0 || listening === 0 || reading === 0 || writing === 0 || speaking === 0 ? 0.5 : 1 }}
                     disabled={courseType === '' || selectedTest === '' || overall === 0 || listening === 0 || reading === 0 || writing === 0 || speaking === 0}
                     onClick={findUnis}
-                    className="w-full btn btn-primary font-bold flex justify-center items-center"
+                    className="uniSubmitBtn"
                 >
                     <SearchIcon className='mr-2' />
                     <p>Find Universities</p>

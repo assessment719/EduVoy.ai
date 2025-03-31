@@ -9,7 +9,7 @@ addRouter.post("/", adminAuth, async function (req, res) {
     const { id, title, type, category, downloadUrl } = req.body;
 
     try {
-        const resources = await resourceModel.create({
+        await resourceModel.create({
             id, title, type, category, downloadUrl
         });
 

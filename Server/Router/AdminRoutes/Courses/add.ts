@@ -1,4 +1,5 @@
 import Router from "express";
+import moment from 'moment';
 import { courseModel } from "./../../../database";
 import { adminAuth } from "./../../../Auth/admin";
 
@@ -6,11 +7,13 @@ export const addRouter = Router();
 
 addRouter.post("/", adminAuth, async function (req, res) {
 
-    const { id, universityId, courseName, courseType, universityName, campus, duration, fees, intakes, faculties, modeOfStudy, applicationFees, scholarship, courseModules, placementAvailability, carrer } = req.body;
+    const { universityId, courseName, courseType, universityName, campus, duration, fees, intakes, faculties, modeOfStudy, applicationFees, scholarship, courseModules, placementAvailability, carrer } = req.body;
+
+    const uniqueId = moment().unix() + Math.floor((Math.random() * 100) + 1);
 
     try {
         await courseModel.create({
-            id, universityId, courseName, courseType, universityName, campus, duration, fees, intakes, faculties, modeOfStudy, applicationFees, scholarship, courseModules, placementAvailability, carrer
+            id : uniqueId, universityId, courseName, courseType, universityName, campus, duration, fees, intakes, faculties, modeOfStudy, applicationFees, scholarship, courseModules, placementAvailability, carrer
         });
 
         res.json({

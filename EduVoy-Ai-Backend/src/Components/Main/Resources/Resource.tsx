@@ -77,13 +77,13 @@ const ResourceCentre: React.FC = () => {
         const idOfResource = idx - 1;
         setNumberOfUpdatingResource(idx);
 
-        handleScrollToInputSection();
-
-        setTitle(`${resources[idOfResource].title}`);
-        setType(`${resources[idOfResource].type}`);
-        setCategory(`${resources[idOfResource].category}`);
-        setDownloadUrl(`${resources[idOfResource].downloadUrl}`);
+        setTitle(resources[idOfResource].title);
+        setType(resources[idOfResource].type);
+        setCategory(resources[idOfResource].category);
+        setDownloadUrl(resources[idOfResource].downloadUrl);
+        
         setIsResourceToUpdated(true);
+        handleScrollToInputSection();
     }
 
     const updateResource = () => {

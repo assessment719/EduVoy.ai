@@ -13,9 +13,9 @@ function OptionCentre() {
     const [activeTab, setActiveTab] = useState('ukUniversities');
 
     return (
-        <main className="min-h-screen px-3 ml-2">
+        <main className="tabListMain">
             <Tabs.Root value={activeTab} onValueChange={setActiveTab}>
-                <Tabs.List className="flex gap-2 space-x-1 bg-gray-200 p-4 rounded-xl shadow-sm mb-8 font-bold w-[1100px]">
+                <Tabs.List className="tabsList">
                     {[
                         { id: 'ukUniversities', label: 'UK Universies', icon: University },
                         { id: 'board', label: 'Boards', icon: School },
@@ -27,9 +27,9 @@ function OptionCentre() {
                         <Tabs.Trigger
                             key={id}
                             value={id}
-                            className={`flex-1 shadow-md shadow-black text-lg p-2 flex items-center justify-center space-x-2 rounded-lg transition-colors duration-200 cursor-pointer ${activeTab === id
-                                ? 'bg-green-200 text-white'
-                                : 'hover:bg-white'
+                            className={`tabs space-x-2 ${activeTab === id
+                                ? 'activeTab'
+                                : 'inActiveTab'
                                 }
                             `}
                         >

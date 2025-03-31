@@ -1,6 +1,5 @@
 import { Cross, Search, University, ArrowLeftCircleIcon, ArrowRightCircleIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
-import moment from 'moment';
 import { useState, useEffect, useRef } from 'react';
 import { EnglandUniversities } from './../../../../utils/ukuniversities';
 import { BACKEND_URL } from './../../../../config';
@@ -96,6 +95,7 @@ const UkUniversities: React.FC = () => {
 
     // Get Uk Universitties
     const fetchUkUniversities = async () => {
+        resetForm(0);
         try {
             const token = localStorage.getItem('token');
 
@@ -130,7 +130,7 @@ const UkUniversities: React.FC = () => {
         fetchUkUniversities();
     }, []);
 
-    const resetForm = () => {
+    const resetForm = (val: number) => {
         setUniversityName('');
         setLocation('');
         setLogoLink('');
@@ -145,7 +145,9 @@ const UkUniversities: React.FC = () => {
         setLivingCost('');
         setAverageSalary('');
         setStudentReview('0/5');
-        fetchUkUniversities();
+        if (val === 1) {
+            fetchUkUniversities();
+        }
     }
 
     // Update Uk Universities
@@ -176,20 +178,20 @@ const UkUniversities: React.FC = () => {
             const data = await response.json();
             const universityToUpdate = data.university;
 
-            setUniversityName(`${universityToUpdate.universityName}`);
-            setLocation(`${universityToUpdate.location}`);
-            setLogoLink(`${universityToUpdate.logoLink}`);
-            setUniversityWebsitePage(`${universityToUpdate.universityWebsitePage}`);
-            setUniversityCoursePage(`${universityToUpdate.universityCoursePage}`);
-            setGlobalRanking(`${universityToUpdate.globalRanking}`);
-            setAccreditation(`${universityToUpdate.accreditation}`);
-            setTutionFees(`${universityToUpdate.tutionFees}`);
-            setScholarships(`${universityToUpdate.scholarships}`);
-            setResearchFacilities(`${universityToUpdate.researchFacilities}`);
-            setJobPlacementRate(`${universityToUpdate.jobPlacementRate}`);
-            setLivingCost(`${universityToUpdate.livingCost}`);
-            setAverageSalary(`${universityToUpdate.averageSalary}`);
-            setStudentReview(`${universityToUpdate.studentReview}`);
+            setUniversityName(universityToUpdate.universityName);
+            setLocation(universityToUpdate.location);
+            setLogoLink(universityToUpdate.logoLink);
+            setUniversityWebsitePage(universityToUpdate.universityWebsitePage);
+            setUniversityCoursePage(universityToUpdate.universityCoursePage);
+            setGlobalRanking(universityToUpdate.globalRanking);
+            setAccreditation(universityToUpdate.accreditation);
+            setTutionFees(universityToUpdate.tutionFees);
+            setScholarships(universityToUpdate.scholarships);
+            setResearchFacilities(universityToUpdate.researchFacilities);
+            setJobPlacementRate(universityToUpdate.jobPlacementRate);
+            setLivingCost(universityToUpdate.livingCost);
+            setAverageSalary(universityToUpdate.averageSalary);
+            setStudentReview(universityToUpdate.studentReview);
             setIsUkUniversityToUpdated(true);
             handleScrollToInputSection();
         } catch (error) {
@@ -219,7 +221,7 @@ const UkUniversities: React.FC = () => {
                         setIsFetching(false);
                         throw new Error("Failed to fetch data");
                     }
-                    resetForm();
+                    resetForm(1);
                     setIsUkUniversityToUpdated(false);
                     setIsSearched(false);
                     setQueryUni('');
@@ -257,7 +259,7 @@ const UkUniversities: React.FC = () => {
                     setIsFetching(false);
                     throw new Error("Failed to fetch data");
                 }
-                resetForm();
+                resetForm(1);
                 checkAndDecreaseMapCount(result, decreaseMapCount);
                 setIsSearched(false);
                 setQueryUni('');
@@ -275,7 +277,6 @@ const UkUniversities: React.FC = () => {
         }
 
         if (universityName && location && logoLink && universityWebsitePage && universityCoursePage && globalRanking && accreditation !== 'one' && tutionFees && scholarships && researchFacilities && jobPlacementRate && livingCost && averageSalary && studentReview) {
-            const newId = moment().unix() + Math.floor((Math.random() * 100) + 1);
 
             fetch(`${BACKEND_URL}/admin/finaluniversities/add`, {
                 method: "POST",
@@ -283,14 +284,14 @@ const UkUniversities: React.FC = () => {
                     'token': `${token}`,
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ id: newId, universityName, location, logoLink, universityWebsitePage, universityCoursePage, globalRanking, accreditation, tutionFees, scholarships, researchFacilities, jobPlacementRate, livingCost, averageSalary, studentReview }),
+                body: JSON.stringify({ universityName, location, logoLink, universityWebsitePage, universityCoursePage, globalRanking, accreditation, tutionFees, scholarships, researchFacilities, jobPlacementRate, livingCost, averageSalary, studentReview }),
             })
                 .then(async (res) => {
                     if (!res.ok) {
                         setIsFetching(false);
                         throw new Error("Failed to fetch data");
                     }
-                    resetForm();
+                    resetForm(1);
                     setIsSearched(false);
                     setQueryUni('');
                 })
@@ -348,26 +349,11 @@ const UkUniversities: React.FC = () => {
                                     <University className="w-6 h-6 text-black" />
                                 </div>
                                 <div className="flex-1 mt-3">
-                                    <b className="font-bold text-xl mb-2">{ukuniversity.universityName}</b><br /><br />
+                                    <b className="font-bold text-xl mb-2">{index + prevNum + 1}. {ukuniversity.universityName}</b><br /><br />
                                     <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Location:</b> {ukuniversity.location}</p>
                                     <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Logo Link:</b> {ukuniversity.logoLink}</p>
                                     <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Website Link:</b> {ukuniversity.universityWebsitePage}</p>
                                     <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Course Page Link:</b> {ukuniversity.universityCoursePage}</p>
-                                    <div className='grid grid-cols-3'>
-                                        <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Global Ranking:</b> {ukuniversity.globalRanking}</p>
-                                        <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Accreditation:</b> {ukuniversity.accreditation}</p>
-                                        <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Tution Fees / Year:</b> {ukuniversity.tutionFees}</p>
-                                    </div>
-                                    <div className='grid grid-cols-3'>
-                                        <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Scholarship Availability:</b> {ukuniversity.scholarships}</p>
-                                        <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Research Facilities:</b> {ukuniversity.researchFacilities}</p>
-                                        <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Job Placement Rate:</b> {ukuniversity.jobPlacementRate}</p>
-                                    </div>
-                                    <div className='grid grid-cols-3'>
-                                        <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Living Costs / Year (Approx):</b> {ukuniversity.livingCost}</p>
-                                        <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Avg. Graduate Salary:</b> {ukuniversity.averageSalary}</p>
-                                        <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Student Reviews & Ratings:</b> {ukuniversity.studentReview}</p>
-                                    </div>
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -378,7 +364,7 @@ const UkUniversities: React.FC = () => {
 
                                     className="w-full btn btn-primary"
                                 >
-                                    Update University
+                                    View & Update University
                                 </motion.button>
                                 <motion.button
                                     initial={{ opacity: 0 }}
@@ -462,7 +448,7 @@ const UkUniversities: React.FC = () => {
                         </div>
 
                         <div className="mb-4">
-                            <label htmlFor="type" className="block font-bold text-xl text-white mb-1">
+                            <label className="block font-bold text-xl text-white mb-1">
                                 University Website Link:
                             </label>
                             <input

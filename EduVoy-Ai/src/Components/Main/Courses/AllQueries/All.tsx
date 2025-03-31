@@ -56,13 +56,13 @@ const AllCourses: React.FC = () => {
             return;
         }
 
-        fetch(`${BACKEND_URL}/users/dreamCourses`, {
+        fetch(`${BACKEND_URL}/users/updateField/dreamCourses/${userDetails.id}`, {
             method: "PUT",
             headers: {
                 'token': `${token}`,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ userId: userDetails.id, dreamCourses: dreamCourses }),
+            body: JSON.stringify({ updatingField: { dreamCourses } }),
         })
             .then(async (res) => {
                 if (!res.ok) {
@@ -308,7 +308,7 @@ const AllCourses: React.FC = () => {
                         </div>
                         <div className='grid grid-cols-4 gap-6'>
                             <div className='col-span-2 '>
-                                <label htmlFor="type" className="block font-bold text-xl text-white mb-1">
+                                <label className="block font-bold text-xl text-white mb-1">
                                     University:
                                 </label>
                                 <Select
@@ -428,7 +428,7 @@ const AllCourses: React.FC = () => {
                                     <Book className="w-6 h-6 text-black" />
                                 </div>
                                 <div className="flex-1 mt-3">
-                                    <b className="font-bold text-xl mb-3">{course.courseName}</b>
+                                    <b className="font-bold text-xl mb-3">{index + prevNum + 1}. {course.courseName}</b>
                                     <br /><br />
                                     <p className="font-light text-xl mb-2">
                                         <b className="font-bold text-lg mb-3">University:</b> {course.universityName}

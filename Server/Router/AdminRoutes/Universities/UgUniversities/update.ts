@@ -12,7 +12,7 @@ updateRouter.put("/", adminAuth, async function (req, res) {
     await ugUniversityModel.updateOne({
       universityId
     }, {
-      universityId, universityName, academicReq, englishReq, ieltsReq, pteReq, toeflReq, duolingoReq, mathReq, placementCourses, topupCourses, fees, extraReqInfo
+      universityName, academicReq, englishReq, ieltsReq, pteReq, toeflReq, duolingoReq, mathReq, placementCourses, topupCourses, fees, extraReqInfo
     });
 
     res.json({

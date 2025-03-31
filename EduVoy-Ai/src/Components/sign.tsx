@@ -3,7 +3,7 @@ import { Eye, EyeOffIcon } from 'lucide-react';
 import * as Tabs from '@radix-ui/react-tabs';
 import { motion } from 'framer-motion';
 import { useState, useRef } from 'react';
-import { userDetailsAtom, signAtom } from '../Atoms/atoms';
+import { userDetailsAtom, signAtom, activeTabAtom } from '../Atoms/atoms';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { BACKEND_URL } from '../config';
 import LoaderComponent from './loader';
@@ -15,6 +15,7 @@ function Sign() {
     const passwordRef = useRef<HTMLInputElement | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isPassword, setIsPassword] = useState(true);
+    const setActiveSec = useSetRecoilState(activeTabAtom);
 
     const navigate = useNavigate();
 
@@ -77,6 +78,7 @@ function Sign() {
                     localStorage.setItem('token', data.token);
                     setUserDetails({id: data.userId, fullName: `${data.firstName} ${data.lastName}`});
                     setSign('up');
+                    setActiveSec('university');
                     navigate("/eduvoytools");
                 } else {
                     alert("Sign-in failed. Please check your credentials.");

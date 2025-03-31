@@ -33,13 +33,13 @@ const DreamUniversities = () => {
             return;
         }
 
-        await fetch(`${BACKEND_URL}/users/dreamUnis`, {
+        await fetch(`${BACKEND_URL}/users/updateField/dreamUnis/${userDetails.id}`, {
             method: "PUT",
             headers: {
                 'token': `${token}`,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ userId: userDetails.id, dreamUnis: dreamUnis }),
+            body: JSON.stringify({ updatingField: { dreamUnis } }),
         })
             .then(async (res) => {
                 if (!res.ok) {
@@ -174,7 +174,7 @@ const DreamUniversities = () => {
                 return;
             }
 
-            const response = await fetch(`${BACKEND_URL}/users/dreamUnis?userId=${userDetails.id}`, {
+            const response = await fetch(`${BACKEND_URL}/users/getField/dreamUnis/${userDetails.id}`, {
                 method: "GET",
                 headers: {
                     'token': `${token}`
@@ -183,7 +183,7 @@ const DreamUniversities = () => {
             const data = await response.json();
 
             let obj: { [key: string]: boolean } = {};
-            data.dreamUnis.forEach((courseId: number) => {
+            data.fieldDetails.dreamUnis.forEach((courseId: number) => {
                 obj[courseId] = true;
             });
             setAddedToList(obj);
@@ -285,6 +285,7 @@ const DreamUniversities = () => {
                     <motion.button
                         initial={{ opacity: 0 }}
                         animate={{ opacity: compareAbleUnis.length !== 2 ? 0.5 : 1 }}
+                        disabled={compareAbleUnis.length !== 2}
                         onClick={compareUniversities}
                         className="w-full flex justify-center items-center btn btn-primary bg-gradient-to-r from-red-500 to-green-600"
                     >

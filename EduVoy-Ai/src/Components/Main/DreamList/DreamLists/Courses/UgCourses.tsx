@@ -37,13 +37,13 @@ const DreamUgCourses = () => {
             return;
         }
 
-        await fetch(`${BACKEND_URL}/users/dreamCourses`, {
+        await fetch(`${BACKEND_URL}/users/updateField/dreamCourses/${userDetails.id}`, {
             method: "PUT",
             headers: {
                 'token': `${token}`,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ userId: userDetails.id, dreamCourses: dreamCourses }),
+            body: JSON.stringify({ updatingField: { dreamCourses } }),
         })
             .then(async (res) => {
                 if (!res.ok) {
@@ -289,6 +289,7 @@ const DreamUgCourses = () => {
                     <motion.button
                         initial={{ opacity: 0 }}
                         animate={{ opacity: compareAbleCourse.length !== 2 ? 0.5 : 1 }}
+                        disabled={compareAbleCourse.length !== 2}
                         onClick={compareCourses}
                         className="w-full flex justify-center items-center btn btn-primary bg-gradient-to-r from-red-500 to-green-600"
                     >

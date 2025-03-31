@@ -69,13 +69,13 @@ const AllUnis = () => {
             return;
         }
 
-        fetch(`${BACKEND_URL}/users/dreamUnis`, {
+        fetch(`${BACKEND_URL}/users/updateField/dreamUnis/${userDetails.id}`, {
             method: "PUT",
             headers: {
                 'token': `${token}`,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ userId: userDetails.id, dreamUnis: dreamUnis }),
+            body: JSON.stringify({ updatingField: { dreamUnis } }),
         })
             .then(async (res) => {
                 if (!res.ok) {

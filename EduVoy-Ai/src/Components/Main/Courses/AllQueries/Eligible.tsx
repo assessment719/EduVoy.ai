@@ -75,13 +75,13 @@ const EligibleCourses = () => {
             return;
         }
 
-        fetch(`${BACKEND_URL}/users/dreamCourses`, {
+        fetch(`${BACKEND_URL}/users/updateField/dreamCourses/${userDetails.id}`, {
             method: "PUT",
             headers: {
                 'token': `${token}`,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ userId: userDetails.id, dreamCourses: dreamCourses }),
+            body: JSON.stringify({ updatingField: { dreamCourses } }),
         })
             .then(async (res) => {
                 if (!res.ok) {
@@ -386,7 +386,7 @@ const EligibleCourses = () => {
                 className="mt-3 space-y-3 w-[800px] mx-auto p-6 bg-white rounded-2xl shadow-2xl"
             >
                 <div className='w-full'>
-                    <label htmlFor="type" className="block font-bold text-xl mb-1">
+                    <label className="block font-bold text-xl mb-1">
                         Select A Course Type Which You Are Looking For:
                     </label>
                     <div className='border-2 border-black'>
@@ -424,7 +424,7 @@ const EligibleCourses = () => {
             >
                 <div className='grid grid-cols-1 gap-6'>
                     <div className='w-full'>
-                        <label htmlFor="type" className="block font-bold text-xl mb-1">
+                        <label className="block font-bold text-xl mb-1">
                             Are You Searching Courses For Any Specific University?
                         </label>
                         <div className='border-2 border-black'>
@@ -443,7 +443,7 @@ const EligibleCourses = () => {
                     </div>
 
                     {isDesiredUni === 'Yes' && <div className='w-full'>
-                        <label htmlFor="type" className="block font-bold text-xl mb-1">
+                        <label className="block font-bold text-xl mb-1">
                             Select An University In Which You Want To Apply:
                         </label>
                         <div className='border-2 border-black'>
@@ -481,7 +481,7 @@ const EligibleCourses = () => {
             >
                 <div className='grid grid-cols-1 gap-6'>
                     <div className='w-full'>
-                        <label htmlFor="type" className="block font-bold text-xl mb-1">
+                        <label className="block font-bold text-xl mb-1">
                             Are You Searching Courses For Any Specific Intake?
                         </label>
                         <div className='border-2 border-black'>
@@ -500,7 +500,7 @@ const EligibleCourses = () => {
                     </div>
 
                     {isDesiredIntake === 'Yes' && <div className='w-full'>
-                        <label htmlFor="type" className="block font-bold text-xl mb-1">
+                        <label className="block font-bold text-xl mb-1">
                             Select An Intake In Which You Want To Apply:
                         </label>
                         <div className='border-2 border-black'>
@@ -594,7 +594,7 @@ const EligibleCourses = () => {
                 className="mt-3 space-y-3 w-[800px] mx-auto p-6 bg-white rounded-2xl shadow-2xl"
             >
                 <div className="w-full">
-                    <label htmlFor="expectedKeywordsID" className="block font-bold text-xl mb-2">
+                    <label className="block font-bold text-xl mb-2">
                         Enter Your Previously Completed Undergraduate Degree:
                     </label>
                     <input
@@ -652,7 +652,7 @@ const EligibleCourses = () => {
                         </div>
                         <div className='grid grid-cols-4 gap-6 items-end'>
                             <div className='col-span-2 '>
-                                <label htmlFor="type" className="block font-bold text-xl text-white mb-1">
+                                <label className="block font-bold text-xl text-white mb-1">
                                     University:
                                 </label>
                                 <Select
@@ -752,7 +752,7 @@ const EligibleCourses = () => {
                                 <Book className="w-6 h-6 text-black" />
                             </div>
                             <div className="flex-1 mt-3">
-                                <b className="font-bold text-xl mb-3">{course.courseName}</b>
+                                <b className="font-bold text-xl mb-3">{index + prevNum + 1}. {course.courseName}</b>
                                 <br /><br />
                                 <p className="font-light text-xl mb-2">
                                     <b className="font-bold text-lg mb-3">University:</b> {course.universityName}

@@ -1,6 +1,5 @@
 import { University } from 'lucide-react';
 import { motion } from 'framer-motion';
-import moment from 'moment';
 import { useState, useEffect, useRef } from 'react';
 import { Option } from './../../../../utils/options';
 import { BACKEND_URL } from './../../../../config';
@@ -76,7 +75,7 @@ const MoiUniversities: React.FC = () => {
             const data = await response.json();
             const universityToUpdate = data.university;
 
-            setOptionTitle(`${universityToUpdate.option}`);
+            setOptionTitle(universityToUpdate.option);
             setIsOptionToUpdated(true);
             handleScrollToInputSection();
         } catch (error) {
@@ -154,7 +153,6 @@ const MoiUniversities: React.FC = () => {
         }
 
         if (optionTitle) {
-            const newId = moment().unix() + Math.floor((Math.random() * 100) + 1);
 
             fetch(`${BACKEND_URL}/admin/options/add/moiunis`, {
                 method: "POST",
@@ -162,7 +160,7 @@ const MoiUniversities: React.FC = () => {
                     'token': `${token}`,
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ id: newId, option: optionTitle }),
+                body: JSON.stringify({ option: optionTitle }),
             })
                 .then(async (res) => {
                     if (!res.ok) {
@@ -223,7 +221,7 @@ const MoiUniversities: React.FC = () => {
                                     <University className="w-6 h-6 text-black" />
                                 </div>
                                 <div className="flex-1 mt-3">
-                                    <b className="font-bold text-xl mb-2">{choice.option}</b><br /><br />
+                                    <b className="font-bold text-xl mb-2">{index + 1}. {choice.option}</b><br /><br />
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

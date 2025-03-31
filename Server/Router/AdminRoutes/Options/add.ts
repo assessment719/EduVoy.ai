@@ -1,17 +1,14 @@
 import Router from "express";
-import { boardsOptionModel } from "./../../../database";
-import { unisOptionModel } from "./../../../database";
-import { moiOptionModel } from "./../../../database";
-import { facultiesOptionModel } from "./../../../database";
-import { intakesOptionModel } from "./../../../database";
-import { ugUniversityModel } from "./../../../database";
-import { pgUniversityModel } from "./../../../database";
+import moment from 'moment';
+import { boardsOptionModel, unisOptionModel, moiOptionModel, facultiesOptionModel, intakesOptionModel, ugUniversityModel, pgUniversityModel } from "./../../../database";
 import { adminAuth } from "./../../../Auth/admin";
 
 export const addRouter = Router();
 
 addRouter.post("/board", adminAuth, async function (req, res) {
-    const { id, option } = req.body;
+    const { option } = req.body;
+
+    const uniqueId = moment().unix() + Math.floor((Math.random() * 100) + 1);
 
     try {
         const boards = await boardsOptionModel.find();
@@ -19,7 +16,7 @@ addRouter.post("/board", adminAuth, async function (req, res) {
         const pgUnis = await pgUniversityModel.find();
 
         await boardsOptionModel.create({
-            id, option
+            id : uniqueId, option
         });
 
         if (boards.length !== 0) {
@@ -39,22 +36,22 @@ addRouter.post("/board", adminAuth, async function (req, res) {
 
                     if (academicRequirement !== undefined) {
                         await ugUniversityModel.updateMany(
-                            { [`academicReq.${id}`]: { $exists: false } },
-                            { $set: { [`academicReq.${id}`]: academicRequirement } }
+                            { [`academicReq.${uniqueId}`]: { $exists: false } },
+                            { $set: { [`academicReq.${uniqueId}`]: academicRequirement } }
                         );
                     }
 
                     if (englishRequirement !== undefined) {
                         await ugUniversityModel.updateMany(
-                            { [`englishReq.${id}`]: { $exists: false } },
-                            { $set: { [`englishReq.${id}`]: englishRequirement } }
+                            { [`englishReq.${uniqueId}`]: { $exists: false } },
+                            { $set: { [`englishReq.${uniqueId}`]: englishRequirement } }
                         );
                     }
 
                     if (mathRequirement !== undefined) {
                         await ugUniversityModel.updateMany(
-                            { [`mathReq.${id}`]: { $exists: false } },
-                            { $set: { [`mathReq.${id}`]: mathRequirement } }
+                            { [`mathReq.${uniqueId}`]: { $exists: false } },
+                            { $set: { [`mathReq.${uniqueId}`]: mathRequirement } }
                         );
                     }
                 }
@@ -72,15 +69,15 @@ addRouter.post("/board", adminAuth, async function (req, res) {
 
                     if (englishRequirement !== undefined) {
                         await pgUniversityModel.updateMany(
-                            { [`englishReq.${id}`]: { $exists: false } },
-                            { $set: { [`englishReq.${id}`]: englishRequirement } }
+                            { [`englishReq.${uniqueId}`]: { $exists: false } },
+                            { $set: { [`englishReq.${uniqueId}`]: englishRequirement } }
                         );
                     }
 
                     if (mathRequirement !== undefined) {
                         await pgUniversityModel.updateMany(
-                            { [`mathReq.${id}`]: { $exists: false } },
-                            { $set: { [`mathReq.${id}`]: mathRequirement } }
+                            { [`mathReq.${uniqueId}`]: { $exists: false } },
+                            { $set: { [`mathReq.${uniqueId}`]: mathRequirement } }
                         );
                     }
                 }
@@ -99,14 +96,16 @@ addRouter.post("/board", adminAuth, async function (req, res) {
 });
 
 addRouter.post("/university", adminAuth, async function (req, res) {
-    const { id, option } = req.body;
+    const { option } = req.body;
+
+    const uniqueId = moment().unix() + Math.floor((Math.random() * 100) + 1);
 
     try {
         const unis = await unisOptionModel.find();
         const pgUnis = await pgUniversityModel.find();
 
         await unisOptionModel.create({
-            id, option
+            id : uniqueId, option
         });
 
         if (unis.length !== 0) {
@@ -119,8 +118,8 @@ addRouter.post("/university", adminAuth, async function (req, res) {
                     const academicRequirement = otherUni.academicReq[otherUnisId];
 
                     await pgUniversityModel.updateMany(
-                        { [`academicReq.${id}`]: { $exists: false } },
-                        { $set: { [`academicReq.${id}`]: academicRequirement } }
+                        { [`academicReq.${uniqueId}`]: { $exists: false } },
+                        { $set: { [`academicReq.${uniqueId}`]: academicRequirement } }
                     );
                 }
             }
@@ -139,11 +138,13 @@ addRouter.post("/university", adminAuth, async function (req, res) {
 
 addRouter.post("/moiunis", adminAuth, async function (req, res) {
 
-    const { id, option } = req.body;
+    const { option } = req.body;
+
+    const uniqueId = moment().unix() + Math.floor((Math.random() * 100) + 1);
 
     try {
         await moiOptionModel.create({
-            id, option
+            id : uniqueId, option
         });
 
         res.json({
@@ -159,11 +160,13 @@ addRouter.post("/moiunis", adminAuth, async function (req, res) {
 
 addRouter.post("/faculty", adminAuth, async function (req, res) {
 
-    const { id, option } = req.body;
+    const { option } = req.body;
+
+    const uniqueId = moment().unix() + Math.floor((Math.random() * 100) + 1);
 
     try {
         await facultiesOptionModel.create({
-            id, option
+            id : uniqueId, option
         });
 
         res.json({
@@ -179,11 +182,13 @@ addRouter.post("/faculty", adminAuth, async function (req, res) {
 
 addRouter.post("/intake", adminAuth, async function (req, res) {
 
-    const { id, option } = req.body;
+    const { option } = req.body;
+
+    const uniqueId = moment().unix() + Math.floor((Math.random() * 100) + 1);
 
     try {
         await intakesOptionModel.create({
-            id, option
+            id : uniqueId, option
         });
 
         res.json({

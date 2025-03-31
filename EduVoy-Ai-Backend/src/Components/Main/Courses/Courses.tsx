@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import { Search, Cross, FilterIcon, Book, ArrowLeftCircleIcon, ArrowRightCircleIcon } from 'lucide-react';
 import Select from 'react-dropdown-select';
-import moment from 'moment';
 import { EnglandUniversities } from './../../../utils/ukuniversities';
 import { Dropdown } from './../../../utils/dropdown';
 import { Option } from './../../../utils/options';
@@ -250,6 +249,7 @@ const CourseCentre: React.FC = () => {
     };
 
     const fetchCourses = async () => {
+        resetForm(0);
         try {
             const token = localStorage.getItem('token');
 
@@ -290,8 +290,7 @@ const CourseCentre: React.FC = () => {
         fetchFaculties();
     }, []);
 
-    // const fakeArray: Dropdown[] = [{value: 0, label: ''}]
-    const resetForm = () => {
+    const resetForm = (val: number) => {
         setCourseName('');
         setSelectedUni([]);
         setCourseType('all');
@@ -306,7 +305,9 @@ const CourseCentre: React.FC = () => {
         setCourseModules('');
         setPlacementAvailability('one');
         setCarrer('');
-        fetchCourses();
+        if (val === 1) {
+            fetchCourses();
+        }
     }
 
     function createIntakes() {
@@ -340,9 +341,6 @@ const CourseCentre: React.FC = () => {
 
     const goToUpadteCourse = async (idx: number) => {
         setNumberOfUpdatingCourse(idx);
-
-        handleScrollToInputSection();
-
         try {
             const token = localStorage.getItem('token');
 
@@ -358,42 +356,43 @@ const CourseCentre: React.FC = () => {
             const data = await response.json();
             const courseToUpdate = data.course;
 
-            setCourseName(`${courseToUpdate.courseName}`);
+            setCourseName(courseToUpdate.courseName);
 
             setSelectedUni([{
                 value: courseToUpdate.universityId,
-                label: `${courseToUpdate.universityName}`,
+                label: courseToUpdate.universityName,
             }]);
 
-            setCourseType(`${courseToUpdate.courseType}`);
+            setCourseType(courseToUpdate.courseType);
 
-            setCampus(`${courseToUpdate.campus}`);
+            setCampus(courseToUpdate.campus);
 
-            setDuration(`${courseToUpdate.duration}`);
+            setDuration(courseToUpdate.duration);
 
             setFees(courseToUpdate.fees)
 
             const allIntakes = courseToUpdate.intakes.map((intake: number) => ({
                 value: intake,
-                label: `${objIntake[intake]}`
+                label: objIntake[intake]
             }));
 
             setSelectedIntakes(allIntakes);
 
             const allFaculties = courseToUpdate.faculties.map((faculty: number) => ({
                 value: faculty,
-                label: `${objFaculty[faculty]}`
+                label: objFaculty[faculty]
             }));
 
             setSelectedFaculties(allFaculties);
-            setModeOfStudy(`${courseToUpdate.modeOfStudy}`);
+            setModeOfStudy(courseToUpdate.modeOfStudy);
             setApplicationFees(courseToUpdate.applicationFees);
-            setScholarship(`${courseToUpdate.scholarship}`);
-            setCourseModules(`${courseToUpdate.courseModules}`);
-            setPlacementAvailability(`${courseToUpdate.placementAvailability}`);
-            setCarrer(`${courseToUpdate.carrer}`);
+            setScholarship(courseToUpdate.scholarship);
+            setCourseModules(courseToUpdate.courseModules);
+            setPlacementAvailability(courseToUpdate.placementAvailability);
+            setCarrer(courseToUpdate.carrer);
 
             setIsCourseToUpdated(true);
+            handleScrollToInputSection();
         } catch (error) {
             console.error('Error fetching options:', error);
         }
@@ -427,7 +426,7 @@ const CourseCentre: React.FC = () => {
                         throw new Error("Failed to fetch data");
                     }
                     handleScrollToTopSection();
-                    resetForm();
+                    resetForm(1);
                     setIsCourseToUpdated(false);
                     resetSearchFn();
                 })
@@ -473,7 +472,7 @@ const CourseCentre: React.FC = () => {
                     throw new Error("Failed to fetch data");
                 }
                 checkAndDecreaseMapCount(result, decreaseMapCount);
-                resetForm();
+                resetForm(1);
                 resetSearchFn();
             })
             .catch((error) => console.error("Error fetching course:", error));
@@ -489,7 +488,6 @@ const CourseCentre: React.FC = () => {
 
         // Add Course
         if (courseName && selectedUni && courseType !== "all" && campus && duration && fees && selectedIntakes && selectedFaculties && modeOfStudy && applicationFees && scholarship && courseModules && placementAvailability !== 'one' && carrer) {
-            const newId = moment().unix() + Math.floor((Math.random() * 100) + 1);
             const intakes = createIntakes();
             const faculties = createFaculties();
             const universityId = selectedUni[0].value;
@@ -501,14 +499,14 @@ const CourseCentre: React.FC = () => {
                     'token': `${token}`,
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ id: newId, universityId, courseName, courseType, universityName, campus, duration, fees, intakes, faculties, modeOfStudy, applicationFees, scholarship, courseModules, placementAvailability, carrer }),
+                body: JSON.stringify({ universityId, courseName, courseType, universityName, campus, duration, fees, intakes, faculties, modeOfStudy, applicationFees, scholarship, courseModules, placementAvailability, carrer }),
             })
                 .then(async (res) => {
                     if (!res.ok) {
                         throw new Error("Failed to fetch data");
                     }
                     handleScrollToTopSection();
-                    resetForm();
+                    resetForm(1);
                     resetSearchFn();
                 })
                 .catch((error) => console.error("Error fetching courses:", error));
@@ -541,7 +539,7 @@ const CourseCentre: React.FC = () => {
                         </div>
                         <div className='grid grid-cols-4 gap-6'>
                             <div className='col-span-2 '>
-                                <label htmlFor="type" className="block font-bold text-xl text-white mb-1">
+                                <label className="block font-bold text-xl text-white mb-1">
                                     University:
                                 </label>
                                 <Select
@@ -651,7 +649,7 @@ const CourseCentre: React.FC = () => {
                                     <Book className="w-6 h-6 text-black" />
                                 </div>
                                 <div className="flex-1 mt-3">
-                                    <b className="font-bold text-xl mb-3">{course.courseName}</b>
+                                    <b className="font-bold text-xl mb-3">{index + prevNum + 1}. {course.courseName}</b>
                                     <br /><br />
                                     <p className="font-light text-xl mb-2">
                                         <b className="font-bold text-lg mb-3">University:</b> {course.universityName}
@@ -670,32 +668,6 @@ const CourseCentre: React.FC = () => {
 
                                         <p className="font-light text-xl mb-2">
                                             <b className="font-bold text-lg mb-3">Course Fees:</b> {course.fees}
-                                        </p>
-                                    </div>
-                                    <div className='grid grid-cols-3'>
-                                        <p className="font-light text-xl mb-2">
-                                            <b className="font-bold text-lg mb-3">Mode Of Study:</b> {course.modeOfStudy}
-                                        </p>
-
-                                        <p className="font-light text-xl mb-2">
-                                            <b className="font-bold text-lg mb-3">Application Fees:</b> {course.applicationFees}
-                                        </p>
-
-                                        <p className="font-light text-xl mb-2">
-                                            <b className="font-bold text-lg mb-3">Scholarship:</b> {course.scholarship}
-                                        </p>
-                                    </div>
-                                    <div className='grid grid-cols-3'>
-                                        <p className="font-light text-xl mb-2">
-                                            <b className="font-bold text-lg mb-3">Course Modules:</b> {course.courseModules}
-                                        </p>
-
-                                        <p className="font-light text-xl mb-2">
-                                            <b className="font-bold text-lg mb-3">Placement Availability:</b> {course.placementAvailability}
-                                        </p>
-
-                                        <p className="font-light text-xl mb-2">
-                                            <b className="font-bold text-lg mb-3">Career Paths & Job Roles:</b> {course.carrer}
                                         </p>
                                     </div>
                                     <div className='flex justify-start items-center'>
@@ -739,7 +711,7 @@ const CourseCentre: React.FC = () => {
                                     onClick={() => goToUpadteCourse(course.id)}
                                     className="w-full btn btn-primary"
                                 >
-                                    Update Course
+                                    View & Update Course
                                 </motion.button>
                                 <motion.button
                                     initial={{ opacity: 0 }}
@@ -795,7 +767,7 @@ const CourseCentre: React.FC = () => {
                         </div>
 
                         <div className="mb-4">
-                            <label htmlFor="type" className="block font-bold text-xl text-white mb-1">
+                            <label className="block font-bold text-xl text-white mb-1">
                                 University:
                             </label>
                             <Select

@@ -188,7 +188,7 @@ const UgUniversities: React.FC = () => {
                 <div className='flex justify-center'>
                     <div className="flex justify-around items-center bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-5 mb-8 text-white w-[1100px]">
                         <div className='w-[700px]'>
-                            <label htmlFor="type" className="block font-bold text-xl text-white mb-1">
+                            <label className="block font-bold text-xl text-white mb-1">
                                 Select A University To Add Requirements:
                             </label>
                             <Select

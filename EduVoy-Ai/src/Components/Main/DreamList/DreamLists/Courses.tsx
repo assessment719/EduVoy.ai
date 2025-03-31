@@ -22,7 +22,7 @@ const DreamList = () => {
                 return;
             }
 
-            const response = await fetch(`${BACKEND_URL}/users/dreamCourses?userId=${userDetails.id}`, {
+            const response = await fetch(`${BACKEND_URL}/users/getField/dreamCourses/${userDetails.id}`, {
                 method: "GET",
                 headers: {
                     'token': `${token}`
@@ -31,7 +31,7 @@ const DreamList = () => {
             const data = await response.json();
 
             let obj: { [key: string]: boolean } = {};
-            data.dreamCourses.forEach((courseId: number) => {
+            data.fieldDetails.dreamCourses.forEach((courseId: number) => {
                 obj[courseId] = true;
             });
             setAddedToList(obj);
@@ -45,27 +45,29 @@ const DreamList = () => {
     }, [])
 
     return (
-        <main className="min-h-screen -ml-2">
+        <main className="min-h-screen">
             <Tabs.Root value={activeTab} onValueChange={setActiveTab}>
-                <Tabs.List className="flex gap-2 space-x-1 bg-gray-200 p-4 rounded-xl shadow-sm mb-8 font-bold w-[1100px]">
-                    {[
-                        { id: 'dreamPgCourses', label: 'Postgraduate Courses' },
-                        { id: 'dreamUgCourses', label: 'Undergraduate Courses' }
-                    ].map(({ id, label }) => (
-                        <Tabs.Trigger
-                            key={id}
-                            value={id}
-                            className={`flex-1 shadow-md shadow-black text-lg p-2 flex items-center justify-center rounded-lg transition-colors duration-200 cursor-pointer
+                <div className='flex justify-center'>
+                    <Tabs.List className="tabsList w-[900px]">
+                        {[
+                            { id: 'dreamPgCourses', label: 'Postgraduate Courses' },
+                            { id: 'dreamUgCourses', label: 'Undergraduate Courses' }
+                        ].map(({ id, label }) => (
+                            <Tabs.Trigger
+                                key={id}
+                                value={id}
+                                className={`tabs
                                 ${activeTab === id
-                                    ? 'bg-green-200 text-white'
-                                    : 'hover:bg-white'
-                                }
+                                        ? 'activeTab'
+                                        : 'inActiveTab'
+                                    }
                             `}
-                        >
-                            <span>{label}</span>
-                        </Tabs.Trigger>
-                    ))}
-                </Tabs.List>
+                            >
+                                <span>{label}</span>
+                            </Tabs.Trigger>
+                        ))}
+                    </Tabs.List>
+                </div>
 
                 <motion.div
                     className='flex justify-center'

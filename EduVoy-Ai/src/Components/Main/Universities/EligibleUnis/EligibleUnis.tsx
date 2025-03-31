@@ -1,7 +1,6 @@
 import * as Tabs from '@radix-ui/react-tabs';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useState } from 'react';
 import Acads from './AllQueries/Acads';
 import Waiver from './AllQueries/Waiver';
 import Test from './AllQueries/Tests';
@@ -9,8 +8,6 @@ import Math from './AllQueries/Math';
 import Moi from './AllQueries/MOI';
 import CourseType from './AllQueries/CourseType';
 import Fees from './AllQueries/Fees';
-import { userDetailsAtom, dreamUniAtom } from'./../../../../Atoms/atoms';
-import { BACKEND_URL } from './../../../../config';
 
 const EligibleUniversities = () => {
     const [activeTab, setActiveTab] = useState('acadreq');
@@ -18,7 +15,7 @@ const EligibleUniversities = () => {
     return (
         <main className="min-h-screen">
             <Tabs.Root value={activeTab} onValueChange={setActiveTab}>
-                <Tabs.List className="flex gap-2 space-x-1 -ml-2 bg-gray-200 p-4 rounded-xl shadow-sm mb-8 font-bold w-[1100px]">
+                <Tabs.List className="tabsList">
                     {[
                         { id: 'acadreq', label: 'Academic' },
                         { id: 'engreq', label: 'English Waiver' },
@@ -31,10 +28,10 @@ const EligibleUniversities = () => {
                         <Tabs.Trigger
                             key={id}
                             value={id}
-                            className={`flex-1 shadow-md shadow-black text-lg p-2 flex items-center justify-center rounded-lg transition-colors duration-200 cursor-pointer
+                            className={`tabs
                                 ${activeTab === id
-                                    ? 'bg-green-200 text-white'
-                                    : 'hover:bg-white'
+                                    ? 'activeTab'
+                                    : 'inActiveTab'
                                 }
                             `}
                         >

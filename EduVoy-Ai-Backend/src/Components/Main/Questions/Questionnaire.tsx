@@ -63,6 +63,7 @@ const QuestionCentre: React.FC = () => {
 
     // Get Question
     const fetchQuestions = async () => {
+        resetForm(0);
         try {
             const token = localStorage.getItem('token');
 
@@ -95,13 +96,15 @@ const QuestionCentre: React.FC = () => {
         fetchQuestions();
     }, []);
 
-    const resetForm = () => {
+    const resetForm = (val: number) => {
         setQuestion('');
         setCategory('');
         setDifficulty('all');
         setExpectedKeywords('');
         setEvaluationPrompt('');
-        fetchQuestions();
+        if (val === 1) {
+            fetchQuestions();
+        }
     }
 
     // Update Question
@@ -126,14 +129,14 @@ const QuestionCentre: React.FC = () => {
         const idOfQuestion = idx - 1;
         setNumberOfUpdatingQuestions(idx);
 
-        handleScrollToInputSection();
+        setQuestion(interviewQuestions[idOfQuestion].question);
+        setCategory(interviewQuestions[idOfQuestion].category);
+        setDifficulty(interviewQuestions[idOfQuestion].difficulty);
+        setExpectedKeywords(interviewQuestions[idOfQuestion].expectedKeywords);
+        setEvaluationPrompt(interviewQuestions[idOfQuestion].evaluationPrompt);
 
-        setQuestion(`${interviewQuestions[idOfQuestion].question}`);
-        setCategory(`${interviewQuestions[idOfQuestion].category}`);
-        setDifficulty(`${interviewQuestions[idOfQuestion].difficulty}`);
-        setExpectedKeywords(`${interviewQuestions[idOfQuestion].expectedKeywords}`);
-        setEvaluationPrompt(`${interviewQuestions[idOfQuestion].evaluationPrompt}`);
         setIsQuestionToUpdated(true);
+        handleScrollToInputSection();
     }
 
     const updateQuestion = () => {
@@ -159,7 +162,7 @@ const QuestionCentre: React.FC = () => {
                         throw new Error("Failed to fetch data");
                     }
                     handleScrollToTopSection();
-                    resetForm();
+                    resetForm(1);
                     setIsQuestionToUpdated(false);
                 })
                 .catch((error) => console.error("Error fetching questions:", error));
@@ -193,7 +196,7 @@ const QuestionCentre: React.FC = () => {
                     setIsFetching(false);
                     throw new Error("Failed to fetch data");
                 }
-                resetForm();
+                resetForm(1);
                 checkAndDecreaseMapCount(result, decreaseMapCount);
             })
             .catch((error) => console.error("Error fetching questions:", error));
@@ -225,7 +228,7 @@ const QuestionCentre: React.FC = () => {
                         throw new Error("Failed to fetch data");
                     }
                     handleScrollToTopSection();
-                    resetForm();
+                    resetForm(1);
                 })
                 .catch((error) => console.error("Error fetching questions:", error));
         } else {
@@ -358,7 +361,7 @@ const QuestionCentre: React.FC = () => {
                             </select>
                         </div>
                         <div className="mb-4">
-                            <label htmlFor="expectedKeywordsID" className="block font-bold text-xl text-white mb-1">
+                            <label className="block font-bold text-xl text-white mb-1">
                                 Expected Keywords:
                             </label>
                             <input

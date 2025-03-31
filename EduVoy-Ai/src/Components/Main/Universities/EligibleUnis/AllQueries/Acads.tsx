@@ -53,13 +53,13 @@ const Acads = () => {
             return;
         }
 
-        fetch(`${BACKEND_URL}/users/dreamUnis`, {
+        fetch(`${BACKEND_URL}/users/updateField/dreamUnis/${userDetails.id}`, {
             method: "PUT",
             headers: {
                 'token': `${token}`,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ userId: userDetails.id, dreamUnis: dreamUnis }),
+            body: JSON.stringify({ updatingField: { dreamUnis } }),
         })
             .then(async (res) => {
                 if (!res.ok) {
@@ -258,6 +258,8 @@ const Acads = () => {
         setCourseType('');
         setInstitutionId(0);
         setAcadMarks(0);
+        setQueryUni('');
+        setIsSearched(false);
     }
 
     async function showMore(universityId: Number) {
@@ -291,16 +293,16 @@ const Acads = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="mt-3 space-y-3 w-[800px] mx-auto p-6 bg-white rounded-2xl shadow-2xl"
+                className="eligibleUniBox"
             >
                 <div className='grid grid-cols-1 gap-6'>
                     <div className='w-full'>
-                        <label htmlFor="type" className="block font-bold text-xl mb-1">
+                        <label className="label">
                             Select Course Type:
                         </label>
-                        <div className='border-2 border-black'>
+                        <div className='selectBorder'>
                             <Select
-                                className='bg-white text-black h-10 text-2xl'
+                                className='select'
                                 name='university'
                                 color='#8bb87b'
                                 searchable={false}
@@ -314,12 +316,12 @@ const Acads = () => {
                     </div>
 
                     <div className='w-full'>
-                        <label htmlFor="type" className="block font-bold text-xl mb-1">
+                        <label className="label">
                             Select University or Board:
                         </label>
-                        <div className='border-2 border-black'>
+                        <div className='selectBorder'>
                             <Select
-                                className='bg-white text-black h-10 text-2xl'
+                                className='select'
                                 name='university'
                                 color='#8bb87b'
                                 placeholder='Select University or Board'
@@ -332,16 +334,16 @@ const Acads = () => {
                     </div>
 
                     <div className="w-full">
-                        <label htmlFor="expectedKeywordsID" className="block font-bold text-xl mb-1">
+                        <label className="label">
                             Enter Overall Marks:
                         </label>
                         <input
-                            type="text"
+                            type="number"
                             id="acadMarks"
                             value={acadMarks === 0 ? '' : acadMarks}
                             onChange={(e) => setAcadMarks(Number(e.target.value))}
                             placeholder="Enter Overall Percentage"
-                            className="p-2 h-11 border-2 border-black text-xl w-full"
+                            className="input"
                         />
                     </div>
                 </div>
@@ -350,7 +352,7 @@ const Acads = () => {
                     animate={{ opacity: courseType === '' || institutionId === 0 || acadMarks === 0 ? 0.5 : 1 }}
                     disabled={courseType === '' || institutionId === 0 || acadMarks === 0}
                     onClick={findUnis}
-                    className="w-full btn btn-primary font-bold flex justify-center items-center"
+                    className="uniSubmitBtn"
                 >
                     <SearchIcon className='mr-2' />
                     <p>Find Universities</p>
@@ -358,13 +360,13 @@ const Acads = () => {
             </motion.div>}
 
             {isGotData && !isFetching && noOfUnis !== 0 && <div className='flex flex-col items-center gap-6'>
-                <div className='p-2 bg-gray-200 rounded-2xl w-full'>
-                    <h1 className='text-3xl font-bold text-center'>You Can Apply For Following Universities</h1>
+                <div className='uniHeadDiv'>
+                    <h1 className='uniHead'>You Can Apply For Following Universities</h1>
                 </div>
 
-                <div className='grid grid-cols-5 gap-6 items-center mb-5 p-5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-white w-[1000px]'>
+                <div className='uniSearchBox'>
                     <div className="mb-4 col-span-3">
-                        <label htmlFor="queryCourse" className="block font-bold text-xl text-white mb-1">
+                        <label htmlFor="queryCourse" className="label">
                             University Name:
                         </label>
                         <input
@@ -373,14 +375,14 @@ const Acads = () => {
                             value={queryUni}
                             onChange={(e) => setQueryUni(e.target.value)}
                             placeholder="Enter University Name"
-                            className="p-2 w-full border border-black text-black rounded-lg"
+                            className="input rounded-lg"
                         />
                     </div>
                     <motion.button
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         onClick={isSearched ? resetUnis : searchUnis}
-                        className="w-full flex justify-center items-center btn btn-primary bg-gradient-to-r from-red-500 to-green-600 col-span-2"
+                        className="btn btn-primary uniSearchBtn"
                     >
                         {isSearched ? <Cross className='mr-2 rotate-45' /> : <Search className='mr-2' />}
                         {isSearched ? <p>Reset Search</p> : <p>Search University</p>}
@@ -427,16 +429,16 @@ const Acads = () => {
                 )}
             </div>}
 
-            {isMore && <div className='fixed h-screen w-[1200px] top-20 -ml-[100px]'>
+            {isMore && <div className='uniMoreDiv'>
                 <div className='flex justify-center'>
                     <motion.div
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="w-[700px] mt-[15%] border-4 border-black bg-white p-5 rounded-xl shadow-2xl shadow-black"
+                        className="morePopUp"
                     >
                         <div className='flex justify-end'>
-                            <Cross onClick={() => setIsMore(false)} className='fixed hover:text-red-500 transition-text duration-300 scale-150 rotate-45 cursor-pointer' />
+                            <Cross onClick={() => setIsMore(false)} className='moreClose transition-text' />
                         </div>
                         <div className='flex flex-col p-3 gap-5'>
                             <div>

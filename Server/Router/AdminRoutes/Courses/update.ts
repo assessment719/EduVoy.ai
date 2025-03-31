@@ -12,7 +12,7 @@ updateRouter.put("/", adminAuth, async function (req, res) {
     await courseModel.updateOne({
       id
     }, {
-      id, universityId, courseName, courseType, universityName, campus, duration, fees, intakes, faculties, modeOfStudy, applicationFees, scholarship, courseModules, placementAvailability, carrer
+      universityId, courseName, courseType, universityName, campus, duration, fees, intakes, faculties, modeOfStudy, applicationFees, scholarship, courseModules, placementAvailability, carrer
     });
 
     res.json({

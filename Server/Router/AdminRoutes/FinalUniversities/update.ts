@@ -15,7 +15,7 @@ updateRouter.put("/", adminAuth, async function (req, res) {
     await universityModel.updateOne({
       id
     }, {
-      id, universityName, location, logoLink, universityWebsitePage, universityCoursePage, globalRanking, accreditation, tutionFees, scholarships, researchFacilities, jobPlacementRate, livingCost, averageSalary, studentReview
+      universityName, location, logoLink, universityWebsitePage, universityCoursePage, globalRanking, accreditation, tutionFees, scholarships, researchFacilities, jobPlacementRate, livingCost, averageSalary, studentReview
     });
 
     await ugUniversityModel.updateOne({

@@ -12,7 +12,7 @@ updateRouter.put("/", adminAuth, async function (req, res) {
         await resourceModel.updateOne({
             id
         }, {
-            id, title, type, category, downloadUrl
+            title, type, category, downloadUrl
         });
 
         res.json({

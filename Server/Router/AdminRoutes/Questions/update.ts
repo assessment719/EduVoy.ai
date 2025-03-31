@@ -12,7 +12,7 @@ updateRouter.put("/", adminAuth, async function (req, res) {
     await questionModel.updateOne({
       id
     }, {
-      id, question, category, difficulty, expectedKeywords, evaluationPrompt
+      question, category, difficulty, expectedKeywords, evaluationPrompt
     });
 
     res.json({

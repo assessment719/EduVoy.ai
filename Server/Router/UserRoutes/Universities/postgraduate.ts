@@ -88,6 +88,97 @@ postgraduateRouter.get("/", userAuth, async function (req, res) {
     }
 });
 
+postgraduateRouter.get("/assessment", userAuth, async function (req, res) {
+    const {
+        instituteId,
+        academicMarks,
+        boardId,
+        waiverMarks,
+        eltTest,
+        overall,
+        listning,
+        reading,
+        writing,
+        speaking,
+        moiUniId,
+        mathBoardId,
+        mathMarks
+    } = req.query;
+
+    const query: { [key: string]: any } = {};
+
+    // Query for academic requirements
+    if (instituteId && academicMarks) {
+        query[`academicReq.${instituteId}`] = { $lte: Number(academicMarks) };
+    }
+
+    // Query for waiver requirements
+    if (waiverMarks) {
+        query[`englishReq.${boardId}`] = { $lte: Number(waiverMarks) };
+    }
+
+    // Query for math requirements
+    if (mathMarks) {
+        query[`mathReq.${mathBoardId}`] = { $lte: Number(mathMarks) };
+    }
+
+    // Query for moi acceptence
+    if (moiUniId) {
+        query.moiUniversities = moiUniId;
+    }
+
+    // Query for english language tests
+    if (eltTest && overall) {
+        query[`${eltTest}.overall`] = { $lte: Number(overall) };
+    }
+    if (eltTest && listning) {
+        query[`${eltTest}.listening`] = { $lte: Number(listning) };
+    }
+    if (eltTest && reading) {
+        query[`${eltTest}.reading`] = { $lte: Number(reading) };
+    }
+    if (eltTest && writing) {
+        query[`${eltTest}.writing`] = { $lte: Number(writing) };
+    }
+    if (eltTest && speaking) {
+        query[`${eltTest}.speaking`] = { $lte: Number(speaking) };
+    }
+
+    try {
+        let data: { result: string, universityIds: any[] } = {
+            result: "",
+            universityIds: []
+        }
+        let uniNames: string[] = []
+        const projection = { universityId: 1, universityName: 1 }
+        const universities = await pgUniversityModel
+            .find(query, projection)
+            .sort({ universityName: 1 });
+
+        if (universities.length !== 0) {
+            uniNames.push(...universities.map(obj => (obj.universityName)));
+            data = {
+                result: `You are elligible to apply in ${uniNames.join(", ")}.`,
+                universityIds: universities
+            }
+        } else {
+            data = {
+                result: "Sorry! You are not eligible for any universities.",
+                universityIds: []
+            }
+        }
+
+        res.json({
+            data
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Error While Fetching Universities",
+            error: `Error With API: ${error}`,
+        });
+    }
+});
+
 postgraduateRouter.get("/:queryField/:universityId", userAuth, async function (req, res) {
 
     const queryField = req.params.queryField;
@@ -95,9 +186,9 @@ postgraduateRouter.get("/:queryField/:universityId", userAuth, async function (r
 
     try {
         const projection: { [key: string]: number } = {};
-        projection[`${queryField}`] = 1
+        projection[queryField] = 1
         projection.extraReqInfo = 1
-        
+
         const university = await pgUniversityModel.findOne({ universityId }, projection);
 
         res.json({

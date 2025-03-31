@@ -1,5 +1,8 @@
 import { atom } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
+import { expensesType } from './../Utils/expenses';
+import { incomesType } from './../Utils/incomes';
+import { loanType } from './../Utils/loan';
 
 const { persistAtom } = recoilPersist();
 
@@ -38,5 +41,35 @@ export const dreamUniAtom = atom({
 
 export const dreamCourseAtom = atom({
     key: 'addedToCourseList',
+    default: {} as { [key: number]: boolean }
+});
+
+export const expensesAtom = atom({
+    key: 'expenses',
+    default: {} as expensesType
+});
+
+export const incomesAtom = atom({
+    key: 'incomes',
+    default: {} as incomesType
+});
+
+export const loanAtom = atom({
+    key: 'loan',
+    default: {} as loanType
+});
+
+export const scholarshipListAtom = atom({
+    key: 'scholarshipList',
+    default: {} as { [key: number]: boolean }
+});
+
+export const loanListAtom = atom({
+    key: 'loanList',
+    default: {} as { [key: number]: boolean }
+});
+
+export const jobListAtom = atom({
+    key: 'jobList',
     default: {} as { [key: number]: boolean }
 });

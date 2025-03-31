@@ -1,4 +1,5 @@
 import Router from "express";
+import moment from 'moment';
 import Jwt from "jsonwebtoken";
 import { z } from "zod";
 import bcrypt from "bcrypt";
@@ -11,6 +12,7 @@ import { universityRouter } from "./Universities/universities";
 import { coursesRouter } from "./Courses/courses";
 import { finalUniversitiesRouter } from "./FinalUniversities/universities";
 import { optionsRouter } from "./Options/options";
+import { finResourcesRouter } from "./FinancialResources/resources";
 
 export const adminRouter = Router();
 
@@ -36,8 +38,11 @@ adminRouter.post("/signup", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const uniqueId = moment().unix() + Math.floor((Math.random() * 100) + 1);
+
     try {
         await adminModel.create({
+            id: uniqueId,
             email,
             password: hashedPassword,
             firstName,
@@ -105,6 +110,7 @@ adminRouter.get("/authenticate", adminAuth, async (req, res) => {
 
 adminRouter.use("/questions", questionsRouter);
 adminRouter.use("/resources", resourcesRouter);
+adminRouter.use("/finresources", finResourcesRouter);
 adminRouter.use("/universities", universityRouter);
 adminRouter.use("/courses", coursesRouter);
 adminRouter.use("/finaluniversities", finalUniversitiesRouter);

@@ -10,9 +10,9 @@ function Interview() {
   const [activeTab, setActiveTab] = useState('dashboard');
 
   return (
-    <div className="min-h-screen px-4 sm:px-6 lg:px-8">
+    <div className="tabListMain">
       <Tabs.Root value={activeTab} onValueChange={setActiveTab}>
-        <Tabs.List className="flex gap-2 space-x-1 -ml-2 bg-gray-200 p-4 rounded-xl shadow-sm mb-8 font-bold w-[1100px]">
+        <Tabs.List className="tabsList">
           {[
             { id: 'dashboard', label: 'Dashboard', icon: BarChart2 },
             { id: 'simulator', label: 'Interview Simulator', icon: Laptop },
@@ -21,10 +21,10 @@ function Interview() {
             <Tabs.Trigger
               key={id}
               value={id}
-              className={`flex-1 shadow-md shadow-black text-lg p-2 flex items-center justify-center space-x-2 rounded-lg transition-colors duration-200 cursor-pointer
+              className={`tabs space-x-2
                   ${activeTab === id
-                  ? 'bg-green-200 text-white'
-                  : 'hover:bg-gray-100'
+                  ? 'activeTab'
+                  : 'inActiveTab'
                 }
                 `}
             >

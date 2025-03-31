@@ -1,4 +1,4 @@
 export interface PendingMessages {
-    message: string;
-    roomId: string;
-  }
+  message: string;
+  roomId: string;
+}

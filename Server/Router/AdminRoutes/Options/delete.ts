@@ -1,12 +1,5 @@
 import Router from "express";
-import { boardsOptionModel } from "./../../../database";
-import { unisOptionModel } from "./../../../database";
-import { moiOptionModel } from "./../../../database";
-import { facultiesOptionModel } from "./../../../database";
-import { intakesOptionModel } from "./../../../database";
-import { ugUniversityModel } from "./../../../database";
-import { pgUniversityModel } from "./../../../database";
-import { courseModel } from "./../../../database";
+import { boardsOptionModel, unisOptionModel, moiOptionModel, facultiesOptionModel, intakesOptionModel, ugUniversityModel, pgUniversityModel, courseModel } from "./../../../database";
 import { adminAuth } from "./../../../Auth/admin";
 
 export const deleteRouter = Router();

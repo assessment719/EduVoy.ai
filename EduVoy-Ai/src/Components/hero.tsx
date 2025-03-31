@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import * as Tabs from '@radix-ui/react-tabs';
 import { motion } from 'framer-motion';
-import { University, Book, PenBoxIcon, Laptop, ArrowRight, LucideListPlus } from 'lucide-react';
-import { activeTabAtom, userDetailsAtom, currentRoomAtom } from '../Atoms/atoms';
+import { University, Book, PenBoxIcon, Laptop, ArrowRight, LucideListPlus, ChartNoAxesCombined } from 'lucide-react';
+import { activeTabAtom, userDetailsAtom, currentRoomAtom, expensesAtom, incomesAtom, loanAtom } from '../Atoms/atoms';
 import { useNavigate } from 'react-router-dom';
 import Universities from './Main/Universities/Universities';
 import Courses from './Main/Courses/Courses';
@@ -11,7 +11,8 @@ import SOP from './Main/SOP/SOP';
 import Interview from './Main/Interview/Head';
 import ChatDashboard from './Main/ChatSupport/ChatDashboard';
 import DreamList from './../Components/Main/DreamList/DreamList';
-
+import PlanningTools from './Main/FinancialPlanner/PlannningTools';
+import { BACKEND_URL } from './../config';
 
 function Hero() {
     const [activeTabTitle, setActiveTabTitle] = useState('');
@@ -20,6 +21,9 @@ function Hero() {
     const userDetails = useRecoilValue(userDetailsAtom);
     const setUserDetails = useSetRecoilState(userDetailsAtom);
     const setCurrentRoom = useSetRecoilState(currentRoomAtom);
+    const setExpenses = useSetRecoilState(expensesAtom);
+    const setIncomes = useSetRecoilState(incomesAtom);
+    const setLoan = useSetRecoilState(loanAtom);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -31,6 +35,8 @@ function Hero() {
             setActiveTabTitle("Statement of Purpose Generator");
         } else if (activeTab === 'interview') {
             setActiveTabTitle("Interview Simulator");
+        } else if (activeTab === 'finance') {
+            setActiveTabTitle("Finance Planner");
         } else {
             setActiveTabTitle("Dream List");
         }
@@ -42,6 +48,75 @@ function Hero() {
         setCurrentRoom('');
         navigate('/sign');
     }
+
+    const fetchExpenses = async () => {
+        try {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                return;
+            }
+
+            const response = await fetch(`${BACKEND_URL}/users/getField/expenses/${userDetails.id}`, {
+                method: "GET",
+                headers: {
+                    'token': `${token}`
+                },
+            });
+            const data = await response.json();
+            setExpenses(data.fieldDetails.expenses)
+        } catch (error) {
+            console.error('Error fetching resources:', error);
+        }
+    };
+
+    const fetchIncomes = async () => {
+        try {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                return;
+            }
+
+            const response = await fetch(`${BACKEND_URL}/users/getField/incomes/${userDetails.id}`, {
+                method: "GET",
+                headers: {
+                    'token': `${token}`
+                },
+            });
+            const data = await response.json();
+            setIncomes(data.fieldDetails.incomes)
+        } catch (error) {
+            console.error('Error fetching resources:', error);
+        }
+    };
+
+    const fetchLoan = async () => {
+        try {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                return;
+            }
+
+            const response = await fetch(`${BACKEND_URL}/users/getField/loan/${userDetails.id}`, {
+                method: "GET",
+                headers: {
+                    'token': `${token}`
+                },
+            });
+            const data = await response.json();
+            setLoan(data.fieldDetails.loan)
+        } catch (error) {
+            console.error('Error fetching resources:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchExpenses();
+        fetchIncomes();
+        fetchLoan();
+    }, [])
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -69,7 +144,8 @@ function Hero() {
                             { id: 'course', label: 'Find Courses', icon: Book },
                             { id: 'dreamlist', label: 'Dream List', icon: LucideListPlus },
                             { id: 'sop', label: 'SOP Generator', icon: PenBoxIcon },
-                            { id: 'interview', label: 'Interview Simulator', icon: Laptop }
+                            { id: 'interview', label: 'Interview Simulator', icon: Laptop },
+                            { id: 'finance', label: 'Finance Planner', icon: ChartNoAxesCombined }
                         ].map(({ id, label, icon: Icon }) => (
                             <Tabs.Trigger
                                 key={id}
@@ -112,6 +188,10 @@ function Hero() {
 
                         <Tabs.Content value="interview">
                             <Interview />
+                        </Tabs.Content>
+
+                        <Tabs.Content value="finance">
+                            <PlanningTools />
                         </Tabs.Content>
                     </motion.div>
                 </Tabs.Root>

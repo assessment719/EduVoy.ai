@@ -1,4 +1,4 @@
 export interface CurrentMessages {
-    role: string;
-    message: string;
-  }
+  role: string;
+  message: string;
+}

@@ -1,9 +1,5 @@
 import Router from "express";
-import { boardsOptionModel } from "./../../../database";
-import { unisOptionModel } from "./../../../database";
-import { moiOptionModel } from "./../../../database";
-import { facultiesOptionModel } from "./../../../database";
-import { intakesOptionModel } from "./../../../database";
+import { boardsOptionModel, unisOptionModel, moiOptionModel, facultiesOptionModel, intakesOptionModel } from "./../../../database";
 import { addRouter } from "./add";
 import { updateRouter } from "./update";
 import { deleteRouter } from "./delete";

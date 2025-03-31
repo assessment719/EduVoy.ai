@@ -646,7 +646,7 @@ const Action = () => {
                         <div className='flex justify-center'>
                             <div className="flex justify-around items-center h-28 bg-gray-200 rounded-xl p-5 mb-8 w-[1100px]">
                                 <div className='w-[700px]'>
-                                    <label htmlFor="type" className="block font-bold text-xl mb-1">
+                                    <label className="block font-bold text-xl mb-1">
                                         Select A University To Add That As A MOI Acceptable University:
                                     </label>
                                     {!fakeRender && <div className='border-2 border-black'>
@@ -659,6 +659,18 @@ const Action = () => {
                                             values={[]}
                                             options={toBeAddedunis}
                                             onChange={(value: Dropdown[]): void => { setAddingfUniId(value[0].value) }}
+                                        />
+                                    </div>}
+                                    {fakeRender && <div className='border-2 border-black'>
+                                        <Select
+                                            className='w-96 bg-white text-black h-10 text-2xl'
+                                            name='university'
+                                            color='#8bb87b'
+                                            placeholder='Select University'
+                                            closeOnClickInput
+                                            values={[]}
+                                            options={[]}
+                                            onChange={(value: Dropdown[]): void => console.log(value[0].value)}
                                         />
                                     </div>}
                                 </div>

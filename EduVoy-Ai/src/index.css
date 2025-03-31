@@ -10,7 +10,7 @@
   
   @layer components {
     .btn {
-      @apply text-xl font-bold rounded-lg px-3 py-2 border-2 border-black;
+      @apply text-xl font-bold rounded-lg px-3 py-2;
     }
   
     .btn-primary {
@@ -19,5 +19,77 @@
   
     .btn-secondary {
       @apply bg-gray-200 text-gray-800 hover:bg-gray-300;
+    }
+
+    .tabListMain {
+      @apply min-h-screen px-4 sm:px-6 lg:px-8;
+    }
+
+    .tabsList {
+      @apply flex gap-2 space-x-1 -ml-2 bg-gray-200 p-4 rounded-xl shadow-sm mb-8 font-bold w-[1100px];
+    }
+
+    .tabs {
+      @apply flex-1 shadow-sm shadow-black text-lg p-2 flex items-center justify-center rounded-lg transition-colors duration-200 cursor-pointer;
+    }
+
+    .activeTab {
+      @apply bg-green-200 text-white;
+    }
+
+    .inActiveTab {
+      @apply hover:bg-white;
+    }
+
+    .eligibleUniBox {
+      @apply mt-3 space-y-3 w-[800px] mx-auto p-6 bg-white rounded-2xl shadow-2xl;
+    }
+
+    .label {
+      @apply block font-bold text-xl mb-1;
+    }
+
+    .selectBorder {
+      @apply border border-black;
+    }
+
+    .select {
+      @apply bg-white text-black h-10 text-2xl;
+    }
+
+    .input {
+      @apply p-2 h-11 border border-black text-xl w-full focus:outline-green-200;
+    }
+
+    .uniSubmitBtn {
+      @apply w-full btn btn-primary font-bold flex justify-center items-center;
+    }
+
+    .uniHeadDiv {
+      @apply p-2 bg-gray-200 rounded-2xl w-full;
+    }
+
+    .uniHead {
+      @apply text-3xl font-bold text-center;
+    }
+
+    .uniSearchBox {
+      @apply grid grid-cols-5 gap-6 items-center mb-5 p-5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-white w-[1000px];
+    }
+
+    .uniSearchBtn {
+      @apply w-full flex justify-center items-center bg-gradient-to-r from-red-500 to-green-600 col-span-2 border-2 border-black;
+    }
+
+    .uniMoreDiv {
+      @apply fixed h-screen w-[1200px] top-20 -ml-[100px];
+    }
+
+    .morePopUp {
+      @apply w-[700px] mt-[15%] border-4 border-black bg-white p-5 rounded-xl shadow-2xl shadow-black;
+    }
+
+    .moreClose {
+      @apply fixed hover:text-red-500 duration-500 scale-150 rotate-45 cursor-pointer;
     }
   }

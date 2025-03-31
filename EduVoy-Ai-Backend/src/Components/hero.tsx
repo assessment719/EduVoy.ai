@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import * as Tabs from '@radix-ui/react-tabs';
 import { motion } from 'framer-motion';
-import { University, LucideMessageCircleQuestion, FileText, Settings, ArrowRight, Book, MessageSquareTextIcon } from 'lucide-react';
+import { University, LucideMessageCircleQuestion, FileText, Settings, ArrowRight, Book, MessageSquareTextIcon, Wallet } from 'lucide-react';
 import { fullNameAtom, allConnectedUsersAtom, pendingMessagesAtom, currentRoomAtom, currentUserNameAtom, previousAdminRoomAtom, previousUserRoomAtom, isChatingAtom } from './../Atoms/atoms';
 import sound from './../Assets/BellNotification.wav'
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +15,7 @@ import CourseCentre from './Main/Courses/Courses';
 import PgUniversities from './Main/Postgraduate/PgUniversities';
 import UgUniversities from './Main/Undergraduate/UgUniversities';
 import ChatDashboard from './Main/ChatSupport/ChatDashboard';
-
+import FinancialTools from './Main/FinancialResources/FinancialTools';
 
 function Hero() {
   const [activeTab, setActiveTab] = useState('chat');
@@ -37,8 +37,10 @@ function Hero() {
       setActiveTabTitle("Courses");
     } else if (activeTab === 'questions') {
       setActiveTabTitle("Interview Questionnaire");
-    } else if (activeTab === 'resources') {
+    } else if (activeTab === 'intResources') {
       setActiveTabTitle("Interview Resources");
+    } else if (activeTab === 'finResources') {
+      setActiveTabTitle("Financial Resources");
     } else {
       setActiveTabTitle("Options");
     }
@@ -105,7 +107,7 @@ function Hero() {
     previousUserRooms.current = previousUsers;
   }, [previousUsers]);
 
-  function playNotification () {
+  function playNotification() {
     new Audio(sound).play()
   }
 
@@ -250,7 +252,8 @@ function Hero() {
                 { id: 'ugunis', label: 'UG Universities', icon: University },
                 { id: 'courses', label: 'Courses', icon: Book },
                 { id: 'questions', label: 'Questions', icon: LucideMessageCircleQuestion },
-                { id: 'resources', label: 'Resources', icon: FileText },
+                { id: 'intResources', label: 'Interview Resources', icon: FileText },
+                { id: 'finResources', label: 'Financial Resources', icon: Wallet },
                 { id: 'options', label: 'Options', icon: Settings },
               ].map(({ id, label, icon: Icon }) => (
                 <Tabs.Trigger
@@ -296,8 +299,12 @@ function Hero() {
                 <QuestionCentre />
               </Tabs.Content>
 
-              <Tabs.Content value="resources">
+              <Tabs.Content value="intResources">
                 <ResourceCentre />
+              </Tabs.Content>
+
+              <Tabs.Content value="finResources">
+                <FinancialTools />
               </Tabs.Content>
 
               <Tabs.Content value="options">

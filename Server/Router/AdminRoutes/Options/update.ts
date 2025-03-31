@@ -1,9 +1,5 @@
 import Router from "express";
-import { boardsOptionModel } from "./../../../database";
-import { unisOptionModel } from "./../../../database";
-import { moiOptionModel } from "./../../../database";
-import { facultiesOptionModel } from "./../../../database";
-import { intakesOptionModel } from "./../../../database";
+import { boardsOptionModel, unisOptionModel, moiOptionModel, facultiesOptionModel, intakesOptionModel } from "./../../../database";
 import { adminAuth } from "./../../../Auth/admin";
 
 export const updateRouter = Router();
@@ -16,7 +12,7 @@ updateRouter.put("/board", adminAuth, async function (req, res) {
     await boardsOptionModel.updateOne({
       id
     }, {
-      id, option
+      option
     });
 
     res.json({
@@ -38,7 +34,7 @@ updateRouter.put("/university", adminAuth, async function (req, res) {
     await unisOptionModel.updateOne({
       id
     }, {
-      id, option
+      option
     });
 
     res.json({
@@ -60,7 +56,7 @@ updateRouter.put("/moiunis", adminAuth, async function (req, res) {
     await moiOptionModel.updateOne({
       id
     }, {
-      id, option
+      option
     });
 
     res.json({
@@ -82,7 +78,7 @@ updateRouter.put("/faculty", adminAuth, async function (req, res) {
     await facultiesOptionModel.updateOne({
       id
     }, {
-      id, option
+      option
     });
 
     res.json({
@@ -104,7 +100,7 @@ updateRouter.put("/intake", adminAuth, async function (req, res) {
     await intakesOptionModel.updateOne({
       id
     }, {
-      id, option
+      option
     });
 
     res.json({

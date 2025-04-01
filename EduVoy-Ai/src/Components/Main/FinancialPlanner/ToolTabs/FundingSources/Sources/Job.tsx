@@ -159,7 +159,7 @@ const Jobs = () => {
                                 </Collapsible.Trigger>
 
                                 <Collapsible.Content className="pt-3 space-y-4 mb-5">
-                                    <div>
+                                    {resource.locations && (<div>
                                         <h4 className="text-lg font-bold mb-2">Job Locations</h4>
                                         <ul className="space-y-1">
                                             {resource.locations.map((item, i) => (
@@ -169,9 +169,9 @@ const Jobs = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                    </div>
+                                    </div>)}
 
-                                    <div>
+                                    {resource.requirements && (<div>
                                         <h4 className="text-lg font-bold mb-2">Requirements</h4>
                                         <ul className="space-y-1">
                                             {resource.requirements.map((item, i) => (
@@ -181,9 +181,9 @@ const Jobs = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                    </div>
+                                    </div>)}
 
-                                    <div>
+                                    {resource.benefits && (<div>
                                         <h4 className="text-lg font-bold mb-2">Benefits</h4>
                                         <ul className="space-y-1">
                                             {resource.benefits.map((item, i) => (
@@ -193,9 +193,9 @@ const Jobs = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                    </div>
+                                    </div>)}
 
-                                    <p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Tips:</b> {resource.tips}</p>
+                                    {resource.tips && (<p className="font-light text-xl mb-2"><b className="font-bold text-lg mb-2">Tips:</b> {resource.tips}</p>)}
                                 </Collapsible.Content>
                             </Collapsible.Root>
 

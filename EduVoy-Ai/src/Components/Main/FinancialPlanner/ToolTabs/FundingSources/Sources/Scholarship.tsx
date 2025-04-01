@@ -169,7 +169,7 @@ const Scholarships = () => {
                                 </Collapsible.Trigger>
 
                                 <Collapsible.Content className="pt-3 space-y-4 mb-5">
-                                    <div>
+                                    {resource.eligibilities && (<div>
                                         <h4 className="text-lg font-bold mb-2">Eligibility</h4>
                                         <ul className="space-y-1">
                                             {resource.eligibilities.map((item, i) => (
@@ -179,9 +179,9 @@ const Scholarships = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                    </div>
+                                    </div>)}
 
-                                    <div>
+                                    {resource.requirements && (<div>
                                         <h4 className="text-lg font-bold mb-2">Requirements</h4>
                                         <ul className="space-y-1">
                                             {resource.requirements.map((item, i) => (
@@ -191,18 +191,16 @@ const Scholarships = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                    </div>
+                                    </div>)}
 
-                                    {resource.faculties && (
-                                        <div>
-                                            <h4 className="text-lg font-bold mb-2">Fields of Study</h4>
-                                            <div className="flex flex-wrap gap-2">
-                                                {resource.faculties.map((field, i) => (
-                                                    <span key={i} className="px-3 py-1 font-medium text-black bg-green-200 text-lg rounded-full">{field}</span>
-                                                ))}
-                                            </div>
+                                    {resource.faculties && (<div>
+                                        <h4 className="text-lg font-bold mb-2">Fields of Study</h4>
+                                        <div className="flex flex-wrap gap-2">
+                                            {resource.faculties.map((field, i) => (
+                                                <span key={i} className="px-3 py-1 font-medium text-black bg-green-200 text-lg rounded-full">{field}</span>
+                                            ))}
                                         </div>
-                                    )}
+                                    </div>)}
                                 </Collapsible.Content>
                             </Collapsible.Root>
 

@@ -179,7 +179,7 @@ const Loans = () => {
                                 </Collapsible.Trigger>
 
                                 <Collapsible.Content className="pt-3 space-y-4 mb-5">
-                                    <div>
+                                    {resource.eligibility && (<div>
                                         <h4 className="text-lg font-bold mb-2">Eligibility</h4>
                                         <ul className="space-y-1">
                                             {resource.eligibility.map((item, i) => (
@@ -189,9 +189,9 @@ const Loans = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                    </div>
+                                    </div>)}
 
-                                    <div>
+                                    {resource.features && (<div>
                                         <h4 className="text-lg font-bold mb-2">Features</h4>
                                         <ul className="space-y-1">
                                             {resource.features.map((item, i) => (
@@ -201,7 +201,7 @@ const Loans = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                    </div>
+                                    </div>)}
                                 </Collapsible.Content>
                             </Collapsible.Root>
 

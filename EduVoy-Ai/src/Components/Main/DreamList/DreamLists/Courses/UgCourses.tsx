@@ -310,7 +310,7 @@ const DreamUgCourses = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1 }}
-                        className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-500 w-[1100px] gap-3"
+                        className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-500 w-[1100px] -ml-2 gap-3"
                     >
                         <div className="flex items-start space-x-4 mb-5">
                             <div className="p-3 bg-green-200 rounded-lg">

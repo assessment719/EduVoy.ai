@@ -252,7 +252,7 @@ const Moi = () => {
                                 className='select'
                                 name='university'
                                 color='#8bb87b'
-                                placeholder='Select University or Board'
+                                placeholder='Select University'
                                 closeOnClickInput
                                 values={[]}
                                 options={universities}

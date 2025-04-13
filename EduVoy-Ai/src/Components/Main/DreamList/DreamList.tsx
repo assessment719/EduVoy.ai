@@ -31,7 +31,7 @@ const DreamList = () => {
                 </Tabs.List>
 
                 <motion.div
-                    className='flex justify-center'
+                    className='flex justify-center -ml-2'
                 >
                     <Tabs.Content value="dreamUniversities">
                         <DreamUniversities />

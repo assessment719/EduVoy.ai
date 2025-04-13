@@ -6,8 +6,7 @@ import { chatBoxStateAtom } from './../../../Atoms/atoms';
 import { AnyDrop } from './../../../Utils/anyDrop';
 import { PgUnis } from '../../../Utils/pgunis';
 import { useSetRecoilState } from 'recoil';
-import { BACKEND_URL } from '../../../config'
-import { Truck } from 'lucide-react';
+import { BACKEND_URL } from '../../../config';
 
 function BotChat() {
     const [step, setStep] = useState(0);
@@ -695,6 +694,8 @@ function BotChat() {
 
     async function sendMessage() {
         createUserMessage(message);
+        let userMsg = message;
+        setMessage('');
         setIsTyping(true);
 
         if (message !== '') {
@@ -712,7 +713,7 @@ function BotChat() {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        message
+                        message: userMsg
                     }),
                 });
                 const data = await result.json();
@@ -734,8 +735,6 @@ function BotChat() {
                 ]);
             }
         }
-
-        setMessage('');
     }
 
     const chatContainerRef = useRef<HTMLDivElement>(null);

@@ -276,7 +276,7 @@ const InterviewSimulator: React.FC = () => {
                     onClick={submitAllFields}
                     className="w-full btn btn-primary font-bold"
                 >
-                    Submit Details
+                    Submit
                 </motion.button>
             </motion.div>
 

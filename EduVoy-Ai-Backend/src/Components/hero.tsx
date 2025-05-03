@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import * as Tabs from '@radix-ui/react-tabs';
 import { motion } from 'framer-motion';
-import { University, LucideMessageCircleQuestion, FileText, Settings, ArrowRight, Book, MessageSquareTextIcon, Wallet } from 'lucide-react';
+import { University, LucideMessageCircleQuestion, FileText, Settings, ArrowRight, Book, MessageSquareTextIcon, Wallet, MailQuestion } from 'lucide-react';
 import { fullNameAtom, allConnectedUsersAtom, pendingMessagesAtom, currentRoomAtom, currentUserNameAtom, previousAdminRoomAtom, previousUserRoomAtom, isChatingAtom } from './../Atoms/atoms';
 import sound from './../Assets/BellNotification.wav'
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +16,7 @@ import PgUniversities from './Main/Postgraduate/PgUniversities';
 import UgUniversities from './Main/Undergraduate/UgUniversities';
 import ChatDashboard from './Main/ChatSupport/ChatDashboard';
 import FinancialTools from './Main/FinancialResources/FinancialTools';
+import QuerriesCentre from './Main/Querries/Querries';
 
 function Hero() {
   const [activeTab, setActiveTab] = useState('chat');
@@ -41,8 +42,10 @@ function Hero() {
       setActiveTabTitle("Interview Resources");
     } else if (activeTab === 'finResources') {
       setActiveTabTitle("Financial Resources");
-    } else {
+    } else if (activeTab === 'options') {
       setActiveTabTitle("Options");
+    } else {
+      setActiveTabTitle("Users Queries");
     }
 
     if (activeTab !== 'pgunis') {
@@ -255,6 +258,7 @@ function Hero() {
                 { id: 'intResources', label: 'Interview Resources', icon: FileText },
                 { id: 'finResources', label: 'Financial Resources', icon: Wallet },
                 { id: 'options', label: 'Options', icon: Settings },
+                { id: 'queries', label: 'Users Queries', icon: MailQuestion },
               ].map(({ id, label, icon: Icon }) => (
                 <Tabs.Trigger
                   key={id}
@@ -309,6 +313,10 @@ function Hero() {
 
               <Tabs.Content value="options">
                 <OptionCentre />
+              </Tabs.Content>
+
+              <Tabs.Content value="queries">
+                <QuerriesCentre />
               </Tabs.Content>
             </motion.div>
           </Tabs.Root>

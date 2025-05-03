@@ -438,7 +438,7 @@ const Acads = () => {
                         className="morePopUp"
                     >
                         <div className='flex justify-end'>
-                            <Cross onClick={() => setIsMore(false)} className='moreClose transition-text' />
+                            <Cross onClick={() => setIsMore(false)} className='moreClose' />
                         </div>
                         <div className='flex flex-col p-3 gap-5'>
                             <div>

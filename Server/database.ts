@@ -97,6 +97,8 @@ const user = new Schema({
     password: { type: String, required: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
+    otp: { type: Number, default: 0 },
+    otpExpiry: { type: Number, default: 0 },
     dreamUnis: { type: [Number], default: [] },
     dreamCourses: { type: [Number], default: [] },
     expenses: { type: expensesSchema, default: defaultExpenses },
@@ -266,6 +268,24 @@ const job = new Schema({
     tips: { type: String, required: true }
 })
 
+enum queryStatus {
+    Answered = 'answered',
+    NotAnswered = 'notAnswered'
+}
+
+const querries = new Schema({
+    id: { type: Number, unique: true, required: true },
+    fullName: { type: String, required: true },
+    email: { type: String, required: true },
+    phoneNo: { type: String, required: true },
+    subject: { type: String, required: true },
+    message: { type: String, required: true },
+    status: { type: String, enum: queryStatus, required: true },
+    answer: { type: String, required: false },
+    createdAt: { type: Date, required: true },
+    updatedAt: { type: Date, required: true }
+})
+
 export const userModel = mongoose.model("users", user);
 export const adminModel = mongoose.model("admins", admin);
 export const questionModel = mongoose.model("questions", question);
@@ -282,3 +302,4 @@ export const intakesOptionModel = mongoose.model("intakeoptions", intakeoption);
 export const scholarshipModel = mongoose.model("scholarships", scholarship);
 export const loanModel = mongoose.model("loans", loan);
 export const jobModel = mongoose.model("jobs", job);
+export const querriesModel = mongoose.model("querries", querries);

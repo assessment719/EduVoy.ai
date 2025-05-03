@@ -16,8 +16,10 @@ import { sopRouter } from "./OpenAI/sop";
 import { facultiesRouter } from "./OpenAI/faculties";
 import { finalUniversitiesRouter } from "./ukuniversities";
 import { optionsRouter } from './options';
+import { querriesRouter } from './querries';
 import { chatRouter } from "./OpenAI/chat";
 import { manualCompRouter } from "./OpenAI/manualComparision";
+import { mailRouter } from "./mail";
 
 export const usersRouter = Router();
 
@@ -66,17 +68,24 @@ usersRouter.post("/signup", async (req, res) => {
 });
 
 usersRouter.post("/signin", async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, otp } = req.body;
 
-    const user = await userModel.findOne({
-        email: email
+    const user: any = await userModel.findOne({
+        email, otp
     });
 
     if (!user) {
         res.status(500).json({
-            Message: "Email Doesn't Exist"
+            Message: "Email Doesn't Exist Or, Entered Wrong OTP."
         });
         return
+    } else {
+        if (moment().unix() > user?.otpExpiry) {
+            res.status(400).json({
+                message: "OTP has expired. Please request a new one."
+            });
+            return;
+        }
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
@@ -92,8 +101,14 @@ usersRouter.post("/signin", async (req, res) => {
         const token = Jwt.sign(
             { id: user._id.toString() },
             JWT_USER_PASSWORD,
-            { expiresIn: '1d' }
+            { expiresIn: '7d' }
         );
+
+        await userModel.updateOne({
+            id: user.id
+        }, {
+            otp: moment().unix()
+        });
 
         res.json({
             token,
@@ -114,7 +129,7 @@ usersRouter.get("/getField/:queryField/:userId", userAuth, async function (req, 
     const id = parseInt(req.params.userId);
 
     try {
-        const fieldDetails = await userModel.findOne({ id }, { [queryField] : 1 });
+        const fieldDetails = await userModel.findOne({ id }, { [queryField]: 1 });
 
         res.json({
             fieldDetails
@@ -136,7 +151,7 @@ usersRouter.put("/updateField/:queryField/:userId", userAuth, async (req, res) =
         await userModel.updateOne({
             id
         }, {
-            $set : updatingField
+            $set: updatingField
         });
 
         res.json({
@@ -163,6 +178,8 @@ usersRouter.use("/universities", universitiesRouter);
 usersRouter.use("/courses", coursesRouter);
 usersRouter.use("/finaluniversities", finalUniversitiesRouter);
 usersRouter.use("/options", optionsRouter);
+usersRouter.use("/querries", querriesRouter);
+usersRouter.use("/sendMail", mailRouter);
 usersRouter.use("/openai/analysation", analysationRouter);
 usersRouter.use("/openai/sop", sopRouter);
 usersRouter.use("/openai/faculties", facultiesRouter);

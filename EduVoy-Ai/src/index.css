@@ -21,6 +21,10 @@
       @apply bg-gray-200 text-gray-800 hover:bg-gray-300;
     }
 
+    .headerList {
+      @apply cursor-pointer border-b-4 px-2 transition-all duration-500;
+    }
+
     .tabListMain {
       @apply min-h-screen px-4 sm:px-6 lg:px-8;
     }
@@ -90,6 +94,22 @@
     }
 
     .moreClose {
-      @apply fixed hover:text-red-500 duration-500 scale-150 rotate-45 cursor-pointer;
+      @apply fixed hover:text-red-500 duration-500 scale-150 rotate-45 cursor-pointer transition-all;
+    }
+
+    .footerColumn {
+      @apply flex-1 min-w-[300px] m-5 text-left text-lg leading-6
+    }
+
+    .footerLink {
+      @apply text-gray-333 hover:underline hover:underline-offset-4;
+    }
+
+    .footerHeading {
+      @apply mt-5 text-2xl font-bold;
+    }
+
+    .socialMedia {
+      @apply text-5xl hover:bg-white transition-all duration-500 p-2 rounded-xl cursor-pointer;
     }
   }

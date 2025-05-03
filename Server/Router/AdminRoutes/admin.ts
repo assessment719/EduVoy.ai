@@ -13,6 +13,8 @@ import { coursesRouter } from "./Courses/courses";
 import { finalUniversitiesRouter } from "./FinalUniversities/universities";
 import { optionsRouter } from "./Options/options";
 import { finResourcesRouter } from "./FinancialResources/resources";
+import { querriesRouter } from "./Querries/querries";
+import { mailRouter } from "./mail";
 
 export const adminRouter = Router();
 
@@ -87,7 +89,7 @@ adminRouter.post("/signin", async (req, res) => {
         const token = Jwt.sign(
             { id: admin._id.toString() },
             JWT_ADMIN_PASSWORD,
-            { expiresIn: '1d' }
+            { expiresIn: '7d' }
         );
 
         res.json({
@@ -115,3 +117,5 @@ adminRouter.use("/universities", universityRouter);
 adminRouter.use("/courses", coursesRouter);
 adminRouter.use("/finaluniversities", finalUniversitiesRouter);
 adminRouter.use("/options", optionsRouter);
+adminRouter.use("/querries", querriesRouter);
+adminRouter.use("/sendMail", mailRouter);

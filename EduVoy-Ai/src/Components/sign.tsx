@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOffIcon } from 'lucide-react';
 import * as Tabs from '@radix-ui/react-tabs';
 import { motion } from 'framer-motion';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { userDetailsAtom, signAtom, activeTabAtom } from '../Atoms/atoms';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { BACKEND_URL } from '../config';
@@ -13,8 +13,10 @@ function Sign() {
     const lastNameRef = useRef<HTMLInputElement | null>(null);
     const emailRef = useRef<HTMLInputElement | null>(null);
     const passwordRef = useRef<HTMLInputElement | null>(null);
+    const otpRef = useRef<HTMLInputElement | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isPassword, setIsPassword] = useState(true);
+    const [isAskedOtp, setIsAskedOtp] = useState(false);
     const setActiveSec = useSetRecoilState(activeTabAtom);
 
     const navigate = useNavigate();
@@ -23,6 +25,10 @@ function Sign() {
     const setActiveTab = useSetRecoilState(signAtom);
     const setSign = useSetRecoilState(signAtom);
     const activeTab = useRecoilValue(signAtom);
+
+    useEffect(() => {
+        setIsAskedOtp(false);
+    }, [activeTab])
 
     const EyeIcon = () => {
         setIsPassword((c) => !c);
@@ -46,19 +52,50 @@ function Sign() {
                     body: JSON.stringify({ email, password, firstName, lastName }),
                 });
                 setIsLoading(false);
+                setIsAskedOtp(false);
                 setSign('in');
             } catch (error) {
                 console.error('Error during sign-up:', error);
                 setIsLoading(false);
+                setIsAskedOtp(false);
             }
         } else {
             alert('Please fill all the fields before sign in.');
         }
     };
 
+    const getOtp = async () => {
+        setIsLoading(true);
+        const email = emailRef.current?.value;
+
+        if (email) {
+            fetch(`${BACKEND_URL}/users/sendMail`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ mailData: { email } }),
+            })
+                .then(async (res) => {
+                    if (!res.ok) {
+                        throw new Error("Failed to fetch data");
+                    }
+                    setIsLoading(false);
+                    setIsAskedOtp(true);
+                    alert('An One Time Password Has Been Send To Your Email.');
+                })
+                .catch((error) => console.error("Error fetching questions:", error));
+        } else {
+            alert('Please fill in email before submitting.');
+            setIsLoading(false);
+            return
+        }
+    }
+
     const signIn = async () => {
         const email = emailRef.current?.value;
         const password = passwordRef.current?.value;
+        const otp = Number(otpRef.current?.value);
 
         if (email && password) {
             setIsLoading(true);
@@ -69,14 +106,14 @@ function Sign() {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ email, password }),
+                    body: JSON.stringify({ email, password, otp }),
                 });
                 const data = await response.json();
 
                 if (data.token) {
                     setIsLoading(false);
                     localStorage.setItem('token', data.token);
-                    setUserDetails({id: data.userId, fullName: `${data.firstName} ${data.lastName}`});
+                    setUserDetails({ id: data.userId, fullName: `${data.firstName} ${data.lastName}` });
                     setSign('up');
                     setActiveSec('university');
                     navigate("/eduvoytools");
@@ -271,12 +308,33 @@ function Sign() {
                                                     {!isPassword && <EyeOffIcon className='mt-2 mr-1 cursor-pointer' onClick={() => EyeIcon()} />}
                                                 </div>
                                             </div>
+                                            {isAskedOtp && (<div className="mb-4">
+                                                <label
+                                                    htmlFor="email"
+                                                    className="block font-bold text-1.2xl text-black mb-1"
+                                                >
+                                                    One Time Password:
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="otp"
+                                                    ref={otpRef}
+                                                    placeholder="Enter Your Email Id"
+                                                    className="p-2 w-full border-2 border-black rounded-lg"
+                                                />
+                                                <div className='flex justify-center items-center gap-3 mt-3'>
+                                                    <b className='font-bold'>Didn't Received The OTP?</b>
+                                                    <button onClick={getOtp} className='bg-green-200 rounded-lg font-semibold px-2 py-1'>
+                                                        Resend!
+                                                    </button>
+                                                </div>
+                                            </div>)}
                                         </div>
                                         <button
-                                            onClick={signIn}
+                                            onClick={isAskedOtp ? signIn : getOtp}
                                             className="w-full btn btn-primary"
                                         >
-                                            Sign In
+                                            {isAskedOtp ? "Sign In" : "Get OTP"}
                                         </button>
                                     </motion.div>
                                 </div>

@@ -87,7 +87,7 @@ adminRouter.post("/signin", async (req, res) => {
 
     if (admin && passwordMatch) {
         const token = Jwt.sign(
-            { id: admin._id.toString() },
+            { id: admin.id, name: `${admin.firstName} ${admin.lastName}`, email: admin.email },
             JWT_ADMIN_PASSWORD,
             { expiresIn: '7d' }
         );

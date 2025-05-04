@@ -1,5 +1,13 @@
 import { WebSocket } from "ws";
 
+export interface JwtPayload {
+    id: number;
+    name: string;
+    email: string;
+    iat: number;
+    exp: number;
+}
+
 export interface ConnectedUsers {
     userName: string;
     socket: WebSocket;

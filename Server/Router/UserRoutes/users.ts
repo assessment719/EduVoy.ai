@@ -99,7 +99,7 @@ usersRouter.post("/signin", async (req, res) => {
 
     if (user && passwordMatch) {
         const token = Jwt.sign(
-            { id: user._id.toString() },
+            { id: user.id, name: `${user.firstName} ${user.lastName}`, email: user.email },
             JWT_USER_PASSWORD,
             { expiresIn: '7d' }
         );

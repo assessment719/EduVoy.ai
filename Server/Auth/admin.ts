@@ -1,5 +1,6 @@
 import Jwt from "jsonwebtoken";
 import { JWT_ADMIN_PASSWORD } from "./../config";
+import { JwtPayload } from "./../interfaces";
 
 export const adminAuth = (req: any, res: any, next: any) => {
     const token = req.headers.token;
@@ -18,8 +19,9 @@ export const adminAuth = (req: any, res: any, next: any) => {
     }
 
     try {
-        const response = Jwt.verify(token, JWT_ADMIN_PASSWORD);
+        const response = Jwt.verify(token, JWT_ADMIN_PASSWORD) as JwtPayload;
         if (response) {
+            req.adminId = response.id
             next();
         }
     } catch (err) {

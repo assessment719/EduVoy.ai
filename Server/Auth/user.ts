@@ -1,5 +1,6 @@
 import Jwt from "jsonwebtoken";
 import { JWT_USER_PASSWORD } from "./../config";
+import { JwtPayload } from "./../interfaces";
 
 export const userAuth = (req: any, res: any, next: any) => {
     const token = req.headers.token;
@@ -18,8 +19,9 @@ export const userAuth = (req: any, res: any, next: any) => {
     }
 
     try {
-        const response = Jwt.verify(token, JWT_USER_PASSWORD);
+        const response = Jwt.verify(token, JWT_USER_PASSWORD) as JwtPayload;
         if (response) {
+            req.userId = response.id
             next();
         }
     } catch (err) {

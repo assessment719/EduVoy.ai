@@ -1,8 +1,8 @@
 import { WebSocketServer, WebSocket } from "ws";
 import { ConnectedUsers, ConnectedAdmins, PendingMessages } from './interfaces'
 
-const chatServer = new WebSocketServer({ port: 8080 });
-const updateServer = new WebSocketServer({ port: 9090 });
+const chatServer = new WebSocketServer({ port: Number(process.env.CHAT_WS) || 8080 });
+const updateServer = new WebSocketServer({ port: Number(process.env.UPDATE_WS) || 9090 });
 
 let allConnectedUsers: ConnectedUsers[] = [];
 let allConnectedAdmins: ConnectedAdmins[] = [];

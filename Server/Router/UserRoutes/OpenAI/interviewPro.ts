@@ -127,7 +127,7 @@ interviewProRouter.post("/doubtSpeech", userAuth, async (req: any, res: any) => 
                     role: "user", content: `
                 Question: ${question}
                 Student Response: ${response}
-                Your Response: ${aiResponse}
+                Your Feedback: ${aiResponse}
                 Student Doubt: ${doubt}
                 Study Destination: ${destination}
                 University Name: ${university}

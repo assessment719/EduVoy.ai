@@ -231,7 +231,7 @@ function Home() {
 
                     <div className='w-full h-screen bg-gradient-to-tr from-black opacity-60 absolute'></div>
 
-                    <img src='https://plus.unsplash.com/premium_photo-1681505336207-cea25b6cf0ea?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Z3JvdXAlMjBvZiUyMHN0dWRlbnRzfGVufDB8fDB8fHww' className='w-screen h-screen object-cover shadow-2xl shadow-black mb-5' />
+                    <img src='https://i.postimg.cc/wjLPwCY5/pexels-olly-3762800.jpg' className='w-screen h-screen object-cover shadow-2xl shadow-black mb-5' />
                 </div>
 
                 <div ref={aboutSection}>

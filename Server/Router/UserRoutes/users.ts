@@ -20,6 +20,7 @@ import { querriesRouter } from './querries';
 import { chatRouter } from "./OpenAI/chat";
 import { manualCompRouter } from "./OpenAI/manualComparision";
 import { mailRouter } from "./mail";
+import { interviewProRouter } from "./OpenAI/interviewPro";
 
 export const usersRouter = Router();
 
@@ -185,3 +186,4 @@ usersRouter.use("/openai/sop", sopRouter);
 usersRouter.use("/openai/faculties", facultiesRouter);
 usersRouter.use("/openai/chat", chatRouter);
 usersRouter.use("/openai/manual", manualCompRouter);
+usersRouter.use("/openai/interviewPro", interviewProRouter);

@@ -1,13 +1,21 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
 import { motion } from 'framer-motion';
 import { Laptop, BarChart2, BookOpen } from 'lucide-react';
+import SpeechRecognition from 'react-speech-recognition';
 import InterviewSimulator from './InterviewSimulator';
+import ProHead from './Interviewsimulator-Pro/ProHead';
 import Dashboard from './Dashboard';
 import ResourceCenter from './ResourceCenter';
 
 function Interview() {
   const [activeTab, setActiveTab] = useState('dashboard');
+
+  useEffect(() => {
+    if (activeTab !== 'simulator-pro') {
+      SpeechRecognition.abortListening();
+    }
+  }, [activeTab])
 
   return (
     <div className="tabListMain">
@@ -16,6 +24,7 @@ function Interview() {
           {[
             { id: 'dashboard', label: 'Dashboard', icon: BarChart2 },
             { id: 'simulator', label: 'Interview Simulator', icon: Laptop },
+            { id: 'simulator-pro', label: 'Interview Simulator Pro', icon: Laptop },
             { id: 'resources', label: 'Resource Center', icon: BookOpen },
           ].map(({ id, label, icon: Icon }) => (
             <Tabs.Trigger
@@ -51,6 +60,10 @@ function Interview() {
             >
               <InterviewSimulator />
             </div>
+          </Tabs.Content>
+
+          <Tabs.Content value="simulator-pro">
+              <ProHead />
           </Tabs.Content>
 
           <Tabs.Content value="resources">

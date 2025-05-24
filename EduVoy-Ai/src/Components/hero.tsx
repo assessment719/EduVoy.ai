@@ -4,6 +4,7 @@ import * as Tabs from '@radix-ui/react-tabs';
 import { motion } from 'framer-motion';
 import { University, Book, PenBoxIcon, Laptop, ArrowRight, LucideListPlus, ChartNoAxesCombined } from 'lucide-react';
 import { activeTabAtom, userDetailsAtom, currentRoomAtom, expensesAtom, incomesAtom, loanAtom } from '../Atoms/atoms';
+import { isSubmitedAtom, transcriptAtom, clarityOfResponsesAtom, confidenceLevelAtom, questionComprehensionAtom, isGivenIntroAtom, currentQuestionAtom } from './Main/Interview/Interviewsimulator-Pro/atoms';
 import { useNavigate } from 'react-router-dom';
 import Universities from './Main/Universities/Universities';
 import Courses from './Main/Courses/Courses';
@@ -12,11 +13,19 @@ import Interview from './Main/Interview/Head';
 import ChatDashboard from './Main/ChatSupport/ChatDashboard';
 import DreamList from './../Components/Main/DreamList/DreamList';
 import PlanningTools from './Main/FinancialPlanner/PlannningTools';
+import SpeechRecognition from 'react-speech-recognition';
 import { BACKEND_URL } from './../config';
 
 function Hero() {
     const [activeTabTitle, setActiveTabTitle] = useState('');
     const setActiveTab = useSetRecoilState(activeTabAtom);
+    const setIsSubmited = useSetRecoilState(isSubmitedAtom);
+    const setTranscript = useSetRecoilState(transcriptAtom);
+    const setClarityOfResponses = useSetRecoilState(clarityOfResponsesAtom);
+    const setConfidenceLevel = useSetRecoilState(confidenceLevelAtom);
+    const setQuestionComprehension = useSetRecoilState(questionComprehensionAtom);
+    const setIsGivenIntro = useSetRecoilState(isGivenIntroAtom);
+    const setCurrentQuestion = useSetRecoilState(currentQuestionAtom);
     const activeTab = useRecoilValue(activeTabAtom);
     const userDetails = useRecoilValue(userDetailsAtom);
     const setUserDetails = useSetRecoilState(userDetailsAtom);
@@ -39,6 +48,17 @@ function Hero() {
             setActiveTabTitle("Finance Planner");
         } else {
             setActiveTabTitle("Dream List");
+        }
+
+        if (activeTab !== 'interview') {
+            setIsSubmited(false);
+            setTranscript([]);
+            setClarityOfResponses(0);
+            setConfidenceLevel(0);
+            setQuestionComprehension(0);
+            setIsGivenIntro(false);
+            setCurrentQuestion(0);
+            SpeechRecognition.stopListening();
         }
     }, [activeTab]);
 

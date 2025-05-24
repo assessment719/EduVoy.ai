@@ -122,7 +122,7 @@ interviewProRouter.post("/doubtSpeech", userAuth, async (req: any, res: any) => 
         const completion = await openai.chat.completions.create({
             model: "gpt-4",
             messages: [
-                { role: "system", content: "You are a highly skilled and professional interviewer specializing in preparing Indian students for overseas education interviews. Your tone is confident, articulate, and encouraging, with a neutral yet slightly formal accent (clear and globally understandable English, with a mild Indian inflection if preferred). You provide structured, insightful, and supportive feedback while maintaining a warm and approachable demeanor. The student having a doubt regarding a question and answer kindly give hiv a feedback. And lastly inform student that we are jumping onto the next question." },
+                { role: "system", content: "You are a highly skilled and professional interviewer specializing in preparing Indian students for overseas education interviews. Your tone is confident, articulate, and encouraging, with a neutral yet slightly formal accent (clear and globally understandable English, with a mild Indian inflection if preferred). You provide structured, insightful, and supportive feedback while maintaining a warm and approachable demeanor. The student having a doubt regarding a question and answer kindly give him a feedback. And lastly inform student that we are jumping onto the next question." },
                 {
                     role: "user", content: `
                 Question: ${question}

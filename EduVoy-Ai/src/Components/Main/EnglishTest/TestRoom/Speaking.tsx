@@ -265,9 +265,7 @@ function Speaking() {
             } else {
                 alert('Sorry! there was an error while examinining your response. Please, try agin!');
             }
-            setTimeout(() => {
-                setIsFetching(false);
-            }, 5000)
+            setIsFetching(false);
         } else if (testPart === 'partB') {
             const reviewBody = {
                 cueCardDetails: {
@@ -301,9 +299,7 @@ function Speaking() {
             } else {
                 alert('Sorry! there was an error while examinining your response. Please, try agin!');
             }
-            setTimeout(() => {
-                setIsFetching(false);
-            }, 5000)
+            setIsFetching(false);
         } else {
             const reviewBody = {
                 abstractDetails: {
@@ -341,9 +337,7 @@ function Speaking() {
             } else {
                 alert('Sorry! there was an error while examinining your response. Please, try agin!');
             }
-            setTimeout(() => {
-                setIsFetching(false);
-            }, 5000)
+            setIsFetching(false);
         }
     }
 
@@ -363,27 +357,25 @@ function Speaking() {
             const res = await getAiResponse();
 
             if (res?.success && res?.data?.cueCardTopic && res?.data?.instructions) {
+                await new Promise((e) => { setTimeout(e, 5000) });
                 setCueCardDetails(res.data);
             } else {
                 alert('Sorry! there was an error while generating new cue card. Please, try agin!');
             }
-            setTimeout(() => {
-                setIsFetching(false);
-                normalTimerA.restart();
-            }, 5000)
+            setIsFetching(false);
+            normalTimerA.restart();
         } else {
             setFetchingPrompt('Generating New Discussion Topic...');
             const res = await getAiResponse();
 
             if (res?.success && res?.data?.discussionDetails && res?.data?.questions) {
+                await new Promise((e) => { setTimeout(e, 5000) });
                 setDiscussionDetails(res.data.discussionDetails);
                 setCurrentQuestions(res.data.questions);
             } else {
                 alert('Sorry! there was an error while generating new discussion topic. Please, try agin!');
             }
-            setTimeout(() => {
-                setIsFetching(false);
-            }, 5000)
+            setIsFetching(false);
         }
     }
 

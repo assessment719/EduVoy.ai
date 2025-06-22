@@ -417,8 +417,8 @@ function Home() {
                             }}
                             className='mx-10'
                         >
-                            <h1 className='my-5 font-bold text-3xl'>Interview Simulator</h1>
-                            <p className='text-xl max-w-[2500px]'>Prepare confidently for university and visa interviews. EduVoy.ai’s Interview Simulator offers realistic practice sessions, instant feedback, and progress tracking, along with curated resources to help students excel in their interviews and boost their confidence.</p>
+                            <h1 className='my-5 font-bold text-3xl'>English Language Test Preparation (PrepELT+)</h1>
+                            <p className='text-xl max-w-[2500px]'>Prepare effectively for English proficiency exams with PrepELT+. This all-in-one feature offers a 30-day study plan, smart tracking dashboard, and AI-powered exercises across Listening, Reading, Writing, and Speaking. Get real-time feedback, score insights, and targeted practice to boost your performance and confidence.</p>
                             <button className='my-5 btn btn-primary'>Try Once!</button>
                         </motion.div>
                         <motion.div
@@ -448,6 +448,23 @@ function Home() {
                         >
                             <img className='rounded-xl shadow-xl shadow-black object-cover h-96 w-[3000px]' src="https://plus.unsplash.com/premium_photo-1681505336207-cea25b6cf0ea?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Z3JvdXAlMjBvZiUyMHN0dWRlbnRzfGVufDB8fDB8fHww" />
                         </motion.div>
+                        <motion.div
+                            initial={{ opacity: 0, x: -30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.7 }}
+                            viewport={{
+                                once: true,
+                                margin: "0px 0px -15% 0px",
+                            }}
+                            className='mx-10'
+                        >
+                            <h1 className='my-5 font-bold text-3xl'>Interview Simulator</h1>
+                            <p className='text-xl max-w-[2500px]'>Prepare confidently for university and visa interviews. EduVoy.ai’s Interview Simulator offers realistic practice sessions, instant feedback, and progress tracking, along with curated resources to help students excel in their interviews and boost their confidence.</p>
+                            <button className='my-5 btn btn-primary'>Try Once!</button>
+                        </motion.div>
+                    </div>
+
+                    <div className='flex justify-between px-28 py-10 items-center'>
                         <motion.div
                             initial={{ opacity: 0, x: -30 }}
                             whileInView={{ opacity: 1, x: 0 }}
@@ -462,9 +479,33 @@ function Home() {
                             <p className='text-xl max-w-[2500px]'>Plan your study abroad finances effortlessly with EduVoy.ai’s Finance Planner. From tracking expenses and setting budgets to calculating loans and exploring funding options, this feature helps you make informed financial decisions for a stress-free journey.</p>
                             <button className='my-5 btn btn-primary'>Try Once!</button>
                         </motion.div>
+                        <motion.div
+                            initial={{ opacity: 0, x: 30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.7 }}
+                            viewport={{
+                                once: true,
+                                margin: "0px 0px -20% 0px",
+                            }}
+                            className='mx-10'
+                        >
+                            <img className='rounded-xl shadow-xl shadow-black object-cover h-96 w-[3000px]' src="https://plus.unsplash.com/premium_photo-1681505336207-cea25b6cf0ea?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Z3JvdXAlMjBvZiUyMHN0dWRlbnRzfGVufDB8fDB8fHww" />
+                        </motion.div>
                     </div>
 
                     <div className='flex justify-between px-28 py-10 items-center'>
+                        <motion.div
+                            initial={{ opacity: 0, x: 30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.7 }}
+                            viewport={{
+                                once: true,
+                                margin: "0px 0px -20% 0px",
+                            }}
+                            className='mx-10'
+                        >
+                            <img className='rounded-xl shadow-xl shadow-black object-cover h-96 w-[3000px]' src="https://plus.unsplash.com/premium_photo-1681505336207-cea25b6cf0ea?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Z3JvdXAlMjBvZiUyMHN0dWRlbnRzfGVufDB8fDB8fHww" />
+                        </motion.div>
                         <motion.div
                             initial={{ opacity: 0, x: -30 }}
                             whileInView={{ opacity: 1, x: 0 }}
@@ -478,18 +519,6 @@ function Home() {
                             <h1 className='my-5 font-bold text-3xl'>Chat Support</h1>
                             <p className='text-xl max-w-[2500px]'>Get 24/7 assistance with EduVoy.ai’s AI-powered Chat Support. From instant responses to common queries to personalized guidance from Study Abroad Specialists, this feature ensures comprehensive support at every step of your study abroad journey.</p>
                             <button className='my-5 btn btn-primary'>Try Once!</button>
-                        </motion.div>
-                        <motion.div
-                            initial={{ opacity: 0, x: 30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.7 }}
-                            viewport={{
-                                once: true,
-                                margin: "0px 0px -20% 0px",
-                            }}
-                            className='mx-10'
-                        >
-                            <img className='rounded-xl shadow-xl shadow-black object-cover h-96 w-[3000px]' src="https://plus.unsplash.com/premium_photo-1681505336207-cea25b6cf0ea?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Z3JvdXAlMjBvZiUyMHN0dWRlbnRzfGVufDB8fDB8fHww" />
                         </motion.div>
                     </div>
                 </div>

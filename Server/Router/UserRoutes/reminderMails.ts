@@ -322,7 +322,7 @@ const getEmailTemplate = (studentName: string, engLishTest: string, startTime: s
                     </div>
                     
                     <div style="text-align: center; margin-top: 25px;">
-                        <a href="http://localhost:5173/test-practice" class="primary-button">Start Practicing ${startTime}</a>
+                        <a href="http://localhost:5173/test-practice" class="primary-button">Start Practicing at ${startTime}</a>
                         <a href="http://localhost:5173/dashboard" class="secondary-button">View My Progress</a>
                     </div>
                 </div>

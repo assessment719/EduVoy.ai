@@ -42,7 +42,7 @@ const Jobs = () => {
             return;
         }
 
-        fetch(`${BACKEND_URL}/users/updateField/jobs/${userDetails.id}`, {
+        fetch(`${BACKEND_URL}/users/updateField/${userDetails.id}`, {
             method: "PUT",
             headers: {
                 'token': `${token}`,

@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { adminRouter } from "./Router/AdminRoutes/admin";
 import { usersRouter } from "./Router/UserRoutes/users";
 import * as dotenv from 'dotenv';
+import './Router/UserRoutes/reminderMails'
 dotenv.config();
 
 const app = express();

@@ -21,6 +21,7 @@ import { chatRouter } from "./OpenAI/chat";
 import { manualCompRouter } from "./OpenAI/manualComparision";
 import { mailRouter } from "./mail";
 import { interviewProRouter } from "./OpenAI/interviewPro";
+import { englishTestRouter } from './OpenAI/languageTest';
 
 export const usersRouter = Router();
 
@@ -143,8 +144,7 @@ usersRouter.get("/getField/:queryField/:userId", userAuth, async function (req, 
     }
 });
 
-usersRouter.put("/updateField/:queryField/:userId", userAuth, async (req, res) => {
-    const queryField = req.params.queryField;
+usersRouter.put("/updateField/:userId", userAuth, async (req, res) => {
     const id = parseInt(req.params.userId);
     const { updatingField } = req.body;
 
@@ -187,3 +187,4 @@ usersRouter.use("/openai/faculties", facultiesRouter);
 usersRouter.use("/openai/chat", chatRouter);
 usersRouter.use("/openai/manual", manualCompRouter);
 usersRouter.use("/openai/interviewPro", interviewProRouter);
+usersRouter.use("/openai/langaugeTest", englishTestRouter);

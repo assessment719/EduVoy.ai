@@ -123,6 +123,7 @@ const InterviewRoom: React.FC = () => {
     }, [voiceTranscript, listening]);
 
     useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         fetchQuestions();
 
         if (!isGivenIntro) {

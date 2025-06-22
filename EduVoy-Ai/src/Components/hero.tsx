@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import * as Tabs from '@radix-ui/react-tabs';
 import { motion } from 'framer-motion';
-import { University, Book, PenBoxIcon, Laptop, ArrowRight, LucideListPlus, ChartNoAxesCombined } from 'lucide-react';
-import { activeTabAtom, userDetailsAtom, currentRoomAtom, expensesAtom, incomesAtom, loanAtom } from '../Atoms/atoms';
+import { University, Book, BookOpenCheck, PenBoxIcon, Laptop, ArrowRight, LucideListPlus, ChartNoAxesCombined } from 'lucide-react';
+import { activeTabAtom, userDetailsAtom, currentRoomAtom, expensesAtom, incomesAtom, loanAtom, englishTestsAtom } from '../Atoms/atoms';
+import { isTestSelecteedAtom, testNameAtom } from './Main/EnglishTest/atoms';
 import { isSubmitedAtom, transcriptAtom, clarityOfResponsesAtom, confidenceLevelAtom, questionComprehensionAtom, isGivenIntroAtom, currentQuestionAtom } from './Main/Interview/Interviewsimulator-Pro/atoms';
 import { useNavigate } from 'react-router-dom';
 import Universities from './Main/Universities/Universities';
@@ -13,11 +14,14 @@ import Interview from './Main/Interview/Head';
 import ChatDashboard from './Main/ChatSupport/ChatDashboard';
 import DreamList from './../Components/Main/DreamList/DreamList';
 import PlanningTools from './Main/FinancialPlanner/PlannningTools';
+import EnglishTestHead from './Main/EnglishTest/Head';
 import SpeechRecognition from 'react-speech-recognition';
 import { BACKEND_URL } from './../config';
 
 function Hero() {
     const [activeTabTitle, setActiveTabTitle] = useState('');
+    const setTestName = useSetRecoilState(testNameAtom);
+    const setSubmitStatus = useSetRecoilState(isTestSelecteedAtom);
     const setActiveTab = useSetRecoilState(activeTabAtom);
     const setIsSubmited = useSetRecoilState(isSubmitedAtom);
     const setTranscript = useSetRecoilState(transcriptAtom);
@@ -33,15 +37,20 @@ function Hero() {
     const setExpenses = useSetRecoilState(expensesAtom);
     const setIncomes = useSetRecoilState(incomesAtom);
     const setLoan = useSetRecoilState(loanAtom);
+    const setEnglishTests = useSetRecoilState(englishTestsAtom);
     const navigate = useNavigate();
 
     useEffect(() => {
+        speechSynthesis.cancel();
+
         if (activeTab === 'university') {
             setActiveTabTitle("Find Universities");
         } else if (activeTab === 'course') {
             setActiveTabTitle("Find Courses");
         } else if (activeTab === 'sop') {
             setActiveTabTitle("Statement of Purpose Generator");
+        } else if (activeTab === 'testPrep') {
+            setActiveTabTitle("English Language Test Preperation");
         } else if (activeTab === 'interview') {
             setActiveTabTitle("Interview Simulator");
         } else if (activeTab === 'finance') {
@@ -59,6 +68,11 @@ function Hero() {
             setIsGivenIntro(false);
             setCurrentQuestion(0);
             SpeechRecognition.stopListening();
+        }
+
+        if (activeTab !== 'testPrep') {
+            setTestName('');
+            setSubmitStatus(false);
         }
     }, [activeTab]);
 
@@ -132,10 +146,32 @@ function Hero() {
         }
     };
 
+    const fetchEnglishTests = async () => {
+        try {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                return;
+            }
+
+            const response = await fetch(`${BACKEND_URL}/users/getField/englishTests/${userDetails.id}`, {
+                method: "GET",
+                headers: {
+                    'token': `${token}`
+                },
+            });
+            const data = await response.json();
+            setEnglishTests(data.fieldDetails.englishTests)
+        } catch (error) {
+            console.error('Error fetching resources:', error);
+        }
+    };
+
     useEffect(() => {
         fetchExpenses();
         fetchIncomes();
         fetchLoan();
+        fetchEnglishTests();
     }, [])
 
     return (
@@ -164,6 +200,7 @@ function Hero() {
                             { id: 'course', label: 'Find Courses', icon: Book },
                             { id: 'dreamlist', label: 'Dream List', icon: LucideListPlus },
                             { id: 'sop', label: 'SOP Generator', icon: PenBoxIcon },
+                            { id: 'testPrep', label: 'PrepELT+', icon: BookOpenCheck },
                             { id: 'interview', label: 'Interview Simulator', icon: Laptop },
                             { id: 'finance', label: 'Finance Planner', icon: ChartNoAxesCombined }
                         ].map(({ id, label, icon: Icon }) => (
@@ -204,6 +241,10 @@ function Hero() {
 
                         <Tabs.Content value="sop">
                             <SOP />
+                        </Tabs.Content>
+
+                        <Tabs.Content value="testPrep">
+                            <EnglishTestHead />
                         </Tabs.Content>
 
                         <Tabs.Content value="interview">

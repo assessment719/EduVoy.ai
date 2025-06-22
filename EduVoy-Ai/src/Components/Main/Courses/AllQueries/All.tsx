@@ -56,7 +56,7 @@ const AllCourses: React.FC = () => {
             return;
         }
 
-        fetch(`${BACKEND_URL}/users/updateField/dreamCourses/${userDetails.id}`, {
+        fetch(`${BACKEND_URL}/users/updateField/${userDetails.id}`, {
             method: "PUT",
             headers: {
                 'token': `${token}`,

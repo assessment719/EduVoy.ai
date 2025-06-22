@@ -37,7 +37,7 @@ const DreamUgCourses = () => {
             return;
         }
 
-        await fetch(`${BACKEND_URL}/users/updateField/dreamCourses/${userDetails.id}`, {
+        await fetch(`${BACKEND_URL}/users/updateField/${userDetails.id}`, {
             method: "PUT",
             headers: {
                 'token': `${token}`,

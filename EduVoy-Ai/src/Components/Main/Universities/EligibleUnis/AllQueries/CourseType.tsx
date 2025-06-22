@@ -40,7 +40,7 @@ const CourseType = () => {
             return;
         }
 
-        fetch(`${BACKEND_URL}/users/updateField/dreamUnis/${userDetails.id}`, {
+        fetch(`${BACKEND_URL}/users/updateField/${userDetails.id}`, {
             method: "PUT",
             headers: {
                 'token': `${token}`,

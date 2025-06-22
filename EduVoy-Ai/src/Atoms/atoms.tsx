@@ -3,6 +3,7 @@ import { recoilPersist } from 'recoil-persist';
 import { expensesType } from './../Utils/expenses';
 import { incomesType } from './../Utils/incomes';
 import { loanType } from './../Utils/loan';
+import { englishTests } from './../Utils/englishTest';
 
 const { persistAtom } = recoilPersist();
 
@@ -73,3 +74,8 @@ export const jobListAtom = atom({
     key: 'jobList',
     default: {} as { [key: number]: boolean }
 });
+
+export const englishTestsAtom = atom({
+    key: 'englishTests',
+    default: {} as englishTests
+})

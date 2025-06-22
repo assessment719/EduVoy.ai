@@ -25,7 +25,8 @@
     "recharts": "^2.15.0",
     "recoil": "^0.7.7",
     "recoil-persist": "^5.1.0",
-    "regenerator-runtime": "^0.14.1"
+    "regenerator-runtime": "^0.14.1",
+    "styled-components": "^6.1.19"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",

@@ -33,7 +33,7 @@ const DreamUniversities = () => {
             return;
         }
 
-        await fetch(`${BACKEND_URL}/users/updateField/dreamUnis/${userDetails.id}`, {
+        await fetch(`${BACKEND_URL}/users/updateField/${userDetails.id}`, {
             method: "PUT",
             headers: {
                 'token': `${token}`,

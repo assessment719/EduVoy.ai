@@ -361,8 +361,8 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description }) =
                 <div className="flex items-center justify-center h-16 w-16 rounded-full bg-green-200 mb-4">
                     {icon}
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">{title}</h3>
-                <p className="text-base text-gray-600">{description}</p>
+                <h3 className="text-xl font-medium text-gray-900 mb-2">{title}</h3>
+                <p className="text-lg text-gray-600">{description}</p>
             </div>
         </motion.div>
     );

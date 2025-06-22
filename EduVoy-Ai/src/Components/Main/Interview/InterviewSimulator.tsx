@@ -32,16 +32,17 @@ const InterviewSimulator: React.FC = () => {
 
     const currentQuestion = interviewQuestions[currentQuestionIndex];
 
-    useEffect(() => {
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({ audio: true })
-                .then(() => setError(''))
-                .catch((err) => {
-                    setError('Microphone access denied. Please enable microphone access in your browser settings.');
-                    console.error('Microphone access error:', err);
-                });
-        }
-    }, []);
+    // Comment Out To Stop The Microphone Starting issue
+    // useEffect(() => {
+    //     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    //         navigator.mediaDevices.getUserMedia({ audio: true })
+    //             .then(() => setError(''))
+    //             .catch((err) => {
+    //                 setError('Microphone access denied. Please enable microphone access in your browser settings.');
+    //                 console.error('Microphone access error:', err);
+    //             });
+    //     }
+    // }, []);
 
     const fetchQuestions = async () => {
         try {

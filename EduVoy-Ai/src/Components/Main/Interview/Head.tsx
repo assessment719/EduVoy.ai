@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
 import { motion } from 'framer-motion';
-import { Laptop, BarChart2, BookOpen } from 'lucide-react';
+import { Laptop, LayoutDashboard, BookOpen } from 'lucide-react';
 import SpeechRecognition from 'react-speech-recognition';
 import InterviewSimulator from './InterviewSimulator';
 import ProHead from './Interviewsimulator-Pro/ProHead';
@@ -22,7 +22,7 @@ function Interview() {
       <Tabs.Root value={activeTab} onValueChange={setActiveTab}>
         <Tabs.List className="tabsList">
           {[
-            { id: 'dashboard', label: 'Dashboard', icon: BarChart2 },
+            { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
             { id: 'simulator', label: 'Interview Simulator', icon: Laptop },
             { id: 'simulator-pro', label: 'Interview Simulator Pro', icon: Laptop },
             { id: 'resources', label: 'Resource Center', icon: BookOpen },

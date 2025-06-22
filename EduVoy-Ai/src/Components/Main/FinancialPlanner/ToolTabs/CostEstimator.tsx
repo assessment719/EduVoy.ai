@@ -68,7 +68,7 @@ const CostEstimator = () => {
             return;
         }
 
-        await fetch(`${BACKEND_URL}/users/updateField/expenses/${userDetails.id}`, {
+        await fetch(`${BACKEND_URL}/users/updateField/${userDetails.id}`, {
             method: "PUT",
             headers: {
                 'token': `${token}`,

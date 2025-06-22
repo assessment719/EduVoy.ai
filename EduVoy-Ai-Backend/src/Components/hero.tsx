@@ -123,6 +123,9 @@ function Hero() {
       const { type, payload } = parsedMessage;
 
       if (type === "newuser") {
+        if (connectedUsers.find(user => payload.roomId === user.roomId)) {
+          return;
+        }
         setConnectedUsers(users => [
           ...users,
           { userName: payload.userName, roomId: payload.roomId }

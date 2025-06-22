@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
-import type { features } from "process";
-import { number } from "zod";
 
 const Schema = mongoose.Schema;
 
+//Finace Planner Schemas
 const expensesSchema = new Schema({
     courseFees: {
         tuitionFees: { type: Number, default: 0 },
@@ -27,7 +26,7 @@ const expensesSchema = new Schema({
         tbTestExp: { type: Number, default: 0 },
         healthSurcharge: { type: Number, default: 0 }
     }
-})
+}, { _id: false })
 
 const incomesSchema = new Schema({
     income: {
@@ -38,15 +37,36 @@ const incomesSchema = new Schema({
     },
     savingsGoal: { type: Number, default: 0 },
     emergencyFund: { type: Number, default: 0 }
-})
+}, { _id: false })
 
 const loanSchema = new Schema({
     amount: { type: Number, default: 0 },
     interestRate: { type: Number, default: 0 },
     termYears: { type: Number, default: 0 }
-})
+}, { _id: false })
 
-// Default Expenses Object
+//English Test Schemas
+const individualEnglishTestSchema = new Schema({
+    currentDate: { type: Number, default: 0 },
+    currentTask: { type: Number, default: 0 },
+    studyTiming: { type: String, default: '00:00' },
+    listeningScore: { type: Number, default: 0 },
+    readingScore: { type: Number, default: 0 },
+    writingScoreTaskA: { type: Number, default: 0 },
+    writingScoreTaskB: { type: Number, default: 0 },
+    speakingScorePartA: { type: Number, default: 0 },
+    speakingScorePartB: { type: Number, default: 0 },
+    speakingScorePartC: { type: Number, default: 0 }
+}, { _id: false })
+
+const englishTestSchema = new Schema({
+    ielts: individualEnglishTestSchema,
+    toefl: individualEnglishTestSchema,
+    pte: individualEnglishTestSchema,
+    duolingo: individualEnglishTestSchema
+}, { _id: false })
+
+//Finace Planner Defaults
 const defaultExpenses = {
     courseFees: {
         tuitionFees: 0,
@@ -72,7 +92,6 @@ const defaultExpenses = {
     }
 };
 
-// Default Incomes Object
 const defaultIncomes = {
     income: {
         partTimeWork: 0,
@@ -84,12 +103,32 @@ const defaultIncomes = {
     emergencyFund: 0
 };
 
-// Default Loan Object
 const defaultLoan = {
     amount: 0,
     interestRate: 0,
     termYears: 0
 };
+
+//English Test Defaults
+const individualEnglishTest = {
+    currentDate: 0,
+    currentTask: 0,
+    studyTiming: '00:00',
+    listeningScore: 0,
+    readingScore: 0,
+    writingScoreTaskA: 0,
+    writingScoreTaskB: 0,
+    speakingScorePartA: 0,
+    speakingScorePartB: 0,
+    speakingScorePartC: 0
+}
+
+const englishTest = {
+    ielts: individualEnglishTest,
+    toefl: individualEnglishTest,
+    pte: individualEnglishTest,
+    duolingo: individualEnglishTest
+}
 
 const user = new Schema({
     id: { type: Number, unique: true, required: true },
@@ -101,6 +140,7 @@ const user = new Schema({
     otpExpiry: { type: Number, default: 0 },
     dreamUnis: { type: [Number], default: [] },
     dreamCourses: { type: [Number], default: [] },
+    englishTests: { type: englishTestSchema, default: englishTest},
     expenses: { type: expensesSchema, default: defaultExpenses },
     incomes: { type: incomesSchema, default: defaultIncomes },
     loan: { type: loanSchema, default: defaultLoan },

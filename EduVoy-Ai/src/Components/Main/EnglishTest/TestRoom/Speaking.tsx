@@ -102,6 +102,7 @@ function Speaking() {
 
     useEffect(() => {
         speechSynthesis.cancel();
+        stopRecording();
         timer.reset();
         normalTimerA.reset();
         normalTimerB.reset();

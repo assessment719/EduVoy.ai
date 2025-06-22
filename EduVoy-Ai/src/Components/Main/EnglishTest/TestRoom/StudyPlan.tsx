@@ -477,7 +477,7 @@ function StudyPlan() {
                                     Time Slot Confirmed!
                                 </h4>
                                 <p className='text-xl'>
-                                    Your appointment is scheduled for <span className="font-semibold">{timeSlots.find(slot => slot.value === englishTests[testName as keyof englishTests].studyTiming)?.label}</span>
+                                    Your study timing is scheduled for <span className="font-semibold">{timeSlots.find(slot => slot.value === englishTests[testName as keyof englishTests].studyTiming)?.label}</span>
                                 </p>
                             </div>
                         ) : (

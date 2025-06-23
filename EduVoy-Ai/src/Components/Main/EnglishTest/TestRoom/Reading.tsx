@@ -28,7 +28,7 @@ function Reading() {
     ]);
 
     // True/False Answers
-    const [answersA, setAnswersA] = useState<string[]>(['', '', '', '', '']);
+    const [answersA, setAnswersA] = useState<string[]>([]);
 
     // Multiple Choice Questions
     const [questionsB, setQuestionsB] = useState<{ id: number, question: string, options: string[], correctAnswer: string }[]>([
@@ -40,7 +40,7 @@ function Reading() {
     ]);
 
     // Multiple Choice Answers
-    const [answersB, setAnswersB] = useState<string[]>(['', '', '', '', '']);
+    const [answersB, setAnswersB] = useState<string[]>([]);
 
     // Fill In The Blank Questions
     const [questionsC, setQuestionsC] = useState<{ id: number, question: string, correctAnswer: string }[]>([
@@ -52,7 +52,7 @@ function Reading() {
     ]);
 
     // Fill In The Blank Answers
-    const [answersC, setAnswersC] = useState<string[]>(['', '', '', '', '']);
+    const [answersC, setAnswersC] = useState<string[]>([]);
 
     const handleAnswerChange = (questionType: string, questionIndex: number, answer: string) => {
         if (questionType === 'A') {
@@ -223,7 +223,6 @@ function Reading() {
     }
 
     const submitFinalAnswer = async () => {
-        timer.reset();
         const finalMarks = await calculateAndSetMarks();
         setFetchingPrompt('Examining and Calculating Your Test Marks...')
         setIsFetching(true);
@@ -241,6 +240,7 @@ function Reading() {
         updateEnglishTests('readingScore', Math.floor((finalMarks[0] + finalMarks[1] + finalMarks[2]) / 15 * 100));
 
         setTimeout(() => {
+            timer.reset();
             setIsFetching(false);
             setStep(4);
         }, 5000)
@@ -427,9 +427,9 @@ function Reading() {
 
                         <motion.button
                             initial={{ opacity: 0 }}
-                            animate={{ opacity: answersA.filter(i => i !== '').length === 0 ? 0.5 : 1 }}
+                            animate={{ opacity: answersA.length !== 5 ? 0.5 : 1 }}
                             onClick={() => setStep(2)}
-                            disabled={answersA.filter(i => i !== '').length === 0}
+                            disabled={answersA.length !== 5}
                             className="w-full btn btn-primary font-bold"
                         >
                             Submit Answers
@@ -498,9 +498,9 @@ function Reading() {
 
                         <motion.button
                             initial={{ opacity: 0 }}
-                            animate={{ opacity: answersB.filter(i => i !== '').length === 0 ? 0.5 : 1 }}
+                            animate={{ opacity: answersB.length !== 5 ? 0.5 : 1 }}
                             onClick={() => setStep(3)}
-                            disabled={answersB.filter(i => i !== '').length === 0}
+                            disabled={answersB.length !== 5}
                             className="w-full btn btn-primary font-bold"
                         >
                             Submit Answers
@@ -547,9 +547,9 @@ function Reading() {
 
                         <motion.button
                             initial={{ opacity: 0 }}
-                            animate={{ opacity: answersC.filter(i => i !== '').length === 0 ? 0.5 : 1 }}
+                            animate={{ opacity: answersC.length !== 5 ? 0.5 : 1 }}
                             onClick={submitFinalAnswer}
-                            disabled={answersC.filter(i => i !== '').length === 0}
+                            disabled={answersC.length !== 5}
                             className="w-full btn btn-primary font-bold"
                         >
                             Submit Answers

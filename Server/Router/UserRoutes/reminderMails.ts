@@ -392,7 +392,7 @@ const timeSlots: { value: string, label: string }[] = [
     { value: "18:30", label: "7:00 PM" }
 ];
 
-cron.schedule('*/30 7-18 * * *', async () => {
+cron.schedule('0 7-18 * * *', async () => {
     const startTime = moment().format('HH:mm');
     const endTime = moment().add(30, 'minutes').format('HH:mm');
 

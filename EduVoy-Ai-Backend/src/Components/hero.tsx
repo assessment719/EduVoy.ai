@@ -257,7 +257,7 @@ function Hero() {
                 { id: 'pgunis', label: 'PG Universities', icon: University },
                 { id: 'ugunis', label: 'UG Universities', icon: University },
                 { id: 'courses', label: 'Courses', icon: Book },
-                { id: 'questions', label: 'Questions', icon: LucideMessageCircleQuestion },
+                { id: 'questions', label: 'Interview Questions', icon: LucideMessageCircleQuestion },
                 { id: 'intResources', label: 'Interview Resources', icon: FileText },
                 { id: 'finResources', label: 'Financial Resources', icon: Wallet },
                 { id: 'options', label: 'Options', icon: Settings },

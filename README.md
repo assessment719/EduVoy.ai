@@ -19,4 +19,4 @@ EduVoy.ai’s dynamic backend ensures seamless resource management, making it a 
 - Back-End runs on http://localhost:3000
 - Server runs on http://localhost:2000
 
-<b>[Project Preview Link](https://drive.google.com/file/d/12rNQ75SbCHvxUumckpRfRzHtYzRAJxsJ/view?usp=sharing)</b>
+<b>[Project Preview Link](https://drive.google.com/file/d/1eLDDMbLDjPW3P0hYgu37UXQAFyu_JeZH/view?usp=sharing)</b>
